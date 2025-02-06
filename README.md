@@ -9,3 +9,4 @@
 - Leen Khouri
 - József Bakosi
 - Dániel Doma
+- Ali Hasan
