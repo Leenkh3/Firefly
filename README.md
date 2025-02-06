@@ -1,6 +1,11 @@
 # Firefly
-this repository is for the team project of production software engineering course
+- this repository is for the team project of production software engineering course
 
-Contributors:
-
-Takács Martin
+## Contributors:
+- Martin Takács
+- Miklós Vajkai
+- Aili Torvinen
+- Zoltán Kaszai
+- Leen Khouri
+- József Bakosi
+- Dániel Doma
