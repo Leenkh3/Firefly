@@ -1,3 +1,10 @@
+// QUESTIONS:
+// how row_ptrs are calculated ? just making sure
+// is it better to save both originalMatrix and its CRM format OR just the CRM format?
+// is there gonna be any operations on matrices like adding a scalar, dot product, adding matrices ?
+// is it better to use col,row as private variables (for testing purposes), to know if the entered matrix is in correct form 
+
+
 using namespace std;
 class CRM{
 	private:
@@ -33,8 +40,15 @@ class CRM{
 			
 			}
 		}
-		void printOriginal(){}
-		CRM operator*(CRM const& m){}
+		void printOriginal(){ //TODO: check if this function is gonna be used 
+			cout<< "The original input matrix is .."
+			for(const auto& row: originalMatrix){
+				for(int col_idx = 0 ; col_idx < row.size();col_idx++)
+					cout<< row[col_idx] << " "; 
+				cout<<endl;
+			}
+		}
+		CRM operator*(CRM const& m){} 
 		void uvalue(int row, int col, int new_val){}//update value
 		
 }
