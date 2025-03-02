@@ -1,7 +1,9 @@
 # Firefly
+
 - this repository is for the team project of production software engineering course
 
 ## Contributors:
+
 - Martin Takács
 - Miklós Vajkai
 - Aili Torvinen
@@ -10,3 +12,11 @@
 - József Bakosi
 - Dániel Doma
 - Ali Hasan
+
+## Instructions
+
+### To compile the C program with Lua support:
+
+```fish
+gcc main.c -o fileprogram -llua -lm -ldl
+```
