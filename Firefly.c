@@ -21,7 +21,7 @@ int main(int argc, char *argv[]) {
     luaL_openlibs(L);
     
     // Input Lua script
-    int status = luaL_dofile(L, "user_input_handler.lua");
+    int status = luaL_dofile(L, "./src/user_input/input_handler.lua");
     if (status) {
         fprintf(stderr, "Couldn't load Lua script: %s\n", lua_tostring(L, -1));
         lua_close(L);
