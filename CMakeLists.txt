@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.15)
 # Project name and version with languages/compilers required
 project(Firefly VERSION 1.0 LANGUAGES CXX)
 # Configure building the gmsh mesh reader
-add_library(GmshMeshReader GmshMeshReader.cpp GmshMeshReader.hpp)
+# add_library(GmshMeshReader GmshMeshReader.cpp GmshMeshReader.hpp)
 # Configure building the main executable
 add_executable(firefly main.cpp)
 # Configure the link command
