@@ -7,7 +7,7 @@ project(Firefly VERSION 1.0 LANGUAGES CXX)
 # Configure building the main executable
 add_executable(firefly firefly.cpp)
 # Configure the link command
-target_link_libraries(firefly PRIVATE GmshMeshReader)
+# target_link_libraries(firefly PRIVATE GmshMeshReader)
 # Configure cmake's testing system
 enable_testing()
 # Add a test, running the chillax executable, non-zero exit code will fail the test
