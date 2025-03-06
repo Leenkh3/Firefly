@@ -5,7 +5,7 @@ project(Firefly VERSION 1.0 LANGUAGES CXX)
 # Configure building the gmsh mesh reader
 # add_library(GmshMeshReader GmshMeshReader.cpp GmshMeshReader.hpp)
 # Configure building the main executable
-add_executable(firefly main.cpp)
+add_executable(firefly firefly.cpp)
 # Configure the link command
 target_link_libraries(firefly PRIVATE GmshMeshReader)
 # Configure cmake's testing system
