@@ -2,25 +2,24 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define MAX_NODES 10000   // Adjust for larger meshes
+#define MAX_NODES 10000
 #define MAX_ELEMENTS 10000
 
-// Structure for nodes (grid points)
+// Node structure
 typedef struct {
     int id;
     double x, y, z;
 } Node;
 
-// Structure for elements (connectivity)
+// Element structure
 typedef struct {
     int id;
-    int *node_ids;  // Dynamically allocated array for node IDs
+    int node_ids[8]; // Max 8 nodes per element
     int num_nodes;
 } Element;
 
-// Function to read a GMSH file and extract node coordinates & connectivity
-void read_gmsh(const char *filename, Node **nodes, int *num_nodes, Element **elements, int *num_elements) {
-    int i, j;
+// Read GMSH 4.1 files
+void read_gmsh(const char *filename, Node *nodes, int *num_nodes, Element *elements, int *num_elements) {
     FILE *file = fopen(filename, "r");
     if (!file) {
         perror("Error opening file");
@@ -28,101 +27,109 @@ void read_gmsh(const char *filename, Node **nodes, int *num_nodes, Element **ele
     }
 
     char line[256];
-    *nodes = malloc(MAX_NODES * sizeof(Node));
-    *elements = malloc(MAX_ELEMENTS * sizeof(Element));
     *num_nodes = 0;
     *num_elements = 0;
 
-    if (!*nodes || !*elements) {
-        perror("Memory allocation failed");
-        fclose(file);
-        exit(EXIT_FAILURE);
-    }
+    int reading_nodes = 0;
+    int reading_elements = 0;
+    int i;
 
     while (fgets(line, sizeof(line), file)) {
-        // Read Nodes Section
-        if (strncmp(line, "$Nodes", 6) == 0) {
-            fgets(line, sizeof(line), file);
-            sscanf(line, "%d", num_nodes);
+        if (strncmp(line, "$Nodes", 6) == 0) { 
+            reading_nodes = 1; 
+            fgets(line, sizeof(line), file); // Skip next line with node count headers
+            continue; 
+        }
+        if (strncmp(line, "$EndNodes", 9) == 0) { 
+            reading_nodes = 0; 
+            continue; 
+        }
+        if (strncmp(line, "$Elements", 9) == 0) { 
+            reading_elements = 1; 
+            fgets(line, sizeof(line), file); // Skip next line with element count headers
+            continue; 
+        }
+        if (strncmp(line, "$EndElements", 12) == 0) { 
+            reading_elements = 0; 
+            continue; 
+        }
 
-            for (i = 0; i < *num_nodes; i++) {
-                fgets(line, sizeof(line), file);
-                sscanf(line, "%d %lf %lf %lf", &(*nodes)[i].id, &(*nodes)[i].x, &(*nodes)[i].y, &(*nodes)[i].z);
+        if (reading_nodes && *num_nodes < MAX_NODES) {
+            int id;
+            double x, y, z;
+            if (sscanf(line, "%d %lf %lf %lf", &id, &x, &y, &z) == 4) {
+                nodes[*num_nodes].id = id;
+                nodes[*num_nodes].x = x;
+                nodes[*num_nodes].y = y;
+                nodes[*num_nodes].z = z;
+                (*num_nodes)++;
+            } else {
+                fprintf(stderr, "Invalid node format: %s", line);
             }
         }
 
-        // Read Elements Section
-        if (strncmp(line, "$Elements", 9) == 0) {
-            fgets(line, sizeof(line), file);
-            sscanf(line, "%d", num_elements);
+        if (reading_elements && *num_elements < MAX_ELEMENTS) {
+            int id, num_tags, element_type, num_nodes;
+            char *token = strtok(line, " ");
+            if (token) id = atoi(token); else continue;
+            token = strtok(NULL, " "); if (token) element_type = atoi(token); else continue;
+            token = strtok(NULL, " "); if (token) num_tags = atoi(token); else continue;
 
-            for (i = 0; i < *num_elements; i++) {
-                int elem_id, elem_type, num_tags, node_id;
-                fgets(line, sizeof(line), file);
-                char *token = strtok(line, " ");
-
-                elem_id = atoi(token);
+            for (i = 0; i < num_tags; i++) {
                 token = strtok(NULL, " ");
-                elem_type = atoi(token);
+            }
+
+            num_nodes = (element_type == 4) ? 4 : (element_type == 8) ? 8 : 0;
+            elements[*num_elements].id = id;
+            elements[*num_elements].num_nodes = num_nodes;
+
+            for (i = 0; i < num_nodes; i++) {
                 token = strtok(NULL, " ");
-                num_tags = atoi(token);
-
-                for (j = 0; j < num_tags; j++)
-                    token = strtok(NULL, " ");
-
-                (*elements)[i].id = elem_id;
-                (*elements)[i].num_nodes = 0;
-                (*elements)[i].node_ids = malloc(8 * sizeof(int)); // Support up to 8-node elements
-
-                if (!(*elements)[i].node_ids) {
-                    perror("Memory allocation failed");
-                    fclose(file);
-                    exit(EXIT_FAILURE);
-                }
-
-                while ((token = strtok(NULL, " ")) != NULL) {
-                    node_id = atoi(token);
-                    (*elements)[i].node_ids[(*elements)[i].num_nodes++] = node_id;
+                if (token) {
+                    elements[*num_elements].node_ids[i] = atoi(token);
+                } else {
+                    fprintf(stderr, "Error reading node for element %d\n", id);
+                    elements[*num_elements].node_ids[i] = -1;
                 }
             }
+            (*num_elements)++;
         }
     }
-
     fclose(file);
 }
 
-void free_elements(Element *elements, int num_elements) {
-    int i;
-    for (i = 0; i < num_elements; i++) {
-        free(elements[i].node_ids);
+int main(int argc, char *argv[]) {
+    if (argc != 2) {
+        fprintf(stderr, "Usage: %s <filename.msh>\n", argv[0]);
+        return EXIT_FAILURE;
     }
-    free(elements);
-}
 
-int main() {
-    Node *nodes;
-    Element *elements;
-    int num_nodes, num_elements, i, j;
+    Node nodes[MAX_NODES];
+    Element elements[MAX_ELEMENTS];
+    int num_nodes, num_elements;
+    int i, j;
 
-    read_gmsh("example.msh", &nodes, &num_nodes, &elements, &num_elements);
+    read_gmsh(argv[1], nodes, &num_nodes, elements, &num_elements);
 
-    printf("Node Coordinates:\n");
-    for (i = 0; i < num_nodes; i++) {
-        printf("ID %d: (%.2lf, %.2lf, %.2lf)\n", nodes[i].id, nodes[i].x, nodes[i].y, nodes[i].z);
+    printf("\nNode Coordinates:\n");
+    i = 0;
+    while (i < num_nodes) {
+        printf("ID %d: (%.6lf, %.6lf, %.6lf)\n", nodes[i].id, nodes[i].x, nodes[i].y, nodes[i].z);
+        i++;
     }
 
     printf("\nElement Connectivity:\n");
-    for (i = 0; i < num_elements; i++) {
+    i = 0;
+    while (i < num_elements) {
         printf("Element %d: ", elements[i].id);
-        for (j = 0; j < elements[i].num_nodes; j++) {
+        j = 0;
+        while (j < elements[i].num_nodes) {
             printf("%d ", elements[i].node_ids[j]);
+            j++;
         }
         printf("\n");
+        i++;
     }
-
-    free(nodes);
-    free_elements(elements, num_elements);
 
     return 0;
 }
-
