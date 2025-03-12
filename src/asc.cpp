@@ -99,3 +99,35 @@ ASCReader::readFile()
     connections.shrink_to_fit();
     return true;
 }
+
+ASCReader::&getCoordinates() const
+{
+    return coordinates;
+}
+
+ASCReader::getCoordinatesCount() const
+{
+    return coordinates.size();
+}
+
+ASCReader::clearCoordinates()
+{
+    coordinates.clear();
+    coordinates.shrink_to_fit();
+}
+
+ASCReader::&getConnections() const
+{
+    return connections;
+}
+
+ASCReader::getConnectionsCount() const
+{
+    return connections.size();
+}
+
+ASCReader::clearConnections()
+{
+    connections.clear();
+    connections.shrink_to_fit();
+}
