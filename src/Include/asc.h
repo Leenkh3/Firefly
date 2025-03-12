@@ -32,10 +32,19 @@ public:
     explicit ASCReader(const std::string &file_path);
 
     bool readFile();
+    const std::vector<Coordinate> &getCoordinates() const;
+    int getCoordinatesCount() const;
+    void clearCoordinates();
+    const std::vector<Connectivity> &getConnections() const;
+    int getConnectionsCount() const;
+    void clearConnections();
+
 private:
     std::string filename;
     std::vector<Coordinate> coordinates;
     std::vector<Connectivity> connections;
+
+    bool parseLine(const std::string &line, Coordinate &coord);
 };
 
 #endif
