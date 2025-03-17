@@ -11,7 +11,7 @@ public:
     virtual void dot(std::vector<double> &vec) = 0;              // Dot product with vector
     virtual void dot(std::vector<std::vector<double> > &mat) = 0;     // Dot product with matrix
     virtual void print() = 0;                                  // Print matrix
-    virtual double at(int row, int col) = 0;                    // get the value at row,col
+    virtual double& at(int row, int col) = 0;                    // get the value at row,col
     virtual ~Matrix() {}                                       // Virtual destructor
 };
 

@@ -18,7 +18,7 @@ void Dense::set_matrix(std::vector<std::vector<double> > matrix) {
     this->matrix_shape.push_back(matrix.size() > 0 ? matrix[0].size() : 0);
 }
 
-double Dense::at(int row, int col){
+double& Dense::at(int row, int col){
     return this->matrix[row][col];
 }
 std::vector<int> Dense::shape() {

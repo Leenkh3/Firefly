@@ -144,6 +144,20 @@ int test_transpose_3x2_array() {
     return 0;
 }
 
+
+int test_getter_and_setter(){
+    int row = 0, col = 0;
+    std::vector<std::vector<double> >mat(2,std::vector<double>(2,2.0));
+    Dense d(mat);
+
+    d.at(0,0)=1.0;
+    if(d.at(0,0) != 1.0){
+        std::cerr << "Setter/Getter test failed: Incorrect value in the requested matrix location." << std::endl;
+        return 1;
+    }
+    std::cout << "Setter/Getter test passed!" << std::endl;
+    return 0;
+}
 int main() {
     int result = 0;
 
@@ -152,6 +166,6 @@ int main() {
     result |= test_not_valid_reshape();
     result |= test_transpose();
     result |= test_transpose_3x2_array();
-
+    result |= test_getter_and_setter();
     return 0;
 }

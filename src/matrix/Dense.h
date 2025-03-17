@@ -11,7 +11,7 @@ private:
 
 public:
     Dense(const std::vector<std::vector<double> > &mat);
-    double at(int row,int col);
+    double& at(int row,int col);
     std::vector<int> shape() ;
     void print() ;
     void reshape(int rows, int cols);
