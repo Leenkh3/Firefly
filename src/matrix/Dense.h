@@ -6,7 +6,7 @@ class Dense : public Matrix
 {
 private:
     std::vector<std::vector<double> > matrix;
-    std::vector<int> matrix_shape;
+    int rows,cols;
     void set_matrix(std::vector<std::vector<double> > matrix);
 
 public:

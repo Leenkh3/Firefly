@@ -5,29 +5,35 @@
 Dense::Dense(const std::vector<std::vector<double> > &mat) : matrix(mat) {
     int rows = mat.size();
     int cols = mat[0].size();
-    matrix_shape.push_back(rows);
-    matrix_shape.push_back(cols);
+    this->rows = rows;
+    this->cols = cols;
+    this->matrix = mat;
 }
 
 
 
 void Dense::set_matrix(std::vector<std::vector<double> > matrix) {
     this->matrix = matrix;
-    this->matrix_shape.clear();
-    this->matrix_shape.push_back(matrix.size());
-    this->matrix_shape.push_back(matrix.size() > 0 ? matrix[0].size() : 0);
+    this->rows =matrix.size();
+    this->cols = matrix.size() > 0 ? matrix[0].size() : 0;
 }
 
 double& Dense::at(int row, int col){
     return this->matrix[row][col];
 }
+
+// this is just a placeholder for now - it may be deleted in the future
 std::vector<int> Dense::shape() {
-    return matrix_shape;
+    std::vector<int> shape(2);
+    shape[0] = rows;
+    shape[1] = cols;
+    
+    return shape;
 }
 
 void Dense::print() {
-    for (int i = 0; i < matrix_shape[0]; i++) {
-        for (int j = 0; j < matrix_shape[1]; j++) {
+    for (int i = 0; i < this->rows; i++) {
+        for (int j = 0; j < this->cols; j++) {
             std::cout << matrix[i][j] << " ";
         }
         std::cout << std::endl;
@@ -35,9 +41,9 @@ void Dense::print() {
 }
 
 void Dense::reshape(int rows, int cols) {
-    if (rows * cols != this->matrix_shape[0] * this->matrix_shape[1]) {
+    if (rows * cols != this->rows * this->cols) {
         std::cout << "Can't reshape this matrix to " << rows << " rows and " << cols
-                  << " cols with shape " << matrix_shape[0] << "," << matrix_shape[1] << std::endl;
+                  << " cols with shape " << rows << "," << cols << std::endl;
         std::cout << "Aborting" << std::endl;
         return ;
     }
@@ -45,8 +51,8 @@ void Dense::reshape(int rows, int cols) {
     std::vector<std::vector<double> > reshaped_matrix(rows, std::vector<double>(cols));
     int curr_row = 0, curr_col = 0;
 
-    for (int i = 0; i < this->matrix_shape[0]; i++) {
-        for (int j = 0; j < this->matrix_shape[1]; j++) {
+    for (int i = 0; i < this->rows; i++) {
+        for (int j = 0; j < this->cols; j++) {
             reshaped_matrix[curr_row][curr_col++] = this->matrix[i][j];
             if (curr_col == cols) {
                 curr_row++;
@@ -59,10 +65,10 @@ void Dense::reshape(int rows, int cols) {
 }
 
 void Dense::T() {
-    std::vector<std::vector<double> > transposed(matrix_shape[1], std::vector<double>(matrix_shape[0]));
+    std::vector<std::vector<double> > transposed(cols, std::vector<double>(rows));
 
-    for (int i = 0; i < matrix_shape[0]; i++) {
-        for (int j = 0; j < matrix_shape[1]; j++) {
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
             transposed[j][i] = matrix[i][j];
         }
     }
@@ -73,16 +79,16 @@ void Dense::T() {
 }
 
  void Dense::dot(std::vector<double> &vec) {
-    if (vec.size() != matrix_shape[1]) {
-        std::cout << "Shapes don't match: cannot multiply matrix with shape " << matrix_shape[0] << ","
-                  << matrix_shape[1] << " with vector of size " << vec.size() << std::endl;
+    if (vec.size() != cols) {
+        std::cout << "Shapes don't match: cannot multiply matrix with shape " << rows << ","
+                  << cols << " with vector of size " << vec.size() << std::endl;
         return ;
     }
 
-    std::vector<std::vector<double> > dotted(matrix_shape[0], std::vector<double>(1, 0));
-    for (int row = 0; row < matrix_shape[0]; row++) {
+    std::vector<std::vector<double> > dotted(rows, std::vector<double>(1, 0));
+    for (int row = 0; row < rows; row++) {
         double sum = 0;
-        for (int col = 0; col < matrix_shape[1]; col++) {
+        for (int col = 0; col < cols; col++) {
             sum += vec[col] * matrix[row][col];
         }
         dotted[row][0] = sum;
