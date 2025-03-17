@@ -24,13 +24,13 @@ int test_reshape() {
     std::vector<std::vector<double> > mat(2, std::vector<double>(2, 2.0));
     Dense d(mat);
 
-    Matrix& reshaped = d.reshape(4, 1);
+    d.reshape(4, 1);
 
     std::vector<int> expected_shape;
     expected_shape.push_back(4); // Rows
     expected_shape.push_back(1); // Cols
 
-    if (reshaped.shape() != expected_shape) {
+    if (d.shape() != expected_shape) {
         std::cerr << "Reshape test failed!" << std::endl;
         return 1;
     }
@@ -44,13 +44,13 @@ int test_not_valid_reshape() {
     std::vector<std::vector<double> > mat(2, std::vector<double>(2, 2.0));
     Dense d(mat);
 
-    Matrix& reshaped = d.reshape(4, 4);
+    d.reshape(4, 4);
 
     std::vector<int> expected_shape;
     expected_shape.push_back(2); // Rows
     expected_shape.push_back(2); // Cols
 
-    if (reshaped.shape() != expected_shape) {
+    if (d.shape() != expected_shape) {
         std::cerr << "Reshape test failed!" << std::endl;
         return 1;
     }
@@ -68,13 +68,13 @@ int test_transpose() {
     mat[1][1] = 5.0;
 
     Dense d(mat);
-    Matrix& transposed = d.T();
+    d.T();
 
     std::vector<int> expected_shape;
     expected_shape.push_back(2); // Rows
     expected_shape.push_back(2); // Cols
 
-    if ((transposed.shape() != expected_shape) || (mat[1][0] != 4.0 && mat[0][1] != 2.0) ) {
+    if ((d.shape() != expected_shape) || (mat[1][0] != 4.0 && mat[0][1] != 2.0) ) {
         std::cerr << "Transpose test failed!" << std::endl;
         return 1;
     }
@@ -110,15 +110,15 @@ int test_transpose_3x2_array() {
     }
     
     Dense d(mat);
-    Matrix &transposed = d.T();
+    d.T();
     
     std::vector<int> expected_shape;
     expected_shape.push_back(2);  // Rows after transpose.
     expected_shape.push_back(3);  // Columns after transpose.
     
-    if (transposed.shape() != expected_shape) {
+    if (d.shape() != expected_shape) {
         std::cerr << "Transpose test failed: Incorrect shape. Expected [2, 3] but got [";
-        std::vector<int> shape = transposed.shape();
+        std::vector<int> shape = d.shape();
         for (size_t i = 0; i < shape.size(); ++i) {
             std::cerr << shape[i];
             if (i + 1 < shape.size()) {
@@ -129,12 +129,12 @@ int test_transpose_3x2_array() {
         return 1;
     }
     
-    if (transposed.at(0,0) != 1.0 ||
-        transposed.at(0,1) != 3.0 ||
-        transposed.at(0,2) != 5.0 ||
-        transposed.at(1,0) != 2.0 ||
-        transposed.at(1,1) != 4.0 ||
-        transposed.at(1,2) != 6.0)
+    if (d.at(0,0) != 1.0 ||
+        d.at(0,1) != 3.0 ||
+        d.at(0,2) != 5.0 ||
+        d.at(1,0) != 2.0 ||
+        d.at(1,1) != 4.0 ||
+        d.at(1,2) != 6.0)
     {
         std::cerr << "Transpose test failed: Incorrect values in the transposed matrix." << std::endl;
         return 1;

@@ -14,8 +14,8 @@ public:
     double at(int row,int col);
     std::vector<int> shape() ;
     void print() ;
-    Matrix &reshape(int rows, int cols);
-    Matrix &T();
-    Matrix &dot( std::vector<double> &vec);
-    Matrix &dot( std::vector<std::vector<double> > &mat) ;
+    void reshape(int rows, int cols);
+    void T();
+    void dot( std::vector<double> &vec);
+    void dot( std::vector<std::vector<double> > &mat) ;
 };

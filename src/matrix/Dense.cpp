@@ -34,12 +34,12 @@ void Dense::print() {
     }
 }
 
-Matrix &Dense::reshape(int rows, int cols) {
+void Dense::reshape(int rows, int cols) {
     if (rows * cols != this->matrix_shape[0] * this->matrix_shape[1]) {
         std::cout << "Can't reshape this matrix to " << rows << " rows and " << cols
                   << " cols with shape " << matrix_shape[0] << "," << matrix_shape[1] << std::endl;
         std::cout << "Aborting" << std::endl;
-        return *this;
+        return ;
     }
 
     std::vector<std::vector<double> > reshaped_matrix(rows, std::vector<double>(cols));
@@ -56,10 +56,9 @@ Matrix &Dense::reshape(int rows, int cols) {
     }
 
     this->set_matrix(reshaped_matrix);
-    return *this;
 }
 
-Matrix &Dense::T() {
+void Dense::T() {
     std::vector<std::vector<double> > transposed(matrix_shape[1], std::vector<double>(matrix_shape[0]));
 
     for (int i = 0; i < matrix_shape[0]; i++) {
@@ -70,14 +69,14 @@ Matrix &Dense::T() {
 
     set_matrix(transposed);
    
-    return *this;
+   
 }
 
-Matrix &Dense::dot(std::vector<double> &vec) {
+ void Dense::dot(std::vector<double> &vec) {
     if (vec.size() != matrix_shape[1]) {
         std::cout << "Shapes don't match: cannot multiply matrix with shape " << matrix_shape[0] << ","
                   << matrix_shape[1] << " with vector of size " << vec.size() << std::endl;
-        return *this;
+        return ;
     }
 
     std::vector<std::vector<double> > dotted(matrix_shape[0], std::vector<double>(1, 0));
@@ -88,11 +87,9 @@ Matrix &Dense::dot(std::vector<double> &vec) {
         }
         dotted[row][0] = sum;
     }
-
-    return *new Dense(dotted);
+    set_matrix(dotted);
 }
 
-Matrix &Dense::dot(std::vector<std::vector<double> > &mat) {
+void Dense::dot(std::vector<std::vector<double> > &mat) {
     std::cerr << "Matrix dot product not implemented yet" << std::endl;
-    return *this;
 }
