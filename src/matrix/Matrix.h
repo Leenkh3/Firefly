@@ -1,5 +1,4 @@
-#ifndef MATRIX_H
-#define MATRIX_H
+#pragma once
 
 #include <vector>
 
@@ -12,8 +11,8 @@ public:
     virtual Matrix &dot(std::vector<double> &vec) = 0;              // Dot product with vector
     virtual Matrix &dot(std::vector<std::vector<double> > &mat) = 0;     // Dot product with matrix
     virtual void print() = 0;                                  // Print matrix
-
+    virtual double at(int row, int col) = 0;                    // get the value at row,col
     virtual ~Matrix() {}                                       // Virtual destructor
 };
 
-#endif
+
