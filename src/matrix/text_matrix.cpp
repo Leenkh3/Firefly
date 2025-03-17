@@ -3,63 +3,62 @@
 #include <vector>
 #include <cassert>
 
-using namespace std;
 
 int test_constructor() {
-    vector<vector<double> > mat(2, vector<double>(2, 2.0));
+    std::vector<std::vector<double> > mat(2, std::vector<double>(2, 2.0));
     Dense d(mat);
 
-    vector<int> expected_shape;
+    std::vector<int> expected_shape;
     expected_shape.push_back(2); // Rows
     expected_shape.push_back(2); // Cols
 
     if (d.shape() != expected_shape) {
-        cerr << "Constructor test failed!" << endl;
+        std::cerr << "Constructor test failed!" << std::endl;
         return 1;
     }
-    cout << "Constructor test passed!" << endl;
+    std::cout << "Constructor test passed!" << std::endl;
     return 0;
 }
 
 int test_reshape() {
-    vector<vector<double> > mat(2, vector<double>(2, 2.0));
+    std::vector<std::vector<double> > mat(2, std::vector<double>(2, 2.0));
     Dense d(mat);
 
-    Matrix* reshaped = d.reshape(4, 1);
+    Matrix& reshaped = d.reshape(4, 1);
 
-    vector<int> expected_shape;
+    std::vector<int> expected_shape;
     expected_shape.push_back(4); // Rows
     expected_shape.push_back(1); // Cols
 
-    if (reshaped->shape() != expected_shape) {
-        cerr << "Reshape test failed!" << endl;
+    if (reshaped.shape() != expected_shape) {
+        std::cerr << "Reshape test failed!" << std::endl;
         return 1;
     }
-    cout << "Reshape test passed!" << endl;
+    std::cout << "Reshape test passed!" << std::endl;
 
-    delete reshaped; // Clean up dynamically allocated memory
+    delete &reshaped; // Clean up dynamically allocated memory
     return 0;
 }
 
 int test_transpose() {
-    vector<vector<double> > mat(2, vector<double>(2, 2.0));
+    std::vector<std::vector<double> > mat(2, std::vector<double>(2, 2.0));
     mat[0][0] = 1.0;
     mat[1][1] = 1.0;
 
     Dense d(mat);
-    Matrix* transposed = d.T();
+    Matrix& transposed = d.T();
 
-    vector<int> expected_shape;
+    std::vector<int> expected_shape;
     expected_shape.push_back(2); // Rows
     expected_shape.push_back(2); // Cols
 
-    if (transposed->shape() != expected_shape) {
-        cerr << "Transpose test failed!" << endl;
+    if (transposed.shape() != expected_shape) {
+        std::cerr << "Transpose test failed!" << std::endl;
         return 1;
     }
-    cout << "Transpose test passed!" << endl;
+    std::cout << "Transpose test passed!" << std::endl;
 
-    delete transposed; // Clean up dynamically allocated memory
+    delete &transposed; // Clean up dynamically allocated memory
     return 0;
 }
 

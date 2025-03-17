@@ -3,25 +3,24 @@
 
 #include "Matrix.h"
 #include <iostream>
-using namespace std;
 
 class Dense : public Matrix
 {
 private:
-    vector<vector<double> > matrix;
-    vector<int> matrix_shape;
+    std::vector<std::vector<double> > matrix;
+    std::vector<int> matrix_shape;
 
     void set_shape(int rows,int cols);
-    void set_matrix(vector<vector<double> > matrix);
+    void set_matrix(std::vector<std::vector<double> > matrix);
 
 public:
-    Dense(const vector<vector<double> > &mat);
-    vector<int> shape() ;
+    Dense(const std::vector<std::vector<double> > &mat);
+    std::vector<int> shape() ;
     void print() ;
-    Matrix *reshape(int rows, int cols);
-    Matrix *T();
-    Matrix *dot( vector<double> &vec);
-    Matrix *dot( vector<vector<double> > &mat) ;
+    Matrix &reshape(int rows, int cols);
+    Matrix &T();
+    Matrix &dot( std::vector<double> &vec);
+    Matrix &dot( std::vector<std::vector<double> > &mat) ;
 };
 
 #endif
