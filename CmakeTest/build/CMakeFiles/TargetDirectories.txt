@@ -1,0 +1,4 @@
+/work/students/hpc-f0v113/firefly/CmakeTest/build/CMakeFiles/GmshReader.dir
+/work/students/hpc-f0v113/firefly/CmakeTest/build/CMakeFiles/test.dir
+/work/students/hpc-f0v113/firefly/CmakeTest/build/CMakeFiles/edit_cache.dir
+/work/students/hpc-f0v113/firefly/CmakeTest/build/CMakeFiles/rebuild_cache.dir
