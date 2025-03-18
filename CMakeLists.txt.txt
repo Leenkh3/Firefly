@@ -1,0 +1,18 @@
+# Find Doxygen
+find_package(Doxygen REQUIRED)
+
+# Define input and output directories
+set(DOXYGEN_INPUT_DIR ${CMAKE_SOURCE_DIR}/src)
+set(DOXYGEN_OUTPUT_DIR ${CMAKE_BINARY_DIR}/docs)
+set(DOXYGEN_CONFIG_FILE ${CMAKE_BINARY_DIR}/Doxyfile)
+
+# Generate the Doxygen configuration file based on settings
+configure_file(${CMAKE_SOURCE_DIR}/Doxyfile ${DOXYGEN_CONFIG_FILE} @ONLY)
+
+# Create a CMake target to generate documentation
+add_custom_target(doc
+    COMMAND Doxygen::doxygen ${DOXYGEN_CONFIG_FILE}
+    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+    COMMENT "Generating API documentation with Doxygen"
+    VERBATIM
+)
