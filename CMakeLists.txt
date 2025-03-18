@@ -24,7 +24,7 @@ target_link_libraries(firefly PRIVATE MatrixLib)
 # Configure cmake's testing system
 enable_testing()
 
-add_executable(MatrixTests src/matrix/text_matrix.cpp)
+add_executable(MatrixTests src/matrix/test_matrix.cpp)
 target_link_libraries(MatrixTests PRIVATE MatrixLib)
 # Add a test, running the chillax executable, non-zero exit code will fail the test
 add_test(NAME firefly COMMAND firefly)

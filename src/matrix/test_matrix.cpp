@@ -70,12 +70,10 @@ int test_transpose() {
     Dense d(mat);
     d.T();
 
-    std::vector<int> expected_shape;
-    expected_shape.push_back(2); // Rows
-    expected_shape.push_back(2); // Cols
-
-    if ((d.shape() != expected_shape) || (mat[1][0] != 4.0 && mat[0][1] != 2.0) ) {
-        std::cerr << "Transpose test failed!" << std::endl;
+   
+    if (d.at(1,0) != 4.0 || d.at(0,1)!= 2.0 ) {
+        std::cerr << "Transpose test failed! ,matrix is :" << std::endl;
+        d.print();
         return 1;
     }
 
@@ -90,24 +88,18 @@ int test_transpose_3x2_array() {
     // Build a 3x2 matrix using push_back for C++ compatibility.
     std::vector<std::vector<double> > mat;
     
-    {
         std::vector<double> row;
         row.push_back(1.0);
         row.push_back(2.0);
         mat.push_back(row);
-    }
-    {
-        std::vector<double> row;
+        row.clear();
         row.push_back(3.0);
         row.push_back(4.0);
         mat.push_back(row);
-    }
-    {
-        std::vector<double> row;
+        row.clear();
         row.push_back(5.0);
         row.push_back(6.0);
         mat.push_back(row);
-    }
     
     Dense d(mat);
     d.T();
@@ -117,15 +109,8 @@ int test_transpose_3x2_array() {
     expected_shape.push_back(3);  // Columns after transpose.
     
     if (d.shape() != expected_shape) {
-        std::cerr << "Transpose test failed: Incorrect shape. Expected [2, 3] but got [";
         std::vector<int> shape = d.shape();
-        for (size_t i = 0; i < shape.size(); ++i) {
-            std::cerr << shape[i];
-            if (i + 1 < shape.size()) {
-                std::cerr << ", ";
-            }
-        }
-        std::cerr << "]." << std::endl;
+        std::cerr << "Transpose test failed: Incorrect shape. Expected [2, 3] but got ["<<shape[0]<<","<<shape[1]<<"]"<<std::endl;
         return 1;
     }
     
@@ -140,7 +125,7 @@ int test_transpose_3x2_array() {
         return 1;
     }
     
-    std::cout << "Transpose test passed!" << std::endl;
+    std::cout << "Transpose 3*2 test passed!" << std::endl;
     return 0;
 }
 
@@ -158,6 +143,49 @@ int test_getter_and_setter(){
     std::cout << "Setter/Getter test passed!" << std::endl;
     return 0;
 }
+
+
+
+int test_vector_multiplication(){
+
+    std::vector<std::vector<double> > mat(3,std::vector<double>(2,2.0));
+
+    Dense d(mat);
+    // original array
+    // 1.0 2.0
+    // 3.0 4.0
+    // 2.0 2.0
+    d.at(0,0) = 1.0;
+    d.at(1,0) = 3.0;
+    d.at(1,1) = 4.0;
+
+    // multiply with vector of shape (2,1) ={1,2} (row vector)
+    std::vector<double> to_mult(2,2.0);
+    to_mult[0] = 1.0;
+
+    // the result must be of shape (3,1) {5.0,11.0,6.0} as row matrix 
+    d.mult(to_mult);
+    // check the shape
+
+    std::vector<int> shape = d.shape();
+
+    if(shape[0] != 3 && shape[1] != 1){
+        std::cerr<<"Matrix Multiplication Test Faild : shape after multiplication must be (3,1) , but it is(" <<shape[0]<<","<<shape[1]<<")!"<<std::endl;
+        return 1;
+    }
+
+    if(d.at(0,0) != 5.0 || d.at(1,0) != 11.0 || d.at(2,0)!=6.0){
+        std::cerr<<"Matrix Multiplication Test Faild :Wrong matrix values, the resulted (wrong matrix) is: !!"<<std::endl;
+        d.print();
+        return 1;
+    }
+
+    std::cout<<"Multiplication with vector test passed!"<<std::endl;
+    return 0;
+
+
+}
+
 int main() {
     int result = 0;
 
@@ -167,5 +195,6 @@ int main() {
     result |= test_transpose();
     result |= test_transpose_3x2_array();
     result |= test_getter_and_setter();
-    return 0;
+    result |= test_vector_multiplication();
+    return result;
 }

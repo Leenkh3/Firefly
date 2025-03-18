@@ -72,13 +72,11 @@ void Dense::T() {
             transposed[j][i] = matrix[i][j];
         }
     }
-
+    
     set_matrix(transposed);
-   
-   
 }
 
- void Dense::dot(std::vector<double> &vec) {
+ void Dense::mult(std::vector<double> &vec) {
     if (vec.size() != cols) {
         std::cout << "Shapes don't match: cannot multiply matrix with shape " << rows << ","
                   << cols << " with vector of size " << vec.size() << std::endl;
@@ -96,6 +94,3 @@ void Dense::T() {
     set_matrix(dotted);
 }
 
-void Dense::dot(std::vector<std::vector<double> > &mat) {
-    std::cerr << "Matrix dot product not implemented yet" << std::endl;
-}
