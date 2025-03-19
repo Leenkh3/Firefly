@@ -2,6 +2,7 @@
 #include <iostream>
 #include <vector>
 #include <cassert>
+#include "CSR.h"
 
 
 int test_constructor() {
@@ -186,6 +187,51 @@ int test_vector_multiplication(){
 
 }
 
+
+int test_CSR_format(){
+    int connectivity_arr[] ={
+        1,2,4,5,
+        2,3,5,6,
+        4,5,7,8,
+        5,6,8,9
+    };
+
+    int count = sizeof(connectivity_arr) / sizeof(connectivity_arr[0]);
+    
+    std::vector<int> connectivity(connectivity_arr,connectivity_arr+count);
+    CSR s(connectivity,4);
+    
+    // for cols it must be as follows
+    int cols_arr[] = {
+        1, 2, 4, 5,
+        1, 2, 3, 4, 5, 6,
+        2, 3, 5, 6,
+        1, 2, 4, 5, 7, 8,
+        1, 2, 3, 4, 5, 6, 7, 8, 9,
+        2, 3, 5, 6, 8, 9,
+        4, 5, 7, 8,
+        4, 5, 6, 7, 8, 9,
+        5, 6, 8, 9
+    };
+    
+    count = sizeof(cols_arr) / sizeof(cols_arr[0]);
+    
+    // Create a std::vector using the cols_array.
+    std::vector<int> cols(cols_arr, cols_arr + count);
+
+
+    int row_ptrs_arr[]={0,4,10,14,20,29,35,39,45,49};
+    count = sizeof(row_ptrs_arr) / sizeof(row_ptrs_arr[0]);
+    std::vector<int> rows_ptr(row_ptrs_arr,row_ptrs_arr + count);
+
+    if(!s.equal(s.getCols(),cols) || ! s.equal(s.getRPtr(),rows_ptr)){
+        std::cerr<<"Wrong cols|row_ptr vector!!" <<std::endl;
+        return 1;
+    }
+    std::cout<<"CSR test passed!"<<std::endl;
+    return 0;
+}
+
 int main() {
     int result = 0;
 
@@ -196,5 +242,6 @@ int main() {
     result |= test_transpose_3x2_array();
     result |= test_getter_and_setter();
     result |= test_vector_multiplication();
+    result |= test_CSR_format();
     return result;
 }
