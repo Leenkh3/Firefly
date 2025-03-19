@@ -8,10 +8,31 @@ project(Firefly VERSION 1.0 LANGUAGES CXX)
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 # Configure building the main executable
+
+# adding matrix to the build
+add_library(MatrixLib
+    src/matrix/Dense.cpp
+    src/matrix/Matrix.h
+    src/matrix/Dense.h
+)
+
+
 add_executable(firefly firefly.cpp)
 
+# Configure the link command
+
+# target_link_libraries(firefly PRIVATE GmshMeshReader)
 # Configure cmake's testing system
 enable_testing()
+
+add_executable(MatrixTests src/matrix/test_matrix.cpp)
+# Link the Matrix library to the main executable
+target_link_libraries(MatrixTests PRIVATE MatrixLib)
+# Add a test, running the chillax executable, non-zero exit code will fail the test
+add_test(NAME firefly COMMAND firefly)
+
+# Add a test for the Matrix library
+add_test(NAME MatrixTests COMMAND MatrixTests)
 
 # Include function used to add regression tests
 include(add_regression_test)
