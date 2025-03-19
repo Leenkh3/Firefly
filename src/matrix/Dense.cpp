@@ -76,21 +76,21 @@ void Dense::T() {
     set_matrix(transposed);
 }
 
- void Dense::mult(std::vector<double> &vec) {
+ std::vector<double> Dense::mult(std::vector<double> &vec) const {
     if (vec.size() != cols) {
         std::cout << "Shapes don't match: cannot multiply matrix with shape " << rows << ","
                   << cols << " with vector of size " << vec.size() << std::endl;
-        return ;
+        return vec ;
     }
 
-    std::vector<std::vector<double> > dotted(rows, std::vector<double>(1, 0));
+    std::vector<double>  dotted(rows);
     for (int row = 0; row < rows; row++) {
         double sum = 0;
         for (int col = 0; col < cols; col++) {
             sum += vec[col] * matrix[row][col];
         }
-        dotted[row][0] = sum;
+        dotted[row] = sum;
     }
-    set_matrix(dotted);
+    return dotted;
 }
 
