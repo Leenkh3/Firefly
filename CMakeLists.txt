@@ -1,7 +1,7 @@
 # Tell cmake the featureset we require
 cmake_minimum_required(VERSION 3.15)
 # Project name and version with languages/compilers required
-project(Firefly VERSION 1.0 LANGUAGES CXX)
+project(Firefly VERSION 1.0 LANGUAGES C CXX)
 # Configure building the gmsh mesh reader
 # add_library(GmshMeshReader GmshMeshReader.cpp GmshMeshReader.hpp)
 # Configure building the main executable
@@ -15,6 +15,8 @@ project(Firefly VERSION 1.0 LANGUAGES CXX)
 
 message("Install path: ${PROJECT_BINARY_DIR}")
 
+
+find_package(MPI)
 include(ExternalProject)
 
 # Install NetCDF first
@@ -35,6 +37,7 @@ ExternalProject_Add(netcdf
                -DENABLE_PARALLEL_TESTS=off
                -DENABLE_BASH_SCRIPT_TESTING=off
                -DENABLE_V2_API=off
+               -DNETCDF_ENABLE_HDF5=off
                -DCMAKE_INSTALL_PREFIX=${PROJECT_BINARY_DIR}/netcdf-install
 )
 
@@ -45,7 +48,7 @@ set(NETCDF_INCLUDE_DIR "${PROJECT_BINARY_DIR}/netcdf-install/include")
 # Install Exodus using the official Sandia Labs SEACAS repository
 ExternalProject_Add(exodus
     GIT_REPOSITORY https://github.com/sandialabs/seacas.git
-    GIT_TAG main
+    GIT_TAG master
     DEPENDS netcdf  # Ensure NetCDF is built before Exodus
     CMAKE_ARGS -DCMAKE_C_COMPILER=${CMAKE_C_COMPILER}
                -DNetCDF_DIR=${PROJECT_BINARY_DIR}/netcdf-install
