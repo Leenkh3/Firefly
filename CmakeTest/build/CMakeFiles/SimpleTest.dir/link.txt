@@ -1,0 +1,1 @@
+/usr/bin/cc CMakeFiles/SimpleTest.dir/gmsh_reader.c.o -o SimpleTest
