@@ -16,5 +16,5 @@ public:
     void print() ;
     void reshape(int rows, int cols);
     void T();
-    void mult( std::vector<double> &vec);
+    std::vector<double> mult( std::vector<double> &vec) const;
 };

@@ -164,17 +164,17 @@ int test_vector_multiplication(){
     to_mult[0] = 1.0;
 
     // the result must be of shape (3,1) {5.0,11.0,6.0} as row matrix 
-    d.mult(to_mult);
+    std::vector<double> results = d.mult(to_mult);
     // check the shape
 
     std::vector<int> shape = d.shape();
 
-    if(shape[0] != 3 && shape[1] != 1){
+    if(shape[0] != 3 && shape[1] != 2){
         std::cerr<<"Matrix Multiplication Test Faild : shape after multiplication must be (3,1) , but it is(" <<shape[0]<<","<<shape[1]<<")!"<<std::endl;
         return 1;
     }
 
-    if(d.at(0,0) != 5.0 || d.at(1,0) != 11.0 || d.at(2,0)!=6.0){
+    if(results[0] != 5.0 || results[1] != 11.0 || results[2]!=6.0){
         std::cerr<<"Matrix Multiplication Test Faild :Wrong matrix values, the resulted (wrong matrix) is: !!"<<std::endl;
         d.print();
         return 1;
