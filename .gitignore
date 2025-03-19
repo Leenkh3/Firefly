@@ -54,5 +54,4 @@ dkms.conf
 # Vim swap and undo files, build dir
 *~
 *sw?
-.gitignore
 /build
