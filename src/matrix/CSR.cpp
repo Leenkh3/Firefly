@@ -152,6 +152,6 @@ CSR::CSR(std::vector<int> &connectivity, int shape_points) {
     }
 
     for(int i =0;i<a.size();i++)
-        if(a[i]!=b[i]) return false
+        if(a[i]!=b[i]) return false;
     return true;
  }
