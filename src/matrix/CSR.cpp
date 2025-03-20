@@ -87,8 +87,8 @@ CSR::CSR(std::vector<int> &connectivity, int shape_points) {
    // Conventionally, the first row pointer is 0.
    this->rows_ptr.clear();
    this->cols.clear();
-   this->rows_ptr.push_back(0);
-   int count = 0;
+   int count = 1;
+   this->rows_ptr.push_back(count);
    for (std::set<int>::iterator it = unique_elemnts.begin(); 
         it != unique_elemnts.end(); 
         ++it) {
@@ -152,6 +152,6 @@ CSR::CSR(std::vector<int> &connectivity, int shape_points) {
     }
 
     for(int i =0;i<a.size();i++)
-        if(a[i]!=b[i]) return false;
+        if(a[i]!=b[i]) return false
     return true;
  }
