@@ -16,23 +16,32 @@ add_library(MatrixLib
     src/matrix/Dense.h
 )
 
+# Configure a CSR matrix class
+add_library(CSR src/laplacian/CSR.cpp)
+# Configure a functions needed to compute the Laplacian
+add_library(Laplacian src/laplacian/Laplacian.cpp)
+
+# Configure building the executable to test the Laplacian
+add_executable(LaplacianTests src/laplacian/testLaplacian.cpp)
+target_link_libraries(LaplacianTests PRIVATE CSR Laplacian)
+
 
 add_executable(firefly firefly.cpp)
 
-# Configure the link command
-
-# target_link_libraries(firefly PRIVATE GmshMeshReader)
 # Configure cmake's testing system
 enable_testing()
 
 add_executable(MatrixTests src/matrix/test_matrix.cpp)
 # Link the Matrix library to the main executable
 target_link_libraries(MatrixTests PRIVATE MatrixLib)
+
 # Add a test, running the chillax executable, non-zero exit code will fail the test
 add_test(NAME firefly COMMAND firefly)
 
 # Add a test for the Matrix library
 add_test(NAME MatrixTests COMMAND MatrixTests)
+# Add tests for the Laplacian
+add_test(NAME laplacian COMMAND LaplacianTests)
 
 # Include function used to add regression tests
 include(add_regression_test)
