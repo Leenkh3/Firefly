@@ -85,24 +85,26 @@ CSR::CSR(std::vector<int> &connectivity, int shape_points) {
 
    // Build the CSR structure.
    // Conventionally, the first row pointer is 0.
-   this->rows_ptr.clear();
-   this->cols.clear();
+   rows_ptr.clear();
+   cols.clear();
    int count = 1;
-   this->rows_ptr.push_back(count);
+   rows_ptr.push_back(count);
    for (std::set<int>::iterator it = unique_elemnts.begin(); 
         it != unique_elemnts.end(); 
         ++it) {
        // Use operator[] instead of .at() so that it works in older compilers.
        std::set<int>& connSet = hash[*it];
        for (std::set<int>::iterator j = connSet.begin(); j != connSet.end(); ++j) {
-           this->cols.push_back(*j);
+           cols.push_back(*j);
        }
        count += (int)connSet.size();
-       this->rows_ptr.push_back(count);
+       rows_ptr.push_back(count);
    }
 }
 
- void CSR::reshape(int rows, int cols){};           
+ void CSR::reshape(int rows, int cols){
+    std::cout<<"Sorry , this functionality is not available in Sparse matrices!";
+ };           
  void CSR::T() {};                                   
  std::vector<double> CSR::mult(std::vector<double> &vec)  const{ 
     // I know this is not good - this is just a placeholder for now
@@ -112,13 +114,13 @@ CSR::CSR(std::vector<int> &connectivity, int shape_points) {
  };           
  void CSR::print() {
     std::cout<<"Printing cols vector" <<std::endl;
-    for(int i = 0;i< this->cols.size();i++){
-        std::cout<<this->cols[i] << " " ;
+    for(int i = 0;i< cols.size();i++){
+        std::cout<<cols[i] << " " ;
     }
     std::cout<<std::endl;
     std::cout<<"Printing row_ptrs vector" <<std::endl;
-    for(int i = 0;i< this->rows_ptr.size();i++){
-        std::cout<<this->rows_ptr[i] << " " ;
+    for(int i = 0;i< rows_ptr.size();i++){
+        std::cout<<rows_ptr[i] << " " ;
 
     }
     std::cout<<std::endl;
@@ -130,17 +132,17 @@ CSR::CSR(std::vector<int> &connectivity, int shape_points) {
     return test;
  };   
  std::vector<int> CSR::shape() {
-    return this->cols;
+    return cols;
  };
 
 
  //getters
  const std::vector<int> &CSR::getRPtr(){
-    return this->rows_ptr;
+    return rows_ptr;
  };
 
  const std::vector<int>& CSR::getCols(){
-    return this->cols;
+    return cols;
  }
 
 
