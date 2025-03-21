@@ -17,7 +17,6 @@ try :
 // *****************************************************************************
 //  Constructor: Create a CSR symmetric matrix with 1 scalar component per
 //  non-zero matrix entry, storing only the upper triangular part
-//! \param[in] nc Number of scalar components (degrees of freedom)
 //! \param[in] psup Points surrounding points of mesh graph, see tk::genPsup
 // *****************************************************************************
 {
