@@ -224,12 +224,14 @@ int test_CSR_format(){
     count = sizeof(row_ptrs_arr) / sizeof(row_ptrs_arr[0]);
     std::vector<int> rows_ptr(row_ptrs_arr,row_ptrs_arr + count);
 
-    if(!s.equal(s.getCols(),cols) || ! s.equal(s.getRPtr(),rows_ptr)){
-        std::cerr<<"Wrong cols|row_ptr vector!!" <<std::endl;
-        return 1;
+    if(cols == s.getCols() && rows_ptr == s.getRPtr()){
+        std::cout<<"CSR test passed!"<<std::endl;
+        return 0;
     }
-    std::cout<<"CSR test passed!"<<std::endl;
-    return 0;
+
+
+    std::cerr<<"Wrong cols|row_ptr vector!!" <<std::endl;
+    return 1;
 }
 
 int CSR_2(){
@@ -272,13 +274,13 @@ int CSR_2(){
 
     s.print();
 
-    if(!s.equal(s.getCols(),cols) || ! s.equal(s.getRPtr(),rows_ptr)){
-        std::cerr<<"Wrong cols|row_ptr vector!!" <<std::endl;
-        return 1;
+    if(cols ==s.getCols() && rows_ptr == s.getRPtr()){
+        std::cout<<"CSR  test 2 passed!"<<std::endl;
+        return 0;       
     }
 
-    std::cout<<"CSR  test 2 passed!"<<std::endl;
-    return 0;
+    std::cerr<<"Wrong cols|row_ptr vector!!" <<std::endl;
+        return 1;
 
 
 }

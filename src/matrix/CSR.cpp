@@ -135,16 +135,16 @@ CSR::CSR(std::vector<int> &connectivity, int shape_points) {
 
 
  //getters
- std::vector<int> CSR::getRPtr(){
+ const std::vector<int> &CSR::getRPtr(){
     return this->rows_ptr;
  };
 
- std::vector<int> CSR::getCols(){
+ const std::vector<int>& CSR::getCols(){
     return this->cols;
  }
 
 
- bool CSR::equal(std::vector<int> a, std::vector<int> b) const{
+ bool operator==(std::vector<int> &a, std::vector<int> &b) {
 
     if(a.size()!=b.size()){
         std::cerr<<"You have to compare vectors of same size!!"<<std::endl;
