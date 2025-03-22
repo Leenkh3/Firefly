@@ -126,14 +126,16 @@ SparseCSR::SparseCSR(std::vector<int> &connectivity, int shape_points) {
    std::vector<double> r;
    double sum=0.0;
    int i = 1,j=0;
-   while(i < rows_ptr.size() && j <= cols.size()){
+   while(i < rows_ptr.size() && j < cols.size()){
+    
+      sum+=vals[j] * vec[cols[j] - 1];
+      j++;
       if(j == rows_ptr[i] -1){ 
          i++;
          r.push_back(sum);
          sum =0;
+         
       }
-      sum+=vals[j] * vec[cols[j] - 1];
-      j++;
    }
 
     return r;
