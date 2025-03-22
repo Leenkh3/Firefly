@@ -15,6 +15,7 @@ public:
     double& at(int row,int col);
     std::vector<int> shape() ;
     void print()  const ;
+    void print_matrix()  const ;
     void reshape(int rows, int cols);
     void T();
     const std::vector<int> &getRPtr(); //getting rows_ptr vector

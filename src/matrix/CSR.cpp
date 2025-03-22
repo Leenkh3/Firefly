@@ -140,19 +140,48 @@ CSR::CSR(std::vector<int> &connectivity, int shape_points) {
 
  };           
  void CSR::print() const {
-    std::cout<<"Printing cols vector" <<std::endl;
-    for(int i = 0;i< cols.size();i++){
-        std::cout<<cols[i] << " " ;
-    }
-    std::cout<<std::endl;
-    std::cout<<"Printing row_ptrs vector" <<std::endl;
-    for(int i = 0;i< rows_ptr.size();i++){
-        std::cout<<rows_ptr[i] << " " ;
+   std::size_t i;
 
-    }
-    std::cout<<std::endl;
+  std::cout << "rows_ptr[rsize+1=" << rows_ptr.size() << "] = { ";
+  for (i=0; i<rows_ptr.size()-1; ++i) std::cout << rows_ptr[i] << ", ";
+  std::cout << rows_ptr[i] << " }\n";
 
- };                                 
+  std::cout << "cols[nnz=" << cols.size() << "] = { ";
+  for (i=0; i<cols.size()-1; ++i) std::cout << cols[i] << ", ";
+  std::cout << cols[i] << " }\n";
+
+  std::cout << "vals[nnz=" << vals.size() << "] = { ";
+  for (i=0; i<vals.size()-1; ++i) std::cout << vals[i] << ", ";
+  std::cout << vals[i] << " }\n";
+
+ };     
+ 
+ void CSR::print_matrix() const {
+ 
+   int nrows = rows_ptr.size()-1;
+   int ncols = nrows;
+
+   for (int i =0; i < nrows; i++) {
+      int start = rows_ptr[i];
+      int end   = rows_ptr[i + 1];
+
+      for (int j = 0; j < ncols; j++) {
+          double value = 0.0;
+          for (int k = start; k < end; k++) {
+              if (cols[k - 1] -1 == j) {
+                  value = vals[k - 1];
+                  break; 
+              }
+          }
+          std::cout << value << " ";
+      }
+      std::cout << std::endl; 
+  }
+
+
+ };     
+
+
  double& CSR::at(int row, int col) { 
     // this function is to get a value based on 0-indexed matrix (first element is 0 not 1)
     for(int j = rows_ptr[row] - 1 ; j < rows_ptr[row+1] -1 ; j++)
