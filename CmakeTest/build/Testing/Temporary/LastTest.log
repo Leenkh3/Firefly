@@ -1,10 +1,10 @@
-Start testing: Mar 18 20:34 UTC
+Start testing: Mar 19 15:50 UTC
 ----------------------------------------------------------
 1/1 Testing: RunGmshReader
 1/1 Test: RunGmshReader
-Command: "/work/students/hpc-f0v113/firefly/CmakeTest/build/GmshReader" "example.msh"
-Directory: /work/students/hpc-f0v113/firefly/CmakeTest/build
-"RunGmshReader" start time: Mar 18 20:34 UTC
+Command: "/work/students/hpc-f0v113/firefly/Firefly/CmakeTest/build/GmshReader" "../example.msh"
+Directory: /work/students/hpc-f0v113/firefly/Firefly/CmakeTest/build
+"RunGmshReader" start time: Mar 19 15:50 UTC
 Output:
 ----------------------------------------------------------
 
@@ -27,8 +27,8 @@ Element 4: 6 7 4 0
 Test time =   0.00 sec
 ----------------------------------------------------------
 Test Passed.
-"RunGmshReader" end time: Mar 18 20:34 UTC
+"RunGmshReader" end time: Mar 19 15:50 UTC
 "RunGmshReader" time elapsed: 00:00:00
 ----------------------------------------------------------
 
-End testing: Mar 18 20:34 UTC
+End testing: Mar 19 15:50 UTC
