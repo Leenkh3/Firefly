@@ -38,6 +38,7 @@
 #include <iostream>
 #include "CSR.h"
 
+
 CSR::CSR(std::vector<int> &connectivity, int shape_points) {
    // check the validity of connectivity vector
    if (connectivity.size() % shape_points != 0) {
@@ -112,14 +113,33 @@ CSR::CSR(std::vector<int> &connectivity, int shape_points) {
  };           
  void CSR::T() {
     std::cout<<"Sorry , this functionality is not available in Sparse matrices!";
- };                                   
+ };    
+ 
+ 
  std::vector<double> CSR::mult(std::vector<double> &vec)  const{ 
-    // I know this is not good - this is just a placeholder for now
-    std::vector<double> any;
-    return any;
+
+    if(vec.size() != rows_ptr.size()-1){
+      std::cerr<<"Cannot multiply matrix by vector : Wrong shapes" << vec.size() << " != "<< rows_ptr.size()<<std::endl;
+      throw;
+    }
+   
+   std::vector<double> r;
+   double sum=0.0;
+   int i = 1,j=0;
+   while(i < rows_ptr.size() && j <= cols.size()){
+      if(j == rows_ptr[i] -1){ 
+         i++;
+         r.push_back(sum);
+         sum =0;
+      }
+      sum+=vals[j] * vec[cols[j] - 1];
+      j++;
+   }
+
+    return r;
 
  };           
- void CSR::print() {
+ void CSR::print() const {
     std::cout<<"Printing cols vector" <<std::endl;
     for(int i = 0;i< cols.size();i++){
         std::cout<<cols[i] << " " ;
@@ -148,7 +168,13 @@ CSR::CSR(std::vector<int> &connectivity, int shape_points) {
 
 
  std::vector<int> CSR::shape() {
-    return cols;
+   std::vector<int> shape;
+
+   // matrix is squared-symmetric (#cols == #rows)
+   shape.push_back(rows_ptr.size()-1);
+   shape.push_back(rows_ptr.size()-1);
+
+   return shape;
  };
 
 

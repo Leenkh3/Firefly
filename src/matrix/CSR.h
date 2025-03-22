@@ -14,7 +14,7 @@ public:
     CSR(std::vector<int> &connectivity,int shape_points);
     double& at(int row,int col);
     std::vector<int> shape() ;
-    void print() ;
+    void print()  const ;
     void reshape(int rows, int cols);
     void T();
     const std::vector<int> &getRPtr(); //getting rows_ptr vector

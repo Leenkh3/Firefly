@@ -336,6 +336,40 @@ int test_sparse_setter(){
 }   
 
 
+int test_CRS_vector_multiplication(){
+
+    int connectivity_arr[] ={
+        1,2,4,5,
+        2,3,5,6,
+        4,5,7,8,
+        5,6,8,9
+    };
+
+    int count = sizeof(connectivity_arr) / sizeof(connectivity_arr[0]);
+    
+    std::vector<int> connectivity(connectivity_arr,connectivity_arr+count);
+    CSR s(connectivity,4);
+
+    double to_mult_arr[] = {1.0,2.0,3.0,4.0,5.0,6.0,7.0,8.0,9.0};
+    count = sizeof(to_mult_arr) / sizeof(to_mult_arr[0]);
+    std::vector<double> to_mult(to_mult_arr,to_mult_arr+count);
+
+    std::vector<double> r = s.mult(to_mult);
+
+    double must_equal_arr[] = {12.0,21.0,16.0,27.0,45.0,33.0,24.0,39.0,28.0};
+    count = sizeof(must_equal_arr) / sizeof(must_equal_arr[0]);
+    std::vector<double> must_equal(must_equal_arr,must_equal_arr+count);
+
+    if(must_equal == r){
+        std::cout<<"CSR-Matrix multiplication with vector test passed"<<std::endl;
+        return 0;
+    }
+
+    std::cout<<"CRS-matrix multiplication with vector test failed!!"<<std::endl;
+    return 1;
+
+}
+
 int main() {
     int result = 0;
 
@@ -350,6 +384,6 @@ int main() {
     result |= CSR_2();
     result |=test_sparse_getter();
     result |=test_sparse_setter();
-
+    result |=test_CRS_vector_multiplication();
     return result;
 }
