@@ -1,3 +1,2 @@
-RunMain 0 0
-RunGmshReader 2 0.000916324
+RunGmshReader 1 0.00109782
 ---

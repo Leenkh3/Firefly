@@ -54,10 +54,10 @@ RM = /work/students/hpc-f0v113/cmake/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /work/students/hpc-f0v113/firefly/CmakeTest
+CMAKE_SOURCE_DIR = /work/students/hpc-f0v113/firefly/Firefly/CmakeTest
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /work/students/hpc-f0v113/firefly/CmakeTest/build
+CMAKE_BINARY_DIR = /work/students/hpc-f0v113/firefly/Firefly/CmakeTest/build
 
 #=============================================================================
 # Directory level rules for the build root directory
@@ -81,14 +81,14 @@ clean: CMakeFiles/GmshReader.dir/clean
 CMakeFiles/GmshReader.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/GmshReader.dir/build.make CMakeFiles/GmshReader.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/GmshReader.dir/build.make CMakeFiles/GmshReader.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/work/students/hpc-f0v113/firefly/CmakeTest/build/CMakeFiles --progress-num=1,2 "Built target GmshReader"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/work/students/hpc-f0v113/firefly/Firefly/CmakeTest/build/CMakeFiles --progress-num=1,2 "Built target GmshReader"
 .PHONY : CMakeFiles/GmshReader.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/GmshReader.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /work/students/hpc-f0v113/firefly/CmakeTest/build/CMakeFiles 2
+	$(CMAKE_COMMAND) -E cmake_progress_start /work/students/hpc-f0v113/firefly/Firefly/CmakeTest/build/CMakeFiles 2
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/GmshReader.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /work/students/hpc-f0v113/firefly/CmakeTest/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /work/students/hpc-f0v113/firefly/Firefly/CmakeTest/build/CMakeFiles 0
 .PHONY : CMakeFiles/GmshReader.dir/rule
 
 # Convenience name for target.
