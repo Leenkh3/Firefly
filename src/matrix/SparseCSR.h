@@ -2,7 +2,7 @@
 #include "Matrix.h"
 #include <iostream>
 
-class CSR : public Matrix
+class SparseCSR : public Matrix
 {
 private:
     std::vector<int> cols;
@@ -11,7 +11,7 @@ private:
 
 
 public:
-    CSR(std::vector<int> &connectivity,int shape_points);
+    SparseCSR(std::vector<int> &connectivity,int shape_points);
     double& at(int row,int col);
     std::vector<int> shape() ;
     void print()  const ;

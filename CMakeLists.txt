@@ -14,8 +14,8 @@ add_library(MatrixLib
     src/matrix/Dense.cpp
     src/matrix/Matrix.h
     src/matrix/Dense.h
-    src/matrix/CSR.h
-    src/matrix/CSR.cpp
+    src/matrix/SparseCSR.h
+    src/matrix/SparseCSR.cpp
 )
 
 

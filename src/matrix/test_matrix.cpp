@@ -2,7 +2,7 @@
 #include <iostream>
 #include <vector>
 #include <cassert>
-#include "CSR.h"
+#include "SparseCSR.h"
 
 
 int test_constructor() {
@@ -188,7 +188,7 @@ int test_vector_multiplication(){
 
 
 
-int test_CSR_format(){
+int test_SparseCSR_format(){
     int connectivity_arr[] ={
         1,2,4,5,
         2,3,5,6,
@@ -199,7 +199,7 @@ int test_CSR_format(){
     int count = sizeof(connectivity_arr) / sizeof(connectivity_arr[0]);
     
     std::vector<int> connectivity(connectivity_arr,connectivity_arr+count);
-    CSR s(connectivity,4);
+    SparseCSR s(connectivity,4);
     
     // for cols it must be as follows
     int cols_arr[] = {
@@ -225,7 +225,7 @@ int test_CSR_format(){
     std::vector<int> rows_ptr(row_ptrs_arr,row_ptrs_arr + count);
 
     if(cols == s.getCols() && rows_ptr == s.getRPtr()){
-        std::cout<<"CSR test passed!"<<std::endl;
+        std::cout<<"SparseCSR test passed!"<<std::endl;
         return 0;
     }
 
@@ -234,7 +234,7 @@ int test_CSR_format(){
     return 1;
 }
 
-int CSR_2(){
+int SparseCSR_2(){
     int connectivity_arr[]= { 12, 14,  9, 11,
         10, 14, 13, 12,
         14, 13, 12,  9,
@@ -262,7 +262,7 @@ int CSR_2(){
     int count = sizeof(connectivity_arr)/sizeof(connectivity_arr[0]);
     std::vector<int> connectivity(connectivity_arr,connectivity_arr+count);
 
-    CSR s(connectivity,4);
+    SparseCSR s(connectivity,4);
 
     int row_ptrs_arr[] = { 1, 8, 15, 22, 29, 36, 43, 50, 57, 66, 75, 84, 94, 103, 113 };
     count = sizeof(row_ptrs_arr)/sizeof(row_ptrs_arr[0]);
@@ -274,7 +274,7 @@ int CSR_2(){
 
 
     if(cols ==s.getCols() && rows_ptr == s.getRPtr()){
-        std::cout<<"CSR  test 2 passed!"<<std::endl;
+        std::cout<<"SparseCSR  test 2 passed!"<<std::endl;
         return 0;       
     }
 
@@ -295,7 +295,7 @@ int test_sparse_getter(){
     int count = sizeof(connectivity_arr) / sizeof(connectivity_arr[0]);
     
     std::vector<int> connectivity(connectivity_arr,connectivity_arr+count);
-    CSR s(connectivity,4);
+    SparseCSR s(connectivity,4);
     
     double val = s.at(0,4); // forth row and 5th column 
 
@@ -321,7 +321,7 @@ int test_sparse_setter(){
     int count = sizeof(connectivity_arr) / sizeof(connectivity_arr[0]);
     
     std::vector<int> connectivity(connectivity_arr,connectivity_arr+count);
-    CSR s(connectivity,4);
+    SparseCSR s(connectivity,4);
     
     s.at(0,4)=3.0;
 
@@ -348,7 +348,7 @@ int test_CRS_vector_multiplication(){
     int count = sizeof(connectivity_arr) / sizeof(connectivity_arr[0]);
     
     std::vector<int> connectivity(connectivity_arr,connectivity_arr+count);
-    CSR s(connectivity,4);
+    SparseCSR s(connectivity,4);
 
     double to_mult_arr[] = {1.0,2.0,3.0,4.0,5.0,6.0,7.0,8.0,9.0};
     count = sizeof(to_mult_arr) / sizeof(to_mult_arr[0]);
@@ -361,7 +361,7 @@ int test_CRS_vector_multiplication(){
     std::vector<double> must_equal(must_equal_arr,must_equal_arr+count);
 
     if(must_equal == r){
-        std::cout<<"CSR-Matrix multiplication with vector test passed"<<std::endl;
+        std::cout<<"SparseCSR-Matrix multiplication with vector test passed"<<std::endl;
         return 0;
     }
 
@@ -380,8 +380,8 @@ int main() {
     result |= test_transpose_3x2_array();
     result |= test_getter_and_setter();
     result |= test_vector_multiplication();
-    result |= test_CSR_format();
-    result |= CSR_2();
+    result |= test_SparseCSR_format();
+    result |= SparseCSR_2();
     result |=test_sparse_getter();
     result |=test_sparse_setter();
     result |=test_CRS_vector_multiplication();

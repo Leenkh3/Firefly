@@ -36,10 +36,10 @@
 #include <set>
 #include <algorithm>
 #include <iostream>
-#include "CSR.h"
+#include "SparseCSR.h"
 
 
-CSR::CSR(std::vector<int> &connectivity, int shape_points) {
+SparseCSR::SparseCSR(std::vector<int> &connectivity, int shape_points) {
    // check the validity of connectivity vector
    if (connectivity.size() % shape_points != 0) {
        std::cerr << "Wrong connectivity vector provided! connectivity size:" 
@@ -84,7 +84,7 @@ CSR::CSR(std::vector<int> &connectivity, int shape_points) {
        prev_group = i / shape_points;
    }
 
-   // Build the CSR structure.
+   // Build the SparseCSR structure.
    // Conventionally, the first row pointer is 0.
    rows_ptr.clear();
    cols.clear();
@@ -108,15 +108,15 @@ CSR::CSR(std::vector<int> &connectivity, int shape_points) {
    hash.clear(); //free up map space 
 }
 
- void CSR::reshape(int rows, int cols){
+ void SparseCSR::reshape(int rows, int cols){
     std::cout<<"Sorry , this functionality is not available in Sparse matrices!";
  };           
- void CSR::T() {
+ void SparseCSR::T() {
     std::cout<<"Sorry , this functionality is not available in Sparse matrices!";
  };    
  
  
- std::vector<double> CSR::mult(std::vector<double> &vec)  const{ 
+ std::vector<double> SparseCSR::mult(std::vector<double> &vec)  const{ 
 
     if(vec.size() != rows_ptr.size()-1){
       std::cerr<<"Cannot multiply matrix by vector : Wrong shapes" << vec.size() << " != "<< rows_ptr.size()<<std::endl;
@@ -139,7 +139,7 @@ CSR::CSR(std::vector<int> &connectivity, int shape_points) {
     return r;
 
  };           
- void CSR::print() const {
+ void SparseCSR::print() const {
    std::size_t i;
 
   std::cout << "rows_ptr[rsize+1=" << rows_ptr.size() << "] = { ";
@@ -156,7 +156,7 @@ CSR::CSR(std::vector<int> &connectivity, int shape_points) {
 
  };     
  
- void CSR::print_matrix() const {
+ void SparseCSR::print_matrix() const {
  
    int nrows = rows_ptr.size()-1;
    int ncols = nrows;
@@ -182,7 +182,7 @@ CSR::CSR(std::vector<int> &connectivity, int shape_points) {
  };     
 
 
- double& CSR::at(int row, int col) { 
+ double& SparseCSR::at(int row, int col) { 
     // this function is to get a value based on 0-indexed matrix (first element is 0 not 1)
     for(int j = rows_ptr[row] - 1 ; j < rows_ptr[row+1] -1 ; j++)
        {
@@ -196,7 +196,7 @@ CSR::CSR(std::vector<int> &connectivity, int shape_points) {
  };   
 
 
- std::vector<int> CSR::shape() {
+ std::vector<int> SparseCSR::shape() {
    std::vector<int> shape;
 
    // matrix is squared-symmetric (#cols == #rows)
@@ -208,15 +208,15 @@ CSR::CSR(std::vector<int> &connectivity, int shape_points) {
 
 
  //getters
- const std::vector<int> &CSR::getRPtr(){
+ const std::vector<int> &SparseCSR::getRPtr(){
     return rows_ptr;
  };
 
- const std::vector<int>& CSR::getCols(){
+ const std::vector<int>& SparseCSR::getCols(){
     return cols;
  }
 
- const std::vector<double>& CSR::getVals(){
+ const std::vector<double>& SparseCSR::getVals(){
     return vals;
  }
 
