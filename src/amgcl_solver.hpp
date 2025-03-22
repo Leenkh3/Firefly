@@ -16,6 +16,6 @@ std::tuple<int, double> solveAMGCL(
     const std::vector<double> &values,
     const std::vector<double> &rhs,
     std::vector<double> &x
-)
+);
 
 #endif
