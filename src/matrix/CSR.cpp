@@ -87,6 +87,7 @@ CSR::CSR(std::vector<int> &connectivity, int shape_points) {
    // Conventionally, the first row pointer is 0.
    rows_ptr.clear();
    cols.clear();
+   vals.clear();
    int count = 1;
    rows_ptr.push_back(count);
    for (std::set<int>::iterator it = unique_elemnts.begin(); 
@@ -96,16 +97,22 @@ CSR::CSR(std::vector<int> &connectivity, int shape_points) {
        std::set<int>& connSet = hash[*it];
        for (std::set<int>::iterator j = connSet.begin(); j != connSet.end(); ++j) {
            cols.push_back(*j);
+           vals.push_back(1); // all elements values are initialized as 1
        }
        count += (int)connSet.size();
        rows_ptr.push_back(count);
    }
+
+
+   hash.clear(); //free up map space 
 }
 
  void CSR::reshape(int rows, int cols){
     std::cout<<"Sorry , this functionality is not available in Sparse matrices!";
  };           
- void CSR::T() {};                                   
+ void CSR::T() {
+    std::cout<<"Sorry , this functionality is not available in Sparse matrices!";
+ };                                   
  std::vector<double> CSR::mult(std::vector<double> &vec)  const{ 
     // I know this is not good - this is just a placeholder for now
     std::vector<double> any;
@@ -127,10 +134,19 @@ CSR::CSR(std::vector<int> &connectivity, int shape_points) {
 
  };                                 
  double& CSR::at(int row, int col) { 
-    // I know this is not good - this is just a placeholder for now
-    double test=0.0;
-    return test;
+    // this function is to get a value based on 0-indexed matrix (first element is 0 not 1)
+    for(int j = rows_ptr[row] - 1 ; j < rows_ptr[row+1] -1 ; j++)
+       {
+        if(cols[j] == col + 1) {
+            std::cout<<"j is "<< j<<" cols at this point is " << cols[j] <<std::endl ;
+            return this->vals[ j ];
+        }
+       }
+    std::cerr<<"Out of Range - Element not found!";
+    throw; 
  };   
+
+
  std::vector<int> CSR::shape() {
     return cols;
  };
@@ -143,6 +159,10 @@ CSR::CSR(std::vector<int> &connectivity, int shape_points) {
 
  const std::vector<int>& CSR::getCols(){
     return cols;
+ }
+
+ const std::vector<double>& CSR::getVals(){
+    return vals;
  }
 
 

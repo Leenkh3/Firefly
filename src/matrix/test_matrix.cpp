@@ -74,7 +74,6 @@ int test_transpose() {
    
     if (d.at(1,0) != 4.0 || d.at(0,1)!= 2.0 ) {
         std::cerr << "Transpose test failed! ,matrix is :" << std::endl;
-        d.print();
         return 1;
     }
 
@@ -177,7 +176,6 @@ int test_vector_multiplication(){
 
     if(results[0] != 5.0 || results[1] != 11.0 || results[2]!=6.0){
         std::cerr<<"Matrix Multiplication Test Faild :Wrong matrix values, the resulted (wrong matrix) is: !!"<<std::endl;
-        d.print();
         return 1;
     }
 
@@ -186,6 +184,8 @@ int test_vector_multiplication(){
 
 
 }
+
+
 
 
 int test_CSR_format(){
@@ -272,7 +272,6 @@ int CSR_2(){
     count = sizeof(cols_arr)/sizeof(cols_arr[0]);
     std::vector<int> cols(cols_arr,cols_arr+count);
 
-    s.print();
 
     if(cols ==s.getCols() && rows_ptr == s.getRPtr()){
         std::cout<<"CSR  test 2 passed!"<<std::endl;
@@ -281,9 +280,62 @@ int CSR_2(){
 
     std::cerr<<"Wrong cols|row_ptr vector!!" <<std::endl;
         return 1;
+}
+//! [param] return_value : boolean : if true it will return the actual value
+//! else it will return the value of the test (0 if passed, 1 if not) 
+int test_sparse_getter(){
+    
+    int connectivity_arr[] ={
+        1,2,4,5,
+        2,3,5,6,
+        4,5,7,8,
+        5,6,8,9
+    };
 
+    int count = sizeof(connectivity_arr) / sizeof(connectivity_arr[0]);
+    
+    std::vector<int> connectivity(connectivity_arr,connectivity_arr+count);
+    CSR s(connectivity,4);
+    
+    double val = s.at(0,4); // forth row and 5th column 
+
+    if(val == 1.0 ) {
+        std::cout<<"Getter test for sparse matrix passed"<<std::endl;
+        return 0;
+
+    }
+
+    std::cerr<<"Getter test for sparse matrix failed!"<<std::endl;
+    return  1;
 
 }
+
+int test_sparse_setter(){
+    int connectivity_arr[] ={
+        1,2,4,5,
+        2,3,5,6,
+        4,5,7,8,
+        5,6,8,9
+    };
+
+    int count = sizeof(connectivity_arr) / sizeof(connectivity_arr[0]);
+    
+    std::vector<int> connectivity(connectivity_arr,connectivity_arr+count);
+    CSR s(connectivity,4);
+    
+    s.at(0,4)=3.0;
+
+    double actual_value = s.getVals()[3];
+    if(actual_value == 3.0){
+        std::cout<<"Setter test for sparce matrix passed"<<std::endl;
+        return 0;
+    }
+    std::cout<<"Setter test for sparce matrix failed , expected value is 3, got "<< actual_value<<std::endl;
+    return 1;
+    
+}   
+
+
 int main() {
     int result = 0;
 
@@ -296,6 +348,8 @@ int main() {
     result |= test_vector_multiplication();
     result |= test_CSR_format();
     result |= CSR_2();
+    result |=test_sparse_getter();
+    result |=test_sparse_setter();
 
     return result;
 }

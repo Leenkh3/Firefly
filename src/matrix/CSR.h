@@ -19,6 +19,7 @@ public:
     void T();
     const std::vector<int> &getRPtr(); //getting rows_ptr vector
     const std::vector<int> &getCols();    // getting cols vector
+    const std::vector<double> &getVals();    // getting values vector
     std::vector<double> mult( std::vector<double> &vec) const;
 
 
