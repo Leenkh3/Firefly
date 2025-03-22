@@ -185,12 +185,8 @@ SparseCSR::SparseCSR(std::vector<int> &connectivity, int shape_points) {
  double& SparseCSR::at(int row, int col) { 
     // this function is to get a value based on 0-indexed matrix (first element is 0 not 1)
     for(int j = rows_ptr[row] - 1 ; j < rows_ptr[row+1] -1 ; j++)
-       {
-        if(cols[j] == col + 1) {
-            std::cout<<"j is "<< j<<" cols at this point is " << cols[j] <<std::endl ;
-            return this->vals[ j ];
-        }
-       }
+        if(cols[j] == col + 1)  return vals[ j ];
+       
     std::cerr<<"Out of Range - Element not found!";
     throw; 
  };   
