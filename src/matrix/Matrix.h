@@ -9,7 +9,7 @@ public:
     virtual void reshape(int rows, int cols) = 0;           // Reshape matrix
     virtual void T() = 0;                                   // Transpose matrix
     virtual std::vector<double> mult(std::vector<double> &vec) const = 0;              // Multiplication with vector
-    virtual void print() = 0;                                  // Print matrix
+    virtual void print() const = 0;                                  // Print matrix
     virtual double& at(int row, int col) = 0;                    // get the value at row,col
     virtual ~Matrix() {}                                       // Virtual destructor
 };
