@@ -31,7 +31,7 @@ std::vector<int> Dense::shape() {
     return shape;
 }
 
-void Dense::print() {
+void Dense::print() const{
     for (int i = 0; i < this->rows; i++) {
         for (int j = 0; j < this->cols; j++) {
             std::cout << matrix[i][j] << " ";
