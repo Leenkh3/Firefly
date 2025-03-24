@@ -1,4 +1,5 @@
 #include <iostream>
+#include <tuple>
 #include "matrix_generator.hpp"
 #include <amgcl_solver.hpp>
 
