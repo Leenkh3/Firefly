@@ -15,6 +15,8 @@ add_library(MatrixLib
     src/matrix/Dense.cpp
     src/matrix/Matrix.h
     src/matrix/Dense.h
+    src/matrix/SparseCSR.h
+    src/matrix/SparseCSR.cpp
 )
 
 add_executable(firefly firefly.cpp)
