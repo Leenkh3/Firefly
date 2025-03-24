@@ -79,9 +79,9 @@ CSR::operator()( std::size_t row, std::size_t col ) const
 //! \return Const reference to matrix entry
 // *****************************************************************************
 {
-  for (std::size_t n=0, j=ia[row]-1; j<ia[row+1]-1; ++j, ++n)
+  for (std::size_t j=ia[row]-1; j<ia[row+1]-1; ++j)
     if (col+1 == ja[j])
-      return a[ia[row]-1+n];
+      return a[j];
 
   std::cerr << "Sparse matrix index not found";
   throw;
