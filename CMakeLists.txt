@@ -7,7 +7,8 @@ project(Firefly VERSION 1.0 LANGUAGES CXX)
 # Set cmake modules directory
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
-# Configure building the main executable
+# Add source subdirectory
+add_subdirectory(${CMAKE_SOURCE_DIR}/src)
 
 # adding matrix to the build
 add_library(MatrixLib
@@ -25,11 +26,13 @@ add_library(Laplacian src/laplacian/Laplacian.cpp)
 add_executable(LaplacianTests src/laplacian/testLaplacian.cpp)
 target_link_libraries(LaplacianTests PRIVATE CSR Laplacian)
 
-
 add_executable(firefly firefly.cpp)
 
 # Configure cmake's testing system
 enable_testing()
+
+# Add testing subdirectory
+add_subdirectory(${CMAKE_SOURCE_DIR}/src/test)
 
 add_executable(MatrixTests src/matrix/test_matrix.cpp)
 # Link the Matrix library to the main executable
