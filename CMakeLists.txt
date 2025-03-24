@@ -8,6 +8,9 @@ project(Firefly VERSION 1.0 LANGUAGES C CXX)
 # Set cmake modules directory
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
+# Include ExternalProject module
+include(ExternalProject)
+
 # Configure building the main executable
 
 # adding matrix to the build
