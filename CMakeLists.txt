@@ -4,6 +4,10 @@ cmake_minimum_required(VERSION 3.15)
 # Project name and version with languages/compilers required
 project(Firefly VERSION 1.0 LANGUAGES CXX)
 
+# Set the compiler version to 17
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
 # Set cmake modules directory
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
