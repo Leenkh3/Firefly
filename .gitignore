@@ -53,4 +53,4 @@ dkms.conf
 
 # User Input ignores --martin
 	# Executables
-	firefly
+	/firefly
