@@ -1,17 +1,20 @@
-# Tell cmake the featureset we require
+#Tell Cmake the featureset we require
 cmake_minimum_required(VERSION 3.15)
 
 # Project name and version with languages/compilers required
+
 project(Firefly VERSION 1.0 LANGUAGES C CXX)
 
 # Set cmake modules directory
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
-# Add source subdirectory
-add_subdirectory(${CMAKE_SOURCE_DIR}/src)
-
 # Include ExternalProject module
 include(ExternalProject)
+
+# Configure building the main executable
+
+# Add source subdirectory
+add_subdirectory(${CMAKE_SOURCE_DIR}/src)
 
 # adding matrix to the build
 add_library(MatrixLib
@@ -65,12 +68,7 @@ add_regression_test(test_example_fail_regexp firefly
                     EXTRA_FAIL_REGEXP "Firefly Project"
                     EXTRA_PROPERTIES "WILL_FAIL;1"
                     LABELS "basic")
-
-message("Install path: ${PROJECT_BINARY_DIR}")
-
 find_package(MPI)
-
-# Install NetCDF first
 
 ExternalProject_Add(netcdf
     GIT_REPOSITORY https://github.com/Unidata/netcdf-c.git
@@ -91,20 +89,16 @@ ExternalProject_Add(netcdf
                -DENABLE_V2_API=off
                -DNETCDF_ENABLE_HDF5=off
                -DCMAKE_INSTALL_PREFIX=${PROJECT_BINARY_DIR}/netcdf-install
-
-
+)
 
 # NetCDF Library Path
-
 set(NETCDF_LIB "${PROJECT_BINARY_DIR}/netcdf-install/lib/libnetcdf.so")
-
 set(NETCDF_INCLUDE_DIR "${PROJECT_BINARY_DIR}/netcdf-install/include")
-
 
 # Install Exodus using the official Sandia Labs SEACAS repository
 ExternalProject_Add(exodus
     GIT_REPOSITORY https://github.com/sandialabs/seacas.git
-    GIT_TAG main
+    GIT_TAG master
     DEPENDS netcdf  # Ensure NetCDF is built before Exodus
     CMAKE_ARGS -DCMAKE_C_COMPILER=${CMAKE_C_COMPILER}
                -DNetCDF_DIR=${PROJECT_BINARY_DIR}/netcdf-install
@@ -115,30 +109,17 @@ ExternalProject_Add(exodus
 # Exodus Library Path
 set(EXODUS_LIB "${PROJECT_BINARY_DIR}/exodus-install/lib/libexodus.so")
 
-
-
 # Configure building the gmsh mesh reader
-
 # add_library(GmshMeshReader GmshMeshReader.cpp GmshMeshReader.hpp)
 
-
-
 # Configure building the main executable
-
 #add_executable(firefly firefly.cpp)
 
-
-
 # Configure the link command
-
 # target_link_libraries(firefly PRIVATE GmshMeshReader)
-
 # Configure cmake's testing system
-
 #enable_testing()
-
 # Add a test, running the chillax executable, non-zero exit code will fail the test
-
 #add_test(NAME firefly COMMAND firefly)
 
-
+message("Install path: ${PROJECT_BINARY_DIR}")
