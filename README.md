@@ -22,3 +22,9 @@
 ```fish
 gcc user_input.c -o fileprogram -llua -lm -ldl
 ```
+
+OR
+
+```
+gcc -std=c99 -o user_input user_input.c -llua -lm -ldl
+```

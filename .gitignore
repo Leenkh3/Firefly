@@ -52,8 +52,8 @@ Mkfile.old
 dkms.conf
 
 # User Input ignores --martin
-	# Executables
-	/firefly
+# Executables
+user_input
  
 # Vim swap and undo files, build dir
 *~
