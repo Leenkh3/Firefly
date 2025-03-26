@@ -54,3 +54,8 @@ dkms.conf
 # User Input ignores --martin
 	# Executables
 	/firefly
+ 
+# Vim swap and undo files, build dir
+*~
+*sw?
+/build
