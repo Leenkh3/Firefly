@@ -103,6 +103,7 @@ ExternalProject_Add(exodus
     CMAKE_ARGS -DCMAKE_C_COMPILER=${CMAKE_C_COMPILER}
                -DNetCDF_DIR=${PROJECT_BINARY_DIR}/netcdf-install
                -DBUILD_SHARED_LIBS=on
+               -DSeacas_ENABLE_SEACASExodiff=on
                -DCMAKE_INSTALL_PREFIX=${PROJECT_BINARY_DIR}/exodus-install
 )
 
