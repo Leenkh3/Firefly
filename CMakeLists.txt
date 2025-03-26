@@ -40,7 +40,7 @@ add_executable(MatrixTests src/matrix/test_matrix.cpp)
 # Link the Matrix library to the main executable
 target_link_libraries(MatrixTests PRIVATE MatrixLib)
 
-# Add a test, running the chillax executable, non-zero exit code will fail the test
+# Add a test, running the firefly executable, non-zero exit code will fail the test
 add_test(NAME firefly COMMAND firefly)
 
 # Add a test for the Matrix library
