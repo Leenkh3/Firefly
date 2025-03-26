@@ -29,6 +29,10 @@ jobs:
           - os: ubuntu-latest
             c_compiler: clang
             cpp_compiler: clang++
+        exclude:
+          - os: macos-latest
+            c_compiler: gcc
+            cpp_compiler: g++
 
     steps:
     - uses: actions/checkout@v4
@@ -45,7 +49,7 @@ jobs:
   
     - name: Install MPI (macOS)
       if: runner.os == 'macOS'
-      run: brew install mpich
+      run: brew install mpich gcc
 
     - name: Configure CMake
       run: >
