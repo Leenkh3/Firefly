@@ -15,7 +15,9 @@
 
 ## Instructions
 
-### To compile the C program with Lua support:
+### user input
+
+#### To compile the C program with Lua support:
 
 ```fish
 gcc main.c -o fileprogram -llua -lm -ldl
