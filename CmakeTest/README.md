@@ -10,6 +10,7 @@ ctest --output-on-failure
 
 ## Compile and run the gmsh reader:
 gcc -o gmsh gmsh_reader.c
+
 ./gmsh test.msh output.txt
 
 
