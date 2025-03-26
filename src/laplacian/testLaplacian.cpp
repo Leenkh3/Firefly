@@ -189,5 +189,5 @@ main(int argc, char * argv[])
 // Test main
 // *****************************************************************************
 {
-  return testCSR() or testLaplacian();
+  return testCSR() || testLaplacian();
 }
