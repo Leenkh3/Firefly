@@ -20,5 +20,5 @@
 #### To compile the C program with Lua support:
 
 ```fish
-gcc main.c -o fileprogram -llua -lm -ldl
+gcc user_input.c -o fileprogram -llua -lm -ldl
 ```
