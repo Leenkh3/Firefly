@@ -26,7 +26,7 @@ add_library(Laplacian src/laplacian/Laplacian.cpp)
 
 # Configure building the executable to test the Laplacian
 add_executable(LaplacianTests src/laplacian/testLaplacian.cpp)
-target_link_libraries(LaplacianTests PRIVATE CSR Laplacian)
+target_link_libraries(LaplacianTests PRIVATE MatrixLib CSR Laplacian)
 
 add_executable(firefly firefly.cpp)
 

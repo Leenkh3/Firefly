@@ -10,8 +10,9 @@
 #include <iostream>
 #include <algorithm>
 #include <sstream>
-
+#include "../laplacian/CSR.hpp"
 #include "../laplacian/Laplacian.hpp"
+
 
 std::size_t
 shiftToZero( std::vector< std::size_t >& inpoel )
@@ -84,6 +85,8 @@ testCSR()
   // Create matrix
   CSR c( psup );
 
+  SparseCSR a(inpoel,4);
+
   // Output sparse matrix data to stringstream
   std::stringstream ss;
   c.write_stored( ss );
@@ -149,6 +152,7 @@ testLaplacian()
   // Shift node IDs to start from zero
   shiftToZero( inpoel );
 
+  
   // Fill matrix with Laplace operator values
   auto [A,x,b] = laplacian( inpoel, coord );
 
@@ -156,6 +160,7 @@ testLaplacian()
   std::stringstream ss;
   A.write_matlab( ss );
   //A.write_matlab( std::cout );
+
 
   auto correct = R"(A = [ -0.5 -0.0416667 0.208333 0 -0.0416667 0 -0.0416667 0 0 0 0 0 0.208333 0.208333 ;
 -0.0416667 -0.5 0.208333 -0.0416667 0 -0.0416667 0 0 0 0 0 0.208333 0.208333 0 ;

@@ -10,6 +10,7 @@
 #include <array>
 #include <vector>
 
+#include "../matrix/SparseCSR.h"
 #include "CSR.hpp"
 
 //! Generate derived data structure, elements surrounding points
@@ -24,6 +25,6 @@ genPsup( const std::vector< std::size_t >& inpoel,
                           std::vector< std::size_t > >& esup );
 
 //  Setup matrix with Laplacian
-std::tuple< CSR, std::vector< double >, std::vector< double > >
+std::tuple< SparseCSR, std::vector< double >, std::vector< double > >
 laplacian( const std::vector< std::size_t >& inpoel,
            const std::array< std::vector< double >, 3 >& coord );

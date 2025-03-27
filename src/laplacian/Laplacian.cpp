@@ -8,8 +8,8 @@
 #include <tuple>
 #include <cassert>
 #include <algorithm>
-
 #include "Laplacian.hpp"
+
 
 std::pair< std::vector< std::size_t >, std::vector< std::size_t > >
 genEsup( const std::vector< std::size_t >& inpoel, std::size_t nnpe )
@@ -257,7 +257,7 @@ triple( const std::array< double, 3 >& v1,
   return dot( v1, cross(v2,v3) );
 }
 
-std::tuple< CSR, std::vector< double >, std::vector< double > >
+std::tuple< SparseCSR, std::vector< double >, std::vector< double > >
 laplacian( const std::vector< std::size_t >& inpoel,
            const std::array< std::vector< double >, 3 >& coord )
 // *****************************************************************************
@@ -276,7 +276,9 @@ laplacian( const std::vector< std::size_t >& inpoel,
   auto psup = genPsup( inpoel, 4, genEsup(inpoel,4) );
 
   // Matrix with compressed sparse row storage
-  CSR A( psup );
+  SparseCSR A( inpoel, 4);
+
+
 
   // fill matrix with Laplacian
   for (std::size_t e=0; e<inpoel.size()/4; ++e) {
@@ -296,7 +298,7 @@ laplacian( const std::vector< std::size_t >& inpoel,
     for (std::size_t a=0; a<4; ++a)
       for (std::size_t b=0; b<4; ++b)
          for (std::size_t k=0; k<3; ++k)
-           A(N[a],N[b]) -= J/6.0 * grad[a][k] * grad[b][k];
+           A.at(N[a],N[b]) -= J/6.0 * grad[a][k] * grad[b][k];
   }
 
   auto nunk = X.size();

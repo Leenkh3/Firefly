@@ -39,7 +39,7 @@
 #include "SparseCSR.h"
 
 
-SparseCSR::SparseCSR(std::vector<int> &connectivity, int shape_points) {
+SparseCSR::SparseCSR(const std::vector<std::size_t> &connectivity, int shape_points) {
    // check the validity of connectivity vector
    if (connectivity.size() % shape_points != 0) {
        std::cerr << "Wrong connectivity vector provided! connectivity size:" 
@@ -97,8 +97,8 @@ SparseCSR::SparseCSR(std::vector<int> &connectivity, int shape_points) {
        // Use operator[] instead of .at() so that it works in older compilers.
        std::set<int>& connSet = hash[*it];
        for (std::set<int>::iterator j = connSet.begin(); j != connSet.end(); ++j) {
-           cols.push_back(*j);
-           vals.push_back(1); // all elements values are initialized as 1
+           cols.push_back(*j +  1);
+           vals.push_back(0); // all elements values are initialized as 0
        }
        count += (int)connSet.size();
        rows_ptr.push_back(count);
@@ -187,9 +187,10 @@ SparseCSR::SparseCSR(std::vector<int> &connectivity, int shape_points) {
  double& SparseCSR::at(int row, int col) { 
     // this function is to get a value based on 0-indexed matrix (first element is 0 not 1)
     for(int j = rows_ptr[row] - 1 ; j < rows_ptr[row+1] -1 ; j++)
-        if(cols[j] == col + 1)  return vals[ j ];
+        if(cols[j] == col + 1 )  return vals[ j ];
        
-    std::cerr<<"Out of Range - Element not found!";
+   this->print();
+    std::cerr<<"Out of Range - Element not found!" << row<< " " << col << " where cols length is" << cols.size();
     throw; 
  };   
 
@@ -230,3 +231,29 @@ SparseCSR::SparseCSR(std::vector<int> &connectivity, int shape_points) {
         if(a[i]!=b[i]) return false;
     return true;
  }
+
+
+
+ std::ostream&
+SparseCSR::write_matlab( std::ostream& os ) const
+// *****************************************************************************
+//  Write out CSR in Matlab/Octave format
+//! \param[in,out] os Output stream to write to
+//! \return Updated output stream
+// *****************************************************************************
+{
+  os << "A = [ ";
+  for (std::size_t i=0; i<rows_ptr.size()-1 ; ++i) {
+    for (std::size_t j=1; j<cols[rows_ptr[i]-1]; ++j) os << "0 ";
+    for ( std::size_t n=rows_ptr[i]-1; n<rows_ptr[i+1]-1; ++n) {
+      if (n > rows_ptr[i]-1)
+        for (std::size_t j=cols[n-1]; j<cols[n]-1; ++j) os << "0 ";
+      os << vals[n] << ' ';
+    }
+    for (std::size_t j=cols[rows_ptr[i+1]-2]; j<rows_ptr.size()-1 ; ++j) os << "0 ";
+    os << ";\n";
+  }
+  os << "]\n";
+
+  return os;
+}
