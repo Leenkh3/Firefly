@@ -37,17 +37,68 @@
 #include <algorithm>
 #include <iostream>
 #include "SparseCSR.h"
+#include <cassert>
 
 
 SparseCSR::SparseCSR(const std::vector<std::size_t> &connectivity, int shape_points) {
-   // check the validity of connectivity vector
-   if (connectivity.size() % shape_points != 0) {
-       std::cerr << "Wrong connectivity vector provided! connectivity size:" 
-                 << connectivity.size() 
-                 << " is not divisible by shape_points:" 
-                 << shape_points << std::endl;
-       return;
-   }
+   /*!
+   * \brief Constructs a SparseCSR object from mesh connectivity data.
+   *
+   * This constructor builds a compressed sparse row (CSR) representation
+   * of a mesh's connectivity structure.
+   *
+   * The connectivity data defines how shape nodes are connected in space,
+   * resulting in a symmetric matrix. In order to optimize memory usage and
+   * computational effort, only the upper triangular portion of the matrix
+   * is stored. From this upper triangular matrix, two vectors are created:
+   *
+   * - **row_ptr**: This vector records the index in the \c cols vector where
+   *   each row's nonzero elements begin.
+   * - **cols**: This vector holds the column indices corresponding to the
+   *   nonzero entries.
+   *
+   * Additionally, a hash table is employed to cache intermediate connectivity
+   * information, which accelerates subsequent computations. For example, if point
+   * 0 connects to point 8, the hash table stores an association such as:
+   *   \code
+   *   [8] : [0, ...]
+   *   \endcode
+   * Later, when processing row 8, the algorithm retrieves the pre-saved connectivity
+   * from the hash table for efficient computation.
+   *
+   * \param[in] connectivity A vector that encodes the connectivity of the mesh.
+   *                         Its organization produces a symmetric matrix.
+   * \param[in] shape_points The number of points per element, which defines
+   *                         the overall structure of the mesh.
+   *
+   * \note Example:
+   * Consider the symmetric matrix:
+   *
+   * \verbatim
+   *   1  1  0  0  0
+   *   1  1  1  0  0
+   *   0  1  1  1  0
+   *   0  0  1  1  1
+   *   0  0  0  1  1
+   * \endverbatim
+   *
+   * Its stored upper triangular part is:
+   *
+   * \verbatim
+   *   1  1  -  -  -
+   *      1  1  -  -
+   *         1  1  -
+   *            1  1
+   *               1
+   * \endverbatim
+   *
+   * Initially, the hash table will, for instance, store an entry like [1] : [0].
+   * When processing row \(i = 1\), the constructor consults the hash table to
+   * quickly access pre-saved connectivity data, and so on.
+   */
+
+   assert (connectivity.size() % shape_points == 0) ;
+       
 
    // Use std::map and std::set for our connectivity hash table.
    std::map<int, std::set<int> > hash;
@@ -117,7 +168,10 @@ SparseCSR::SparseCSR(const std::vector<std::size_t> &connectivity, int shape_poi
  
  
  std::vector<double> SparseCSR::mult(std::vector<double> &vec)  const{ 
-
+// *****************************************************************************
+//  Multiply CSR matrix with vector from the right: r = A * x
+//! \param[in] vec Vector to multiply matrix with from the right
+// *****************************************************************************
     if(vec.size() != rows_ptr.size()-1){
       std::cerr<<"Cannot multiply matrix by vector : Wrong shapes" << vec.size() << " != "<< rows_ptr.size()<<std::endl;
       throw;
@@ -142,6 +196,10 @@ SparseCSR::SparseCSR(const std::vector<std::size_t> &connectivity, int shape_poi
 
  };           
  void SparseCSR::print() const {
+
+// *****************************************************************************
+//! \short Write out CSR as stored
+// *****************************************************************************
    std::size_t i;
 
   std::cout << "rows_ptr[rsize+1=" << rows_ptr.size() << "] = { ";
@@ -159,7 +217,9 @@ SparseCSR::SparseCSR(const std::vector<std::size_t> &connectivity, int shape_poi
  };     
  
  void SparseCSR::print_matrix() const {
- 
+ // *****************************************************************************
+//! \short Write out CSR as a real matrix
+// *****************************************************************************
    int nrows = rows_ptr.size()-1;
    int ncols = nrows;
 
