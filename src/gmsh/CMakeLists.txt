@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.10)
 project(GmshReader)
 
 # Add the main executable
-add_executable(GmshReader gmsh_reader.c)
+add_executable(GmshReader src/gmsh/gmsh_reader.c)
 
 # Enable testing
 enable_testing()
