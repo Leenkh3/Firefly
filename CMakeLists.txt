@@ -23,6 +23,8 @@ add_library(MatrixLib
     src/matrix/Dense.h
     src/matrix/SparseCSR.h
     src/matrix/SparseCSR.cpp
+    src/cholesky/Cholesky_dense.cpp
+    src/cholesky/cholesky.hpp
 )
 
 # Configure a CSR matrix class
@@ -32,6 +34,10 @@ add_library(Laplacian src/laplacian/Laplacian.cpp)
 
 # Configure building the executable to test the Laplacian
 add_executable(LaplacianTests src/laplacian/testLaplacian.cpp)
+
+# Configure building the executable to test the Cholesky
+add_executable(cholesky_test src/cholesky/cholesky_test.cpp)
+
 target_link_libraries(LaplacianTests PRIVATE CSR Laplacian)
 
 add_executable(firefly firefly.cpp)
@@ -53,6 +59,9 @@ add_test(NAME firefly COMMAND firefly)
 add_test(NAME MatrixTests COMMAND MatrixTests)
 # Add tests for the Laplacian
 add_test(NAME laplacian COMMAND LaplacianTests)
+
+#Add tests for the Cholesky
+add_test(NAME cholesky COMMAND cholesky_test)
 
 # Include function used to add regression tests
 include(add_regression_test)
@@ -94,6 +103,20 @@ ExternalProject_Add(netcdf
 # NetCDF Library Path
 set(NETCDF_LIB "${PROJECT_BINARY_DIR}/netcdf-install/lib/libnetcdf.so")
 set(NETCDF_INCLUDE_DIR "${PROJECT_BINARY_DIR}/netcdf-install/include")
+
+#External project: Eigen
+ExternalProject_Add(eigen
+    GIT_REPOSITORY https://gitlab.com/eigen/eigen.git
+    GIT_TAG master
+    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${PROJECT_BINARY_DIR}/eigen-install
+)
+
+# Eigen Library Path
+set(EIGEN_INCLUDE_DIR "${PROJECT_BINARY_DIR}/eigen-install/include/eigen3")
+
+# Add source subdirectory (your original setup)
+add_subdirectory(${CMAKE_SOURCE_DIR}/src)
+
 
 # Install Exodus using the official Sandia Labs SEACAS repository
 ExternalProject_Add(exodus
