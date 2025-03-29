@@ -167,13 +167,13 @@ SparseCSR::SparseCSR(const std::vector<std::size_t> &connectivity, int shape_poi
  };    
  
  
- std::vector<double> SparseCSR::mult(std::vector<double> &vec)  const{ 
+ std::vector<double> SparseCSR::mult(std::vector<double> &x)  const{ 
 // *****************************************************************************
 //  Multiply CSR matrix with vector from the right: r = A * x
-//! \param[in] vec Vector to multiply matrix with from the right
+//! \param[in] x Vector to multiply matrix with from the right
 // *****************************************************************************
-    if(vec.size() != rows_ptr.size()-1){
-      std::cerr<<"Cannot multiply matrix by vector : Wrong shapes" << vec.size() << " != "<< rows_ptr.size()<<std::endl;
+    if(x.size() != rows_ptr.size()-1){
+      std::cerr<<"Cannot multiply matrix by vector : Wrong shapes" << x.size() << " != "<< rows_ptr.size()<<std::endl;
       throw;
     }
    
@@ -182,7 +182,7 @@ SparseCSR::SparseCSR(const std::vector<std::size_t> &connectivity, int shape_poi
    int i = 1,j=0;
    while(i < rows_ptr.size() && j < cols.size()){
     
-      sum+=vals[j] * vec[cols[j] - 1];
+      sum+=vals[j] * x[cols[j] - 1];
       j++;
       if(j == rows_ptr[i] -1){ 
          i++;

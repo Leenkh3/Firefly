@@ -118,7 +118,7 @@ void Dense::T() {
     set_matrix(transposed);
 }
 
- std::vector<double> Dense::mult(std::vector<double> &vec) const {
+ std::vector<double> Dense::mult(std::vector<double> &x) const {
     //********************************************************************************
     //! \param[in] vec A vector to multiply the matrix with (from the right)
     /*!
@@ -126,17 +126,17 @@ void Dense::T() {
        \return The resulted vector (after multiplication)
     */
     //********************************************************************************
-    if (vec.size() != cols) {
+    if (x.size() != cols) {
         std::cout << "Shapes don't match: cannot multiply matrix with shape " << rows << ","
-                  << cols << " with vector of size " << vec.size() << std::endl;
-        return vec ;
+                  << cols << " with vector of size " << x.size() << std::endl;
+        return x ;
     }
 
     std::vector<double>  dotted(rows);
     for (int row = 0; row < rows; row++) {
         double sum = 0;
         for (int col = 0; col < cols; col++) {
-            sum += vec[col] * matrix[row][col];
+            sum += x[col] * matrix[row][col];
         }
         dotted[row] = sum;
     }

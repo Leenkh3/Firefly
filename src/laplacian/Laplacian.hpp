@@ -11,7 +11,6 @@
 #include <vector>
 
 #include "../matrix/SparseCSR.h"
-#include "CSR.hpp"
 
 //! Generate derived data structure, elements surrounding points
 std::pair< std::vector< std::size_t >, std::vector< std::size_t > >
