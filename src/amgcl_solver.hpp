@@ -1,6 +1,8 @@
 #ifndef AMGCL_FIREFLY
 #define AMGCL_FIREFLY
 
+typedef std::tuple<int, double> SolverResult;
+
 /*
 Input:
 - row_endpoints: vector of row endpoints of matrix in CRS format
@@ -10,7 +12,7 @@ Input:
 - x: used as output, vector representing solution after algorithm finished
 Returns: tuple of number of iterations used and the error.
 */
-std::tuple<int, double> solveAMGCL(
+SolverResult solveAMGCL(
     const std::vector<int> &row_endpoints,
     const std::vector<int> &col_indices,
     const std::vector<double> &values,

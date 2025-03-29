@@ -21,7 +21,7 @@ Input:
 - x: used as output, vector representing solution after algorithm finished
 Returns: tuple of number of iterations used and the error.
 */
-std::tuple<int, double> solveAMGCL(
+SolverResult solveAMGCL(
     const std::vector<int> &row_endpoints,
     const std::vector<int> &col_indices,
     const std::vector<double> &values,
