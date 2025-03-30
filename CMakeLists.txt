@@ -42,7 +42,11 @@ add_executable(LaplacianTests src/laplacian/testLaplacian.cpp)
 # Configure building the executable to test the Cholesky
 add_executable(cholesky_test src/cholesky/cholesky_test.cpp)
 
+target_link_libraries(cholesky_test PRIVATE MatrixLib)
+
 add_executable(test_cholesky_CRS src/cholesky/test_cholesky_CRS.cpp)
+
+target_link_libraries(test_cholesky_CRS PRIVATE MatrixLib)
 
 target_link_libraries(LaplacianTests PRIVATE CSR Laplacian)
 
@@ -69,9 +73,9 @@ add_test(NAME MatrixTests COMMAND MatrixTests)
 add_test(NAME laplacian COMMAND LaplacianTests)
 
 # Add tests for the Cholesky
-add_test(NAME cholesky COMMAND cholesky_test)
+add_test(NAME cholesky_dense COMMAND cholesky_test)
 
-add_test(NAME cholesky COMMAND test_cholesky_CRS)
+add_test(NAME cholesky_crs COMMAND test_cholesky_CRS)
 
 # Include function used to add regression tests
 include(add_regression_test)
@@ -91,26 +95,24 @@ add_regression_test(test_example_fail_regexp firefly
 find_package(MPI)
 
 # === KEEPING NetCDF ExternalProject ===
+
 ExternalProject_Add(netcdf
     GIT_REPOSITORY https://github.com/Unidata/netcdf-c.git
     GIT_TAG main
-    CMAKE_ARGS -DCMAKE_C_COMPILER=${CMAKE_C_COMPILER}
-               -DENABLE_NETCDF_4=on
-               -DBUILD_SHARED_LIBS=on
-               -DENABLE_EXAMPLES=off
-               -DENABLE_FSYNC=off
-               -DENABLE_DAP=off
-               -DENABLE_TESTS=off
-               -DENABLE_CONVERSION_WARNINGS=off
-               -DENABLE_DAP_REMOTE_TESTS=off
-               -DENABLE_EXTREME_NUMBERS=off
-               -DENABLE_PARALLEL4=on
-               -DENABLE_PARALLEL_TESTS=off
-               -DENABLE_BASH_SCRIPT_TESTING=off
-               -DENABLE_V2_API=off
-               -DNETCDF_ENABLE_HDF5=off
-               -DCMAKE_INSTALL_PREFIX=${PROJECT_BINARY_DIR}/netcdf-install
+    CMAKE_ARGS
+      -DCMAKE_C_COMPILER=${CMAKE_C_COMPILER}
+      -DCMAKE_INSTALL_PREFIX=${PROJECT_BINARY_DIR}/netcdf-install
+      -DNETCDF_ENABLE_HDF5=off
+      -DNETCDF_ENABLE_PARALLEL=off         # 👈 NEW: Disable MPI
+      -DBUILD_SHARED_LIBS=on
+      -DNETCDF_ENABLE_TESTS=off
+      -DNETCDF_ENABLE_EXAMPLES=off
+      -DNETCDF_ENABLE_FSYNC=off
+      -DNETCDF_ENABLE_CONVERSION_WARNINGS=off
+      -DNETCDF_ENABLE_EXTREME_NUMBERS=off
 )
+
+
 
 # NetCDF Library Path
 set(NETCDF_LIB "${PROJECT_BINARY_DIR}/netcdf-install/lib/libnetcdf.so")
@@ -125,19 +127,46 @@ set(NETCDF_INCLUDE_DIR "${PROJECT_BINARY_DIR}/netcdf-install/include")
 # )
 # set(EIGEN_INCLUDE_DIR "${PROJECT_BINARY_DIR}/eigen-install/include/eigen3")
 
-# Add source subdirectory (your original setup)
-add_subdirectory(${CMAKE_SOURCE_DIR}/src)
 
 # Install Exodus using the official Sandia Labs SEACAS repository
+
+
+include(ExternalProject)
+
+ExternalProject_Add(fmt
+    GIT_REPOSITORY https://github.com/fmtlib/fmt.git
+    GIT_TAG 10.1.1
+    CMAKE_ARGS
+        -DCMAKE_INSTALL_PREFIX=${PROJECT_BINARY_DIR}/fmt-install
+        -DFMT_DOC=OFF
+        -DFMT_TEST=OFF
+        -DBUILD_SHARED_LIBS=OFF
+        -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+)
+
+
+
 ExternalProject_Add(exodus
     GIT_REPOSITORY https://github.com/sandialabs/seacas.git
     GIT_TAG master
-    DEPENDS netcdf  # Ensure NetCDF is built before Exodus
-    CMAKE_ARGS -DCMAKE_C_COMPILER=${CMAKE_C_COMPILER}
-               -DNetCDF_DIR=${PROJECT_BINARY_DIR}/netcdf-install
-               -DBUILD_SHARED_LIBS=on
-               -DCMAKE_INSTALL_PREFIX=${PROJECT_BINARY_DIR}/exodus-install
+    DEPENDS netcdf fmt
+    CMAKE_ARGS
+        -DCMAKE_C_COMPILER=${CMAKE_C_COMPILER}
+        -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}
+        -DBUILD_SHARED_LIBS=on
+        -DCMAKE_INSTALL_PREFIX=${PROJECT_BINARY_DIR}/exodus-install
+        -DNetCDF_DIR=${PROJECT_BINARY_DIR}/netcdf-install
+        -Dfmt_DIR=${PROJECT_BINARY_DIR}/fmt-install/lib64/cmake/fmt
+        -DTPL_ENABLE_fmt=ON
+        -DTPL_fmt_INCLUDE_DIRS=${PROJECT_BINARY_DIR}/fmt-install/include
+        -DTPL_fmt_LIBRARIES=${PROJECT_BINARY_DIR}/fmt-install/lib64/libfmt.a
+        -DSeacas_ENABLE_SEACAS=ON
+        -DSeacas_ENABLE_SEACASExodus=ON
+        -DSeacas_ENABLE_SEACASIoss=ON
+        -DSeacas_ENABLE_SEACASNemesis=ON
 )
+
+
 
 # Exodus Library Path
 set(EXODUS_LIB "${PROJECT_BINARY_DIR}/exodus-install/lib/libexodus.so")

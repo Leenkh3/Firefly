@@ -22,6 +22,9 @@ void testCholeskySolver() {
     // Solve for x in A * x = b
     Eigen::VectorXd x = solver.solve(b);
 
+
+    std::cout << "Solution x:\n" << x << std::endl;
+
     // Verify that A * x == b
     Eigen::VectorXd Ax = A * x;
     assert((Ax - b).norm() < 1e-6 && "Solution does not satisfy A * x = b.");

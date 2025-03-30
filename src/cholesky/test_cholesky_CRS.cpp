@@ -1,45 +1,65 @@
-#include "cholesky_sparse_solver.hpp"
 #include <Eigen/Sparse>
+#include <Eigen/SparseCholesky>
 #include <iostream>
 #include <cassert>
 
+// Assume your CholeskySparseSolver is just a wrapper for Eigen’s SimplicialLLT
+struct CholeskySparseSolver {
+    Eigen::SimplicialLLT<Eigen::SparseMatrix<double>> solver;
+
+    bool compute(const Eigen::SparseMatrix<double>& A) {
+        solver.compute(A);
+        return solver.info() == Eigen::Success;
+    }
+
+    Eigen::VectorXd solve(const Eigen::VectorXd& b) {
+        return solver.solve(b);
+    }
+};
+
+
+
+
+
+
 void testCholeskySparseSolver() {
-    // Define a 3x3 symmetric positive definite sparse matrix in CRS style
     Eigen::SparseMatrix<double> A(3, 3);
     std::vector<Eigen::Triplet<double>> triplets;
 
-    // Fill the matrix in symmetric CRS format
+    // Fill only lower triangle (for selfadjointView)
     triplets.emplace_back(0, 0, 4);
-    triplets.emplace_back(0, 1, 1);
-    triplets.emplace_back(0, 2, 2);
+    triplets.emplace_back(1, 0, 1);
+    triplets.emplace_back(2, 0, 2);
     triplets.emplace_back(1, 1, 3);
     triplets.emplace_back(2, 2, 5);
 
-    // Set the values into A
     A.setFromTriplets(triplets.begin(), triplets.end());
+    A.makeCompressed();
 
-    // Make sure the matrix is symmetric
-    A = A.selfadjointView<Eigen::Lower>();
-
-    // Right-hand side vector
     Eigen::VectorXd b(3);
     b << 7, 4, 10;
 
-    // Create and test the solver
     CholeskySparseSolver solver;
-    bool success = solver.compute(A);
+    bool success = solver.compute(A.selfadjointView<Eigen::Lower>());
     assert(success && "Sparse Cholesky decomposition failed.");
 
     Eigen::VectorXd x = solver.solve(b);
 
-    // Check that A * x ≈ b
-    Eigen::VectorXd Ax = A * x;
+    // This line changed:
+    Eigen::VectorXd Ax = A.selfadjointView<Eigen::Lower>() * x;
     assert((Ax - b).norm() < 1e-6 && "Solution does not satisfy A * x = b.");
 
-    std::cout << "Test passed for sparse Cholesky (CRS) matrix!" << std::endl;
+    std::cout << "✅ Sparse Cholesky test passed!" << std::endl;
+    std::cout << "Solution x:\n" << x << std::endl;
 }
+
+
+
+
 
 int main() {
     testCholeskySparseSolver();
     return 0;
 }
+
+

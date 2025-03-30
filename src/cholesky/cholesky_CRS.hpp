@@ -1,15 +1,16 @@
-#pragma once
+#ifndef CHOLESKY_CRS_HPP
+#define CHOLESKY_CRS_HPP
+
 #include <Eigen/Sparse>
-#include <Eigen/SparseCholesky>
 
 class CholeskySparseSolver {
 public:
-    // Compute the Cholesky decomposition of a sparse matrix
     bool compute(const Eigen::SparseMatrix<double>& A);
-
-    // Solve the linear system A * x = b
-    Eigen::VectorXd solve(const Eigen::VectorXd& b) const;
+    Eigen::VectorXd solve(const Eigen::VectorXd& b);
 
 private:
     Eigen::SimplicialLLT<Eigen::SparseMatrix<double>> solver;
 };
+
+#endif
+
