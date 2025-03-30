@@ -109,6 +109,51 @@ ExternalProject_Add(exodus
 # Exodus Library Path
 set(EXODUS_LIB "${PROJECT_BINARY_DIR}/exodus-install/lib/libexodus.so")
 
+
+cmake_minimum_required(VERSION 2.4)
+
+PROJECT(numdiff C)
+
+if(NOT "${CMAKE_C_FLAGS}" MATCHES "std=c99")
+   if(NOT CMAKE_C_COMPILER_ID STREQUAL "Cray")
+     if(NOT (WIN32 AND CMAKE_C_COMPILER_ID STREQUAL "Intel") AND
+        NOT CMAKE_C_COMPILER_ID STREQUAL "PGI")
+        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c99")
+     else()
+        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /Qstd=c99")
+     endif()
+   endif()
+endif()
+
+file(GLOB numdiff_src src/ndiff/src/*.c)
+
+include_directories(src/ndiff/src/)
+add_executable(numdiff ${numdiff_src})
+set(OUTPUT_NAME maddiff CACHE string "Output name for executable")
+set_target_properties(numdiff PROPERTIES OUTPUT_NAME ${OUTPUT_NAME})
+if(UNIX)
+   target_link_libraries(numdiff m)
+endif()
+
+install(TARGETS numdiff
+   RUNTIME
+   DESTINATION bin
+   COMPONENT Runtime
+   )
+
+# ndiff Library Path
+set(NDIFF_LIB "${PROJECT_BINARY_DIR}/ndiff-install/lib/libndiff.so")
+set(NDIFF_INCLUDE_DIR "${PROJECT_BINARY_DIR}/ndiff-install/include")
+
+# Add testing subdirectory
+add_executable(ndiffTests src/ndiff/test_ndiff.cpp)
+
+# Link ndiff to the main executable
+target_link_libraries(ndiffTests PRIVATE NDIFF_LIB)
+
+# Add a test for the ndiff library
+add_test(NAME ndiffTests COMMAND ndiffTests)
+
 # Configure building the gmsh mesh reader
 # add_library(GmshMeshReader GmshMeshReader.cpp GmshMeshReader.hpp)
 
