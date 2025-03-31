@@ -2,9 +2,9 @@ name: Generate Doxygen Docs
 
 on:
   push:
-    branches:
-      - obay
-  pull_request:
+    branches: ["*"]
+      
+  pull_request: ["*"]
 
 jobs:
   generate-docs:
