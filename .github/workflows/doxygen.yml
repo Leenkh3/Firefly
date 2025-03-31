@@ -3,8 +3,7 @@ name: Generate Doxygen Docs
 on:
   push:
     branches:
-      - main
-      - saher  
+      - obay
   pull_request:
 
 jobs:
@@ -20,8 +19,15 @@ jobs:
       - name: Run Doxygen
         run: doxygen Doxyfile
 
+      - name: Check if docs directory exists
+        run: |
+          if [ ! -d "docs" ]; then
+            echo "❌ The docs directory was not created!"
+            exit 1
+          fi
+
       - name: Deploy Documentation
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           branch: gh-pages
-          folder: docs  
+          folder: docs
