@@ -1,9 +1,9 @@
 #include <Eigen/Sparse>
 #include <Eigen/SparseCholesky>
 #include <iostream>
-#include <cassert>
+#include <vector>
 
-// Assume your CholeskySparseSolver is just a wrapper for Eigen’s SimplicialLLT
+// Wrapper for Eigen’s SimplicialLLT
 struct CholeskySparseSolver {
     Eigen::SimplicialLLT<Eigen::SparseMatrix<double>> solver;
 
@@ -17,16 +17,12 @@ struct CholeskySparseSolver {
     }
 };
 
-
-
-
-
-
-void testCholeskySparseSolver() {
+// ✅ Returns true if test passes, false if fails
+bool testCholeskySparseSolver() {
     Eigen::SparseMatrix<double> A(3, 3);
     std::vector<Eigen::Triplet<double>> triplets;
 
-    // Fill only lower triangle (for selfadjointView)
+    // Lower triangle of SPD matrix
     triplets.emplace_back(0, 0, 4);
     triplets.emplace_back(1, 0, 1);
     triplets.emplace_back(2, 0, 2);
@@ -40,26 +36,25 @@ void testCholeskySparseSolver() {
     b << 7, 4, 10;
 
     CholeskySparseSolver solver;
-    bool success = solver.compute(A.selfadjointView<Eigen::Lower>());
-    assert(success && "Sparse Cholesky decomposition failed.");
+    if (!solver.compute(A.selfadjointView<Eigen::Lower>())) {
+        std::cerr << " Sparse Cholesky decomposition failed!" << std::endl;
+        return false;
+    }
 
     Eigen::VectorXd x = solver.solve(b);
-
-    // This line changed:
     Eigen::VectorXd Ax = A.selfadjointView<Eigen::Lower>() * x;
-    assert((Ax - b).norm() < 1e-6 && "Solution does not satisfy A * x = b.");
 
-    std::cout << "✅ Sparse Cholesky test passed!" << std::endl;
+    if ((Ax - b).norm() >= 1e-6) {
+        std::cerr << " Solution is incorrect. ||Ax - b|| = " << (Ax - b).norm() << std::endl;
+        return false;
+    }
+
+    std::cout << " Sparse Cholesky test passed!" << std::endl;
     std::cout << "Solution x:\n" << x << std::endl;
+    return true;
 }
-
-
-
-
 
 int main() {
-    testCholeskySparseSolver();
-    return 0;
+    return testCholeskySparseSolver() ? 0 : 1;
 }
-
 

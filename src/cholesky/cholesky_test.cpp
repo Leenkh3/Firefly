@@ -1,10 +1,10 @@
 #include "cholesky.hpp"
 #include <Eigen/Dense>
 #include <iostream>
-#include <cassert>
 
-void testCholeskySolver() {
-    // Test case 1: Simple positive definite matrix
+// ✅ Returns true if test passes, false otherwise
+bool testCholeskySolver() {
+    // Define a symmetric positive definite matrix
     Eigen::MatrixXd A(3, 3);
     A << 4, 1, 2,
          1, 3, 0,
@@ -15,27 +15,26 @@ void testCholeskySolver() {
 
     CholeskySolver solver;
 
-    // Compute the Cholesky decomposition
     bool success = solver.compute(A);
-    assert(success && "Cholesky decomposition failed.");
+    if (!success) {
+        std::cerr << " Cholesky decomposition failed." << std::endl;
+        return false;
+    }
 
-    // Solve for x in A * x = b
     Eigen::VectorXd x = solver.solve(b);
-
-
-    std::cout << "Solution x:\n" << x << std::endl;
-
-    // Verify that A * x == b
     Eigen::VectorXd Ax = A * x;
-    assert((Ax - b).norm() < 1e-6 && "Solution does not satisfy A * x = b.");
 
-    std::cout << "Test passed for simple positive definite matrix!" << std::endl;
+    if ((Ax - b).norm() >= 1e-6) {
+        std::cerr << " Solution is incorrect. ||Ax - b|| = " << (Ax - b).norm() << std::endl;
+        return false;
+    }
+
+    std::cout << " Dense Cholesky test passed!" << std::endl;
+    std::cout << "Solution x:\n" << x << std::endl;
+    return true;
 }
 
 int main() {
-    // Run the test
-    testCholeskySolver();
-    
-    return 0;
+    return testCholeskySolver() ? 0 : 1;
 }
 
