@@ -22,7 +22,7 @@ jobs:
       - name: Check if docs directory exists
         run: |
           if [ ! -d "docs" ]; then
-            echo "❌ The docs directory was not created!"
+            echo " The docs directory was not created!"
             exit 1
           fi
 
