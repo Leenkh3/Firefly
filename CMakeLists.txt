@@ -10,9 +10,30 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 # Include ExternalProject module
 include(ExternalProject)
 
-# === ✅ ADD LOCAL EIGEN LIBRARY ===
-# Path: firefly/eigen-3.4.0/eigen-3.4.0/Eigen
-include_directories(${CMAKE_SOURCE_DIR}/eigen-3.4.0/eigen-3.4.0)
+# === ✅ Use system Eigen if available, otherwise download it ===
+find_package(Eigen3 QUIET)
+
+if (Eigen3_FOUND)
+    message(STATUS "Using system-installed Eigen3: ${Eigen3_INCLUDE_DIRS}")
+    include_directories(${Eigen3_INCLUDE_DIRS})
+else()
+    message(STATUS "Eigen3 not found. Downloading with ExternalProject_Add.")
+
+    include(ExternalProject)
+    ExternalProject_Add(eigen
+        GIT_REPOSITORY https://gitlab.com/libeigen/eigen.git
+        GIT_TAG master
+        CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${PROJECT_BINARY_DIR}/eigen-install
+    )
+
+    # Make sure to include the downloaded Eigen headers
+    set(EIGEN_INCLUDE_DIR "${PROJECT_BINARY_DIR}/eigen-install/include/eigen3")
+    include_directories(${EIGEN_INCLUDE_DIR})
+    
+    
+endif()
+
+
 
 # Add source subdirectory
 add_subdirectory(${CMAKE_SOURCE_DIR}/src)
@@ -39,6 +60,8 @@ add_library(Laplacian src/laplacian/Laplacian.cpp)
 # Configure building the executable to test the Laplacian
 add_executable(LaplacianTests src/laplacian/testLaplacian.cpp)
 
+target_link_libraries(LaplacianTests PRIVATE MatrixLib CSR Laplacian)
+
 # Configure building the executable to test the Cholesky
 add_executable(cholesky_test src/cholesky/cholesky_test.cpp)
 
@@ -48,9 +71,11 @@ add_executable(test_cholesky_CRS src/cholesky/test_cholesky_CRS.cpp)
 
 target_link_libraries(test_cholesky_CRS PRIVATE MatrixLib)
 
-target_link_libraries(LaplacianTests PRIVATE CSR Laplacian)
+
 
 add_executable(firefly firefly.cpp)  
+
+
 
 # Configure cmake's testing system
 enable_testing()
@@ -62,6 +87,12 @@ add_executable(MatrixTests src/matrix/test_matrix.cpp)
 
 # Link the Matrix library to the main executable
 target_link_libraries(MatrixTests PRIVATE MatrixLib)
+
+add_dependencies(MatrixLib eigen)
+add_dependencies(MatrixTests eigen)
+add_dependencies(test_cholesky_CRS eigen)
+add_dependencies(cholesky_test eigen)
+
 
 # Add a test, running the chillax executable, non-zero exit code will fail the test
 add_test(NAME firefly COMMAND firefly)
@@ -103,13 +134,11 @@ ExternalProject_Add(netcdf
       -DCMAKE_C_COMPILER=${CMAKE_C_COMPILER}
       -DCMAKE_INSTALL_PREFIX=${PROJECT_BINARY_DIR}/netcdf-install
       -DNETCDF_ENABLE_HDF5=off
-      -DNETCDF_ENABLE_PARALLEL=off         # 👈 NEW: Disable MPI
+      -DNETCDF_ENABLE_PARALLEL=off         
       -DBUILD_SHARED_LIBS=on
       -DNETCDF_ENABLE_TESTS=off
       -DNETCDF_ENABLE_EXAMPLES=off
       -DNETCDF_ENABLE_FSYNC=off
-      -DNETCDF_ENABLE_CONVERSION_WARNINGS=off
-      -DNETCDF_ENABLE_EXTREME_NUMBERS=off
 )
 
 
@@ -118,20 +147,14 @@ ExternalProject_Add(netcdf
 set(NETCDF_LIB "${PROJECT_BINARY_DIR}/netcdf-install/lib/libnetcdf.so")
 set(NETCDF_INCLUDE_DIR "${PROJECT_BINARY_DIR}/netcdf-install/include")
 
-# === 🔥 REMOVED ExternalProject_Add for Eigen — using local copy ===
-# External project: Eigen (DISABLED in favor of local copy)
-# ExternalProject_Add(eigen
-#     GIT_REPOSITORY https://gitlab.com/eigen/eigen.git
-#     GIT_TAG master
-#     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${PROJECT_BINARY_DIR}/eigen-install
-# )
-# set(EIGEN_INCLUDE_DIR "${PROJECT_BINARY_DIR}/eigen-install/include/eigen3")
 
 
 # Install Exodus using the official Sandia Labs SEACAS repository
 
 
-include(ExternalProject)
+# fmt is required because SEACAS (Exodus) depends on it.
+# We build it locally to ensure compatibility with NetCDF and SEACAS
+
 
 ExternalProject_Add(fmt
     GIT_REPOSITORY https://github.com/fmtlib/fmt.git
