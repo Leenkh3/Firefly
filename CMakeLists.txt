@@ -62,3 +62,33 @@ add_regression_test(test_example_fail_regexp firefly
                     EXTRA_FAIL_REGEXP "Firefly Project"
                     EXTRA_PROPERTIES "WILL_FAIL;1"
                     LABELS "basic")
+# find package
+find_package(Doxygen REQUIRED)
+# add_custom_command
+if(DOXYGEN_FOUND)
+    set(DOXYGEN_IN ${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile)
+    set(DOXYGEN_OUT ${CMAKE_CURRENT_BINARY_DIR}/docs)
+
+    add_custom_command(
+        OUTPUT ${DOXYGEN_OUT}
+        COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYGEN_IN}
+        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+        COMMENT "Generating API documentation with Doxygen"
+        VERBATIM
+    )
+
+    add_custom_target(doc ALL DEPENDS ${DOXYGEN_OUT})
+endif()
+
+set(DOXYGEN_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/docs)
+
+add_custom_target(
+    generate_docs
+    COMMAND ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile
+    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+    COMMENT "Generating documentation..."
+    VERBATIM
+)
+
+add_dependencies(all generate_docs)
+
