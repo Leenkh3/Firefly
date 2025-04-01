@@ -47,13 +47,14 @@ jobs:
       if: runner.os == 'macOS'
       run: brew install mpich gcc
 
-    - name: Check Installed Compilers
+    - name: Debug Fortran Compiler
       if: runner.os == 'macOS'
       run: |
-        echo "C Compiler: $(which gcc)"
-        echo "C++ Compiler: $(which g++)"
-        echo "Fortran Compiler: $(which gfortran)"
-        gfortran --version || echo "gfortran not found"
+        echo "Checking Fortran Compiler..."
+        which gfortran || echo "gfortran not found in PATH"
+        ls -l /usr/local/bin/gfortran* || echo "No gfortran in /usr/local/bin"
+        ls -l /opt/homebrew/bin/gfortran* || echo "No gfortran in /opt/homebrew/bin"
+        gfortran --version || echo "gfortran command not working"
 
     - name: Configure CMake
       run: >
