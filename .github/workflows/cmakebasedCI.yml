@@ -1,4 +1,4 @@
-#name: CMake on multiple platform with multiple compilers
+name: CMake build tests
 
 on:
   push:
