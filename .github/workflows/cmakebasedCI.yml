@@ -37,15 +37,18 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
+    - name: List directory contents
+      run: ls -R ${{ github.workspace }}
+
     - name: Set reusable strings
       id: strings
       shell: bash
       run: |
         echo "build-output-dir=${{ github.workspace }}/build" >> "$GITHUB_OUTPUT"
 
-    - name: Install MPI (Ubuntu)
-      if: runner.os == 'Linux'
-      run: apt-get update && apt-get install -y mpich
+    #- name: Install MPI (Ubuntu)
+    #  if: runner.os == 'Linux'
+    #  run: apt-get update && apt-get install -y mpich
   
     - name: Install MPI (macOS)
       if: runner.os == 'macOS'
