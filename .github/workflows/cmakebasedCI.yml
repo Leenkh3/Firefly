@@ -2,7 +2,7 @@ name: CMake build tests
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "kzoli39-CI" ]
   pull_request:
     branches: [ "main" ]
 
@@ -29,6 +29,10 @@ jobs:
         exclude:
           - os: macos-latest
             cpp_compiler: g++
+
+    container:
+      image: docker.io/kzoli39/custom-ubuntu-firefly:latest
+      options: --rm
 
     steps:
     - uses: actions/checkout@v4
