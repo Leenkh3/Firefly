@@ -12,7 +12,7 @@ env:
 jobs:
   build:
     runs-on: ${{ matrix.os }}
-
+    name: ${{ matrix.os }}/${{ matrix.build_type }}/${{ matrix.cpp_compiler }}
     strategy:
       fail-fast: false
       matrix:
