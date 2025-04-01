@@ -29,7 +29,7 @@ void vectorSub(vector<double>& a, const vector<double>& b, double alpha) {
 }
 
 // Function to compute matrix-vector product
-vector<double> matVecMult(const vector<vector<double> > &A, const vector<double> &v) {
+vector<double> matVecMult(const vector<vector<double>>& A, const vector<double>& v) {
     int N = A.size();
     vector<double> result(N, 0.0);
     for (int i = 0; i < N; i++) {
@@ -41,9 +41,9 @@ vector<double> matVecMult(const vector<vector<double> > &A, const vector<double>
 }
 
 // Incomplete Cholesky decomposition function
-vector<vector<double> > incompleteCholesky(const vector<vector<double> > &A) {
+vector<vector<double>> incompleteCholesky(const vector<vector<double>>& A) {
     int N = A.size();
-    vector<vector<double> > L(N, vector<double>(N, 0.0));
+    vector<vector<double>> L(N, vector<double>(N, 0.0));
 
     for (int i = 0; i < N; i++) {
         for (int j = 0; j <= i; j++) {
@@ -66,7 +66,7 @@ vector<vector<double> > incompleteCholesky(const vector<vector<double> > &A) {
 }
 
 // Forward substitution for solving L * y = b
-vector<double> forwardSolve(const vector<vector<double> > &L, const vector<double> &b) {
+vector<double> forwardSolve(const vector<vector<double>>& L, const vector<double>& b) {
     int N = L.size();
     vector<double> y(N, 0.0);
     for (int i = 0; i < N; i++) {
@@ -80,7 +80,7 @@ vector<double> forwardSolve(const vector<vector<double> > &L, const vector<doubl
 }
 
 // Backward substitution for solving L^T * x = y
-vector<double> backwardSolve(const vector<vector<double> > &L, const vector<double> &y) {
+vector<double> backwardSolve(const vector<vector<double>>& L, const vector<double>& y) {
     int N = L.size();
     vector<double> x(N, 0.0);
     for (int i = N - 1; i >= 0; i--) {
@@ -93,29 +93,50 @@ vector<double> backwardSolve(const vector<vector<double> > &L, const vector<doub
     return x;
 }
 
-// Conjugate Gradient Solver
-void conjugateGradient(const vector<vector<double> > &A, const vector<double> &b, vector<double> &x) {
+// Conjugate Gradient method with preconditioning using ICD
+void conjugateGradient(const vector<vector<double>>& A, const vector<double>& b, vector<double>& x, const vector<vector<double>>& L) {
     int N = A.size();
-    vector<double> r = b; // Initial residual r0 = b - A*x0 (assuming x0 = 0)
-    vector<double> p = r;
-    vector<double> Ap(N);
-    double alpha, beta, rsold, rsnew;
+    vector<double> r = b;  // Initial residual
+    vector<double> p = r;  // Initial search direction
 
-    rsold = dotProduct(r, r);
-    for (int j = 0; j < N; j++) {
-        Ap = matVecMult(A, p);
-        alpha = rsold / dotProduct(p, Ap);
+    // Solve L * y = r to precondition the residual
+    vector<double> y = forwardSolve(L, r);
+    
+    //  r to be preconditioned residual
+    vector<double> r_preconditioned = y;
 
+    double rsold = dotProduct(r_preconditioned, r_preconditioned);
+
+    for (int i = 0; i < N; i++) {
+        // Matrix-vector multiplication A * p
+        vector<double> Ap = matVecMult(A, p);
+
+        // Compute alpha
+        double alpha = rsold / dotProduct(p, Ap);
+
+        //  the solution
         vectorAdd(x, p, alpha);
+        
+        //  the residual: r = r - alpha * A * p
         vectorSub(r, Ap, alpha);
 
-        rsnew = dotProduct(r, r);
-        if (sqrt(rsnew) < 1e-6) // Convergence check
+        // Solve L * y = r to precondition the residual
+        y = forwardSolve(L, r);
+        
+        //  the preconditioned residual
+        r_preconditioned = y;
+
+        double rsnew = dotProduct(r_preconditioned, r_preconditioned);
+        
+        if (sqrt(rsnew) < 1e-6)  // Convergence check
             break;
 
-        beta = rsnew / rsold;
+        // Compute beta
+        double beta = rsnew / rsold;
+
+        // Update the search direction
         for (int i = 0; i < N; i++) {
-            p[i] = r[i] + beta * p[i];
+            p[i] = r_preconditioned[i] + beta * p[i];
         }
 
         rsold = rsnew;
@@ -127,7 +148,7 @@ int main() {
     cout << "Enter the matrix size N: ";
     cin >> N;
 
-    vector<vector<double> > A(N, vector<double>(N));
+    vector<vector<double>> A(N, vector<double>(N));
     vector<double> b(N);
     vector<double> x(N, 0.0);
 
@@ -143,8 +164,11 @@ int main() {
         cin >> b[i];
     }
 
-    vector<vector<double> > L = incompleteCholesky(A);
-    conjugateGradient(A, b, x);
+    // Perform Incomplete Cholesky Decomposition to get L
+    vector<vector<double>> L = incompleteCholesky(A);
+
+    // Solve the system using Conjugate Gradient with ICD as preconditioner
+    conjugateGradient(A, b, x, L);
 
     cout << "Solution x: ";
     for (size_t i = 0; i < x.size(); i++) {
