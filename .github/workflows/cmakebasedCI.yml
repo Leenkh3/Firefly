@@ -47,20 +47,25 @@ jobs:
       if: runner.os == 'macOS'
       run: brew install mpich gcc
 
-    - name: Debug Fortran Compiler
-      if: runner.os == 'macOS'
+    - name: Set Fortran Compiler
       run: |
-        echo "Checking Fortran Compiler..."
-        which gfortran || echo "gfortran not found in PATH"
-        ls -l /usr/local/bin/gfortran* || echo "No gfortran in /usr/local/bin"
-        ls -l /opt/homebrew/bin/gfortran* || echo "No gfortran in /opt/homebrew/bin"
-        gfortran --version || echo "gfortran command not working"
+        echo "Setting Fortran Compiler..."
+        if [[ -x "$(which gfortran)" ]]; then
+          echo "FC=$(which gfortran)" >> $GITHUB_ENV
+        elif [[ -f "/usr/local/bin/gfortran-13" ]]; then
+          echo "FC=/usr/local/bin/gfortran-13" >> $GITHUB_ENV
+        elif [[ -f "/opt/homebrew/bin/gfortran-13" ]]; then
+          echo "FC=/opt/homebrew/bin/gfortran-13" >> $GITHUB_ENV
+        else
+          echo "No gfortran found!"
+          exit 1
+        fi    
 
     - name: Configure CMake
       run: >
         cmake -B ${{ steps.strings.outputs.build-output-dir }}
         -DCMAKE_CXX_COMPILER=${{ matrix.cpp_compiler }}
-        -DCMAKE_Fortran_COMPILER=$(which gfortran || echo "/usr/local/bin/gfortran-13") \
+        -DCMAKE_Fortran_COMPILER=$FC
         -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
         -S ${{ github.workspace }}
 
