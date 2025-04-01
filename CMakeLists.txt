@@ -30,7 +30,7 @@ target_link_libraries(LaplacianTests PRIVATE CSR Laplacian)
 
 add_executable(firefly firefly.cpp)
 
-# Configure cmake's testing system
+# build & test 
 enable_testing()
 
 # Add testing subdirectory
