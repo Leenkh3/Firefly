@@ -32,13 +32,10 @@ jobs:
 
     container:
       image: docker.io/kzoli39/custom-ubuntu-firefly:latest
-      options: --rm
+      options: --workdir /github/workspace
 
     steps:
     - uses: actions/checkout@v4
-
-    - name: List directory contents
-      run: ls -R ${{ github.workspace }}
 
     - name: Set reusable strings
       id: strings
@@ -67,9 +64,19 @@ jobs:
         else
           echo "No gfortran found!"
           exit 1
-        fi    
+        fi
 
     - name: Configure CMake
+      if: runner.os == 'Linux'
+      run: >
+        cmake -B /github/workspace/build
+        -DCMAKE_CXX_COMPILER=${{ matrix.cpp_compiler }}
+        -DCMAKE_Fortran_COMPILER=$FC
+        -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
+        -S /github/workspace
+
+    - name: Configure CMake
+      if: runner.os == 'macOS'
       run: >
         cmake -B ${{ steps.strings.outputs.build-output-dir }}
         -DCMAKE_CXX_COMPILER=${{ matrix.cpp_compiler }}
