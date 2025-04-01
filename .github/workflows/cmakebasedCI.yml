@@ -51,7 +51,8 @@ jobs:
       if: runner.os == 'macOS'
       run: brew install mpich gcc
 
-    - name: Set Fortran Compiler
+    - name: Set Fortran Compiler (macOS)
+      if: runner.os == 'macOS'
       run: |
         echo "Setting Fortran Compiler..."
         if [[ -x "$(which gfortran)" ]]; then
