@@ -47,10 +47,19 @@ jobs:
       if: runner.os == 'macOS'
       run: brew install mpich gcc
 
+    - name: Check Installed Compilers
+      if: runner.os == 'macOS'
+      run: |
+        echo "C Compiler: $(which gcc)"
+        echo "C++ Compiler: $(which g++)"
+        echo "Fortran Compiler: $(which gfortran)"
+        gfortran --version || echo "gfortran not found"
+
     - name: Configure CMake
       run: >
         cmake -B ${{ steps.strings.outputs.build-output-dir }}
         -DCMAKE_CXX_COMPILER=${{ matrix.cpp_compiler }}
+        -DCMAKE_Fortran_COMPILER=$(which gfortran || echo "/usr/local/bin/gfortran-13") \
         -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
         -S ${{ github.workspace }}
 
