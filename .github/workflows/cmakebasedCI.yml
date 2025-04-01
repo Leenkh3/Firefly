@@ -1,4 +1,4 @@
-name: CMake on multiple platform with multiple compilers
+#name: CMake on multiple platform with multiple compilers
 
 on:
   push:
