@@ -13,7 +13,7 @@ public:
     Dense(const std::vector<std::vector<double> > &mat);
     double& at(int row,int col);
     std::vector<int> shape() ;
-    void print() ;
+    void print() const;
     void reshape(int rows, int cols);
     void T();
     std::vector<double> mult( std::vector<double> &vec) const;
