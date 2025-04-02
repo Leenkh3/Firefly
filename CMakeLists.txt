@@ -1,3 +1,4 @@
+
 #Tell Cmake the featureset we require
 cmake_minimum_required(VERSION 3.15)
 
@@ -143,6 +144,8 @@ ExternalProject_Add(netcdf
       -DNETCDF_ENABLE_TESTS=off
       -DNETCDF_ENABLE_EXAMPLES=off
       -DNETCDF_ENABLE_FSYNC=off
+      -DENABLE_DAP=OFF                
+      -DENABLE_BYTERANGE=OFF 
 )
 
 
@@ -184,9 +187,9 @@ ExternalProject_Add(exodus
         -DCMAKE_INSTALL_PREFIX=${PROJECT_BINARY_DIR}/exodus-install
         -DNetCDF_DIR=${PROJECT_BINARY_DIR}/netcdf-install
         -Dfmt_DIR=${PROJECT_BINARY_DIR}/fmt-install/lib64/cmake/fmt
-        -DTPL_ENABLE_fmt=ON
-        -DTPL_fmt_INCLUDE_DIRS=${PROJECT_BINARY_DIR}/fmt-install/include
-        -DTPL_fmt_LIBRARIES=${PROJECT_BINARY_DIR}/fmt-install/lib64/libfmt.a
+  #      -DTPL_ENABLE_fmt=ON
+ #       -DTPL_fmt_INCLUDE_DIRS=${PROJECT_BINARY_DIR}/fmt-install/include
+#        -DTPL_fmt_LIBRARIES=${PROJECT_BINARY_DIR}/fmt-install/lib64/libfmt.a
         -DSeacas_ENABLE_SEACAS=ON
         -DSeacas_ENABLE_SEACASExodus=ON
         -DSeacas_ENABLE_SEACASIoss=ON
