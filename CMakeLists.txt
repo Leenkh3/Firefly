@@ -15,12 +15,10 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 # Include ExternalProject module
 include(ExternalProject)
 
-# Configure building the main executable
-
 # Add source subdirectory
 add_subdirectory(${CMAKE_SOURCE_DIR}/src)
 
-# adding matrix to the build
+# Add Matrix Library
 add_library(MatrixLib
     src/matrix/Dense.cpp
     src/matrix/Matrix.h
@@ -28,6 +26,16 @@ add_library(MatrixLib
     src/matrix/SparseCSR.h
     src/matrix/SparseCSR.cpp
 )
+
+
+# Add ICD library 
+add_library(ICDLib src/ICD.cpp)
+
+# Add firefly executable
+add_executable(firefly firefly.cpp)
+
+# Link the Matrix and ICD libraries to the main executable
+target_link_libraries(firefly PRIVATE MatrixLib ICDLib)
 
 # Configure a CSR matrix class
 add_library(CSR src/laplacian/CSR.cpp)
@@ -43,18 +51,23 @@ add_executable(firefly firefly.cpp)
 # Configure cmake's testing system
 enable_testing()
 
+
 # Add testing subdirectory
 add_subdirectory(${CMAKE_SOURCE_DIR}/src/test)
 
+
 add_executable(MatrixTests src/matrix/test_matrix.cpp)
-# Link the Matrix library to the main executable
 target_link_libraries(MatrixTests PRIVATE MatrixLib)
 
-# Add a test, running the chillax executable, non-zero exit code will fail the test
-add_test(NAME firefly COMMAND firefly)
+# Add a test for ICD (link it to the ICDLib library)
+add_executable(test_ICD src/tests/test_ICD.cpp)
+target_link_libraries(test_ICD PRIVATE ICDLib)
 
-# Add a test for the Matrix library
+# Add tests
+add_test(NAME firefly COMMAND firefly)
 add_test(NAME MatrixTests COMMAND MatrixTests)
+add_test(NAME ICDUnitTest COMMAND test_ICD)
+
 # Add tests for the Laplacian
 add_test(NAME laplacian COMMAND LaplacianTests)
 
@@ -64,7 +77,7 @@ include(add_regression_test)
 # Set paths required for running tests
 set(TEST_RUNNER ${CMAKE_SOURCE_DIR}/cmake/test_runner.cmake)
 
-# Add tests
+# Add regression tests
 add_regression_test(test_example_pass_regexp firefly
                     EXTRA_PASS_REGEXP "Firefly Project"
                     LABELS "basic")
@@ -72,6 +85,7 @@ add_regression_test(test_example_fail_regexp firefly
                     EXTRA_FAIL_REGEXP "Firefly Project"
                     EXTRA_PROPERTIES "WILL_FAIL;1"
                     LABELS "basic")
+
 find_package(MPI)
 
 ExternalProject_Add(netcdf
