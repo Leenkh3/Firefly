@@ -14,7 +14,7 @@ add_library(MatrixLib
     src/matrix/Dense.h
 )
 
-# Add ICD library (change ICD from executable to library)
+# Add ICD library 
 add_library(ICDLib src/ICD.cpp)
 
 # Add firefly executable
