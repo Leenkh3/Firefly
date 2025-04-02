@@ -1,9 +1,9 @@
 #include <iostream>
-#include "src/Include/asc.h"
 
-int main() {
+int main()
+{
     std::cout << "Firefly Project - Main Execution" << std::endl;
-   
+
     try
     {
         ASCReader reader("Resources/sedov_coarse.asc_mesh");
@@ -28,4 +28,3 @@ int main() {
 
     return 0;
 }
-
