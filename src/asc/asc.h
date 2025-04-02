@@ -1,4 +1,4 @@
-
+#pragma once
 #ifndef ASC_READER_H
 #define ASC_READER_H
 

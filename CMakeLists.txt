@@ -115,6 +115,8 @@ set(EXODUS_LIB "${PROJECT_BINARY_DIR}/exodus-install/lib/libexodus.so")
 
 # Add ASC reader file
 add_executable(asc src/asc/asc.cpp)
+add_executable(AscTest src/asc/asc_test.cpp)
+add_test(NAME AscTest COMMAND AscTest)
 
 # Configure building the gmsh mesh reader
 # add_library(GmshMeshReader GmshMeshReader.cpp GmshMeshReader.hpp)
