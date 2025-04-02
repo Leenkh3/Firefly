@@ -1,0 +1,54 @@
+c57b5fc Update ICD.cpp
+ac7ef91 Add ICD.cpp for incomplete Cholesky decomposition
+68aaafa Update ICD.cpp
+850402d Remove deleteMe.c from repository
+adbff84 Delete me
+f26e400 Merge pull request #21 from Leenkh3/ash
+c325b57 Make multiply matrix with vector as const and return vector from it
+4e334d1 Merge branch 'main' of github.com:Leenkh3/Firefly into ash
+fdf39c5 Merge pull request #19 from Leenkh3/cmake-test
+4e2a907 Unignore .gitignore
+f3fa230 Delete CMakeLists.txt.txt
+9d16f9f Add files via upload
+6bd0516 Adding tests to Dense and refactoring
+9818286 change matrix_shape from vector to rows and cols
+3e456fa set at method as getter and setter
+38e58b5 Matrix' methods will update matrix object internally now
+1d403a1 add more test - refactor and add (at method)
+5e11c2d refactoring Matrix code
+e9c20a7 add initial testing for matrices
+a67bc20 Merge branch 'main' of github.com:Leenkh3/Firefly into ash
+db1a057 using header files in the right way
+34d1f42 Matrix simple implementation - main matrix class and Dense implementation.
+0b9d0a9 Agument .gitignore for those who like vim
+2e217f9 Add custom cmake test add/run functions
+58b6169 Merge pull request #18 from Leenkh3/kzoli39-CI
+9a4ffa0 creating matrix interface
+83ede86 Merge branch 'main' of github.com:Leenkh3/Firefly into ash
+9d1d4bd Update CMakeLists.txt
+29cbfb0 Delete src/main.cpp
+6caaf78 Update CMakeLists.txt
+c14e64a Update CMakeLists.txt
+f5eb706 Create main.cpp
+7ebc08f Create cmakebasedCI.yml
+73b0525 Update firefly.cpp
+d03141a Create firefly.cpp
+bee6715 create CRS folder to separate features
+7cc17a3 implement simple CRS convert method
+7ba86bc Added cmakelists file for building
+0aeab95 create initial-simple convert to CRS method
+c56fbdb Merge pull request #14 from Leenkh3/martin
+87cd94b Merge pull request #13 from Leenkh3/main
+9c94276 no longer needed
+f7eed7d logo idea upload
+89cbd22 initialize CRM class with its main variables and functions placeholders
+578c7a0 testing
+4b5419c Update README.md
+458437a testing new codespace environment from tablet
+d49eedd Merge pull request #2 from Leenkh3/martin
+74e61bd add src dir - maybe finally works
+dcf36dd add gitignore
+4250935 Merge pull request #1 from Leenkh3/martin
+658b4c7 Update README.md
+bae3a5b add contributor to readme
+0e664c6 Initial commit
