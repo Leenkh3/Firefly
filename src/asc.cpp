@@ -1,13 +1,13 @@
-#include "asc.h"
+#include "Include/asc.h"
 #include <iostream>
 #include <fstream>
 #include <sstream>
 
 ASCReader::Coordinate(double x_val, double y_val, double z_val)
-            : x(x_val), y(y_val), z(z_val) {}
+    : x(x_val), y(y_val), z(z_val) {}
 
 ASCReader::Connectivity(int x_val, int y_val, int z_val, int a_val, int b_val, int c_val)
-            : x(x_val), y(y_val), z(z_val), a(a_val), b(b_val), c(c_val) {}
+    : x(x_val), y(y_val), z(z_val), a(a_val), b(b_val), c(c_val) {}
 
 ASCReader::ASCReader(const std::string &file_path) : filename(file_path) {}
 
@@ -79,7 +79,7 @@ ASCReader::readFile()
             else
             {
                 std::cerr << "Warning: Invalid format at line "
-                            << line_number << ": " << line << std::endl;
+                          << line_number << ": " << line << std::endl;
             }
         }
 
