@@ -9,6 +9,7 @@ class NdiffExecuter{
     std::string firstFile;
     std::string secondFile;
     std::string configFile;
+    std::string ndiffexecutable;
 
     bool fileExists(const std::string& filePath);
 
@@ -19,7 +20,7 @@ class NdiffExecuter{
     //! for comparing two files with an optional configuration file. It includes
     //! methods to set and retrieve file paths, check file existence, and capture
     //! the output of the ndiff command.
-    NdiffExecuter(std::string firstFile, std::string secondFile, std::string configFile);
+    NdiffExecuter(std::string firstFile, std::string secondFile, std::string configFile, std::string ndiffexecutable);
     std::string execute();
     void setFirstFile(std::string firstFile);
     void setSecondFile(std::string secondFile);
@@ -27,4 +28,5 @@ class NdiffExecuter{
     std::string getFirstFile();
     std::string getSecondFile();
     std::string getConfigFile();
+    std::string getNdiffExecutable();
 };

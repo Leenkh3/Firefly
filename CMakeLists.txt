@@ -32,7 +32,7 @@ add_library(Laplacian src/laplacian/Laplacian.cpp)
 
 # Configure building the executable to test the Laplacian
 add_executable(LaplacianTests src/laplacian/testLaplacian.cpp)
-target_link_libraries(LaplacianTests PRIVATE CSR Laplacian)
+target_link_libraries(LaplacianTests PRIVATE MatrixLib CSR Laplacian)
 
 add_executable(firefly firefly.cpp)
 
@@ -46,7 +46,7 @@ add_executable(MatrixTests src/matrix/test_matrix.cpp)
 # Link the Matrix library to the main executable
 target_link_libraries(MatrixTests PRIVATE MatrixLib)
 
-# Add a test, running the firefly executable, non-zero exit code will fail the test
+# Add a test, running the chillax executable, non-zero exit code will fail the test
 add_test(NAME firefly COMMAND firefly)
 
 # Add a test for the Matrix library
@@ -110,10 +110,6 @@ ExternalProject_Add(exodus
 set(EXODUS_LIB "${PROJECT_BINARY_DIR}/exodus-install/lib/libexodus.so")
 
 
-cmake_minimum_required(VERSION 2.4)
-
-PROJECT(numdiff C)
-
 if(NOT "${CMAKE_C_FLAGS}" MATCHES "std=c99")
    if(NOT CMAKE_C_COMPILER_ID STREQUAL "Cray")
      if(NOT (WIN32 AND CMAKE_C_COMPILER_ID STREQUAL "Intel") AND
@@ -127,9 +123,11 @@ endif()
 
 file(GLOB numdiff_src src/ndiff/src/*.c)
 
-include_directories(src/ndiff/src/)
+include_directories(src/ndiff/src)
 add_executable(numdiff ${numdiff_src})
-set(OUTPUT_NAME maddiff CACHE string "Output name for executable")
+add_library(numdiff_lib STATIC ${numdiff_src})
+add_library(numdiff-Executer STATIC src/ndiff/src/ndiff-executer.cpp)
+set(OUTPUT_NAME maddiff CACHE STRING "Output name for executable")
 set_target_properties(numdiff PROPERTIES OUTPUT_NAME ${OUTPUT_NAME})
 if(UNIX)
    target_link_libraries(numdiff m)
@@ -141,18 +139,15 @@ install(TARGETS numdiff
    COMPONENT Runtime
    )
 
-# ndiff Library Path
-set(NDIFF_LIB "${PROJECT_BINARY_DIR}/ndiff-install/lib/libndiff.so")
-set(NDIFF_INCLUDE_DIR "${PROJECT_BINARY_DIR}/ndiff-install/include")
+# add test executable for ndiff
+add_executable(numdiff_test src/ndiff/test_ndiff.cpp)
+target_link_libraries(numdiff_test PRIVATE m numdiff-Executer)
 
-# Add testing subdirectory
-add_executable(ndiffTests src/ndiff/test_ndiff.cpp)
-
-# Link ndiff to the main executable
-target_link_libraries(ndiffTests PRIVATE NDIFF_LIB)
-
-# Add a test for the ndiff library
-add_test(NAME ndiffTests COMMAND ndiffTests)
+# Add a test, running the numdiff_test executable, non-zero exit code will fail the test
+add_regression_test( numdifftest numdiff_test 
+                     INPUTFILES diag1.txt diag3.txt config.cfg 
+                     ARGS ${CMAKE_BINARY_DIR}/maddiff diag1.txt diag3.txt config.cfg)
+                     
 
 # Configure building the gmsh mesh reader
 # add_library(GmshMeshReader GmshMeshReader.cpp GmshMeshReader.hpp)

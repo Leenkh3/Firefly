@@ -4,7 +4,7 @@
 # \brief     Function used to add a regression test to the ctest test suite
 #
 ################################################################################
-
+# add soft link for the regression test runner script
 # ##############################################################################
 # Function used to add a regression test to the ctest test suite
 # add_regression_test( <test_name> <executable>

@@ -13,20 +13,25 @@
 #include <iostream>
 #include <stdexcept>
 
-NdiffExecuter::NdiffExecuter(std::string firstFile, std::string secondFile, std::string configFile){
+NdiffExecuter::NdiffExecuter(std::string firstFile, std::string secondFile, std::string configFile, std::string ndiffexecutable){
+    // Initialize the member variables with the provided file paths
     this->firstFile = firstFile;
     this->secondFile = secondFile;
     this->configFile = configFile;
+    this->ndiffexecutable = ndiffexecutable; // Assuming ndiff is in the system PATH
 }
 
 std::string NdiffExecuter::execute(){
     // Check if files exist
-    if (!fileExists(firstFile) || !fileExists(secondFile) || !fileExists(configFile)) {
+    std::cout<<firstFile<<std::endl;
+    
+    if (!fileExists(firstFile) && !fileExists(secondFile) && !fileExists(configFile)) {
+        std::cout << firstFile << " " << secondFile << " "  << configFile << " " << std::endl;
         throw std::runtime_error("One or more input files do not exist.");
     }
 
     // Construct the command
-    std::string command = "ndiff " + firstFile + " " + secondFile + " " + configFile + " 2>&1";
+    std::string command = ndiffexecutable + " " + firstFile + " " + secondFile + " " + configFile + " 2>&1";
 
     // Use popen to capture the output of the command
     std::ostringstream output;
