@@ -20,6 +20,33 @@ include(ExternalProject)
 # Add source subdirectory
 add_subdirectory(${CMAKE_SOURCE_DIR}/src)
 
+#[===[ LUA ]===]
+#[[ BEGIN ]]
+# Add Lua as an external project dependency
+ExternalProject_Add(lua
+    URL http://www.lua.org/ftp/lua-5.4.4.tar.gz
+    URL_HASH SHA256=164c7849653b80ae67bec4b7473b884bf5cc8d2dca05653475ec2ed27b9ebf61
+    DOWNLOAD_EXTRACT_TIMESTAMP TRUE
+    CONFIGURE_COMMAND ""    # No configure step
+    BUILD_IN_SOURCE 1
+    BUILD_COMMAND make MYCFLAGS=-fPIC linux
+    INSTALL_COMMAND make INSTALL_TOP=${PROJECT_BINARY_DIR}/lua-install install
+    COMMAND ${CMAKE_COMMAND} -E copy_directory ${PROJECT_BINARY_DIR}/lua-install/include ${CMAKE_SOURCE_DIR}/src/user_input/LUA/include
+    COMMAND ${CMAKE_COMMAND} -E copy_directory ${PROJECT_BINARY_DIR}/lua-install/lib ${CMAKE_SOURCE_DIR}/src/user_input/LUA/lib
+)
+
+# Set Lua paths for other targets to use
+set(LUA_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/src/user_input/LUA/include")
+set(LUA_LIBRARIES "${CMAKE_SOURCE_DIR}/src/user_input/LUA/lib/liblua.a")
+
+add_executable(user_input src/user_input/user_input.c)
+add_dependencies(user_input lua)
+target_include_directories(user_input PRIVATE ${LUA_INCLUDE_DIR})
+target_link_libraries(user_input PRIVATE ${LUA_LIBRARIES} m) # 'm' for the math library
+
+#[[ END ]]
+#[===] LUA [===]
+
 # adding matrix to the build
 add_library(MatrixLib
     src/matrix/Dense.cpp
