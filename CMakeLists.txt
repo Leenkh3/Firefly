@@ -175,6 +175,14 @@ ExternalProject_Add(fmt
 )
 
 
+add_library(fmt::fmt STATIC IMPORTED GLOBAL)
+set_target_properties(fmt::fmt PROPERTIES
+  IMPORTED_LOCATION ${PROJECT_BINARY_DIR}/fmt-install/lib/libfmt.a
+  INTERFACE_INCLUDE_DIRECTORIES ${PROJECT_BINARY_DIR}/fmt-install/include
+)
+
+
+add_library(fmt::all_libs ALIAS fmt::fmt)
 
 ExternalProject_Add(exodus
     GIT_REPOSITORY https://github.com/sandialabs/seacas.git
