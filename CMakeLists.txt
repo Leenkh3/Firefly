@@ -29,7 +29,8 @@ ExternalProject_Add(lua
     DOWNLOAD_EXTRACT_TIMESTAMP TRUE
     CONFIGURE_COMMAND ""    # No configure step
     BUILD_IN_SOURCE 1
-    BUILD_COMMAND make MYCFLAGS=-fPIC linux
+    BUILD_COMMAND ${CMAKE_COMMAND} -E echo "Building Lua for ${CMAKE_SYSTEM_NAME}"
+    COMMAND if [ "${CMAKE_SYSTEM_NAME}" = "Darwin" ]\; then make MYCFLAGS=-fPIC macosx\; else make MYCFLAGS=-fPIC linux\; fi
     INSTALL_COMMAND make INSTALL_TOP=${PROJECT_BINARY_DIR}/lua-install install
     COMMAND ${CMAKE_COMMAND} -E copy_directory ${PROJECT_BINARY_DIR}/lua-install/include ${CMAKE_SOURCE_DIR}/src/user_input/LUA/include
     COMMAND ${CMAKE_COMMAND} -E copy_directory ${PROJECT_BINARY_DIR}/lua-install/lib ${CMAKE_SOURCE_DIR}/src/user_input/LUA/lib
