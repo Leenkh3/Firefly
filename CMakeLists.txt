@@ -144,10 +144,16 @@ add_executable(numdiff_test src/ndiff/test_ndiff.cpp)
 target_link_libraries(numdiff_test PRIVATE m numdiff-Executer)
 
 # Add a test, running the numdiff_test executable, non-zero exit code will fail the test
-add_regression_test( numdifftest numdiff_test 
-                     INPUTFILES diag1.txt diag3.txt config.cfg 
+add_regression_test( numdifftest_pass numdiff_test
+                     INPUTFILES src/ndiff/diag1.txt src/ndiff/diag3.txt src/ndiff/config.cfg
                      ARGS ${CMAKE_BINARY_DIR}/maddiff diag1.txt diag3.txt config.cfg)
-                     
+
+
+# Add a test, running the numdiff_test executable, non-zero exit code will fail the test
+add_regression_test( numdifftest_fail numdiff_test
+                     INPUTFILES src/ndiff/diag1.txt src/ndiff/diag2.txt src/ndiff/config.cfg
+                     ARGS ${CMAKE_BINARY_DIR}/maddiff diag1.txt diag2.txt config.cfg
+                     EXTRA_PROPERTIES "WILL_FAIL;1")
 
 # Configure building the gmsh mesh reader
 # add_library(GmshMeshReader GmshMeshReader.cpp GmshMeshReader.hpp)

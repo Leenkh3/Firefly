@@ -1,9 +1,9 @@
-// *****************************************************************************
+// ***************************
 /*!
   \file      src/ndiff/ndiff-executer.cpp
   \brief     ndiff tool for comparing two files
 */
-// *****************************************************************************
+// ***************************
 
 #include "ndiff-executer.hpp"
 #include <cstdlib>
@@ -23,12 +23,10 @@ NdiffExecuter::NdiffExecuter(std::string firstFile, std::string secondFile, std:
 
 std::string NdiffExecuter::execute(){
     // Check if files exist
-    std::cout<<firstFile<<std::endl;
-    
-    if (!fileExists(firstFile) && !fileExists(secondFile) && !fileExists(configFile)) {
-        std::cout << firstFile << " " << secondFile << " "  << configFile << " " << std::endl;
-        throw std::runtime_error("One or more input files do not exist.");
-    }
+
+   if (!fileExists(firstFile) || !fileExists(secondFile) || !fileExists(configFile)) {
+    throw std::runtime_error("File not found: " + firstFile + ", " + secondFile + ", or " + configFile);
+}
 
     // Construct the command
     std::string command = ndiffexecutable + " " + firstFile + " " + secondFile + " " + configFile + " 2>&1";
