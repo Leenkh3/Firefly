@@ -74,7 +74,8 @@ add_regression_test(test_example_fail_regexp firefly
                     LABELS "basic")
 find_package(MPI)
 
-find_package(netCDF)
+set(CMAKE_PREFIX_PATH "/usr/local")
+find_package(netCDF REQUIRED)
 if(NOT netCDF_FOUND)
     message(STATUS "NetCDF found.")
     ExternalProject_Add(netcdf
@@ -103,11 +104,11 @@ if(NOT netCDF_FOUND)
     set(NETCDF_INCLUDE_DIR "${PROJECT_BINARY_DIR}/netcdf-install/include")
 else()
     message(STATUS "NetCDF NOT found.")
-    set(NETCDF_LIB ${NETCDF_LIBRARY})
-    set(NETCDF_INCLUDE_DIRS ${NETCDF_INCLUDE_DIR})
+    set(NETCDF_LIB "${CMAKE_PREFIX_PATH}/netcdf-install/lib/libnetcdf.so")
+    set(NETCDF_INCLUDE_DIRS "${CMAKE_PREFIX_PATH}/netcdf-install/include")
 endif()
 
-find_package(Seacas)
+find_package(Seacas REQUIRED)
 if(NOT Seacas_FOUND)
     message(STATUS "Seacas found.")
     # Install Exodus using the official Sandia Labs SEACAS repository
@@ -124,7 +125,7 @@ if(NOT Seacas_FOUND)
     set(EXODUS_LIB "${PROJECT_BINARY_DIR}/exodus-install/lib/libexodus.so")
 else()
     message(STATUS "Seacas NOT found.")
-    set(EXODUS_LIB ${SEACAS_LIBRARY})
+    set(EXODUS_LIB "${CMAKE_PREFIX_PATH}/exodus-install/lib/libexodus.so")
 endif()
 
 include_directories(${Seacas_})
