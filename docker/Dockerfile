@@ -11,6 +11,7 @@ RUN apt update && apt install -y \
     cmake \
     make \
     g++ \
+    gcc \
     clang \
     git \
     openmpi-bin \
@@ -40,7 +41,22 @@ WORKDIR /workspace
 RUN git clone --depth=1 https://github.com/Unidata/netcdf-c.git /opt/netcdf-c \
     && cd /opt/netcdf-c \
     && mkdir build && cd build \
-    && cmake .. -DCMAKE_INSTALL_PREFIX=/usr/local \
+    && cmake .. -DCMAKE_C_COMPILER=/usr/bin/gcc \
+                -DENABLE_NETCDF_4=on \
+                -DBUILD_SHARED_LIBS=on \
+                -DENABLE_EXAMPLES=off \
+                -DENABLE_FSYNC=off \
+                -DENABLE_DAP=off \
+                -DENABLE_TESTS=off \
+                -DENABLE_CONVERSION_WARNINGS=off \
+                -DENABLE_DAP_REMOTE_TESTS=off \
+                -DENABLE_EXTREME_NUMBERS=off \
+                -DENABLE_PARALLEL4=on \
+                -DENABLE_PARALLEL_TESTS=off \
+                -DENABLE_BASH_SCRIPT_TESTING=off \
+                -DENABLE_V2_API=off \
+                -DNETCDF_ENABLE_HDF5=off \
+                -DCMAKE_INSTALL_PREFIX=/usr/local/ \
     && make -j$(nproc) && make install \
     && rm -rf /opt/netcdf-c
 
@@ -48,7 +64,10 @@ RUN git clone --depth=1 https://github.com/Unidata/netcdf-c.git /opt/netcdf-c \
 RUN git clone --depth=1 https://github.com/sandialabs/seacas.git /opt/seacas \
     && cd /opt/seacas \
     && mkdir build && cd build \
-    && cmake .. -DCMAKE_INSTALL_PREFIX=/usr/local \
+    && cmake .. -DCMAKE_C_COMPILER=/usr/bin/gcc \
+                -DNetCDF_DIR=/usr/local \
+                -DBUILD_SHARED_LIBS=on \
+                -DCMAKE_INSTALL_PREFIX=/usr/local/ \
     && make -j$(nproc) && make install \
     && rm -rf /opt/seacas
 
