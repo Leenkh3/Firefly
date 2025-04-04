@@ -52,8 +52,7 @@ Mkfile.old
 dkms.conf
 
 # User Input ignores --martin
-# Executables
-user_input
+LUA*
  
 # Vim swap and undo files, build dir
 *~
