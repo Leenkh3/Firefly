@@ -28,7 +28,13 @@ else()
     ExternalProject_Add(eigen
         GIT_REPOSITORY https://gitlab.com/libeigen/eigen.git
         GIT_TAG master
-        CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${PROJECT_BINARY_DIR}/eigen-install
+        CMAKE_ARGS 
+		-DCMAKE_INSTALL_PREFIX=${PROJECT_BINARY_DIR}/eigen-install
+		-DEIGEN_BUILD_DOC=OFF
+        	-DEIGEN_BUILD_TESTING=OFF
+        	-DEIGEN_USE_LAPACKE=OFF         # ✅ Disable LAPACK bindings
+        	-DEIGEN_BUILD_BLAS=OFF          # ✅ Disable internal BLAS
+        	-DEIGEN_BUILD_LAPACK=OFF        # ✅ Disable internal LAPACK
     )
 
     # Make sure to include the downloaded Eigen headers
@@ -160,9 +166,10 @@ set(NETCDF_INCLUDE_DIR "${PROJECT_BINARY_DIR}/netcdf-install/include")
 
 
 # fmt is required because SEACAS (Exodus) depends on it.
-# We build it locally to ensure compatibility with NetCDF and SEACAS
+# We build it locally to ensure compatibility with NetCDF and SEAC
 
 
+# === Add External fmt build ===
 ExternalProject_Add(fmt
     GIT_REPOSITORY https://github.com/fmtlib/fmt.git
     GIT_TAG 10.1.1
@@ -172,17 +179,25 @@ ExternalProject_Add(fmt
         -DFMT_TEST=OFF
         -DBUILD_SHARED_LIBS=OFF
         -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+
+
 )
 
-
+# === Declare the imported fmt target after fmt is built ===
 add_library(fmt::fmt STATIC IMPORTED GLOBAL)
 set_target_properties(fmt::fmt PROPERTIES
-  IMPORTED_LOCATION ${PROJECT_BINARY_DIR}/fmt-install/lib/libfmt.a
-  INTERFACE_INCLUDE_DIRECTORIES ${PROJECT_BINARY_DIR}/fmt-install/include
+    IMPORTED_LOCATION ${PROJECT_BINARY_DIR}/fmt-install/lib/libfmt.a
+    INTERFACE_INCLUDE_DIRECTORIES ${PROJECT_BINARY_DIR}/fmt-install/include
 )
 
+# Make sure fmt::fmt depends on the ExternalProject
+add_dependencies(fmt::fmt fmt)
 
-add_library(fmt::all_libs ALIAS fmt::fmt)
+# Create interface target to match fmt::all_libs
+add_library(fmt_all INTERFACE)
+target_link_libraries(fmt_all INTERFACE fmt::fmt)
+add_library(fmt::all_libs ALIAS fmt_all)
+
 
 ExternalProject_Add(exodus
     GIT_REPOSITORY https://github.com/sandialabs/seacas.git
