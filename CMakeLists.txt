@@ -1,7 +1,8 @@
-# Tell CMake the featureset we require
+# Tell Cmake the featureset we require
 cmake_minimum_required(VERSION 3.15)
 
 # Project name and version with languages/compilers required
+
 project(Firefly VERSION 1.0 LANGUAGES C CXX)
 
 # Set the compiler version to 17
@@ -33,7 +34,7 @@ add_library(MatrixLib
 
 # Configure a CSR matrix class
 add_library(CSR src/laplacian/CSR.cpp)
-# Configure functions needed to compute the Laplacian
+# Configure a functions needed to compute the Laplacian
 add_library(Laplacian src/laplacian/Laplacian.cpp)
 
 # Configure building the executable to test the Laplacian
