@@ -14,8 +14,8 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 # Include ExternalProject module
 include(ExternalProject)
 
-# Add source subdirectory (adjusted for CG)
-add_subdirectory(${CMAKE_SOURCE_DIR}/src/CG)
+# Add source subdirectory 
+add_subdirectory(${CMAKE_SOURCE_DIR}/src)
 
 # adding matrix to the build
 add_library(MatrixLib
