@@ -23,6 +23,6 @@ find_library(SEACAS_LIBRARY NAMES seacas libseacas
 set(SEACAS_LIBRARIES ${SEACAS_LIBRARY})
 
 include(FindPackageHandleStandardArgs)
-find_package_handle_standard_args(SEACAS DEFAULT_MSG SEACAS_INCLUDE_DIRS SEACAS_LIBRARIES)
+find_package_handle_standard_args(Seacas DEFAULT_MSG SEACAS_INCLUDE_DIRS SEACAS_LIBRARIES)
 
 mark_as_advanced(SEACAS_INCLUDE_DIRS SEACAS_LIBRARIES)
