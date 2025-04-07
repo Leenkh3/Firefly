@@ -10,7 +10,7 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 # Add source subdirectory
 add_subdirectory(${CMAKE_SOURCE_DIR}/src)
 
-# adding matrix to the build
+# Adding matrix to the build
 add_library(MatrixLib
     src/matrix/Dense.cpp
     src/matrix/Matrix.h
@@ -21,31 +21,30 @@ add_library(MatrixLib
 
 # Configure a CSR matrix class
 add_library(CSR src/laplacian/CSR.cpp)
-# Configure a functions needed to compute the Laplacian
+
+# Configure functions needed to compute the Laplacian
 add_library(Laplacian src/laplacian/Laplacian.cpp)
 
 # Configure building the executable to test the Laplacian
 add_executable(LaplacianTests src/laplacian/testLaplacian.cpp)
 target_link_libraries(LaplacianTests PRIVATE CSR Laplacian)
 
+# Add the main executable
 add_executable(firefly firefly.cpp)
 
-# build & test 
+# Build & test 
 enable_testing()
 
 # Add testing subdirectory
 add_subdirectory(${CMAKE_SOURCE_DIR}/src/test)
 
+# Add test executables for the Matrix library
 add_executable(MatrixTests src/matrix/test_matrix.cpp)
-# Link the Matrix library to the main executable
 target_link_libraries(MatrixTests PRIVATE MatrixLib)
 
-# Add a test, running the chillax executable, non-zero exit code will fail the test
+# Add tests for executables
 add_test(NAME firefly COMMAND firefly)
-
-# Add a test for the Matrix library
 add_test(NAME MatrixTests COMMAND MatrixTests)
-# Add tests for the Laplacian
 add_test(NAME laplacian COMMAND LaplacianTests)
 
 # Include function used to add regression tests
@@ -54,7 +53,7 @@ include(add_regression_test)
 # Set paths required for running tests
 set(TEST_RUNNER ${CMAKE_SOURCE_DIR}/cmake/test_runner.cmake)
 
-# Add tests
+# Add regression tests
 add_regression_test(test_example_pass_regexp firefly
                     EXTRA_PASS_REGEXP "Firefly Project"
                     LABELS "basic")
@@ -62,9 +61,11 @@ add_regression_test(test_example_fail_regexp firefly
                     EXTRA_FAIL_REGEXP "Firefly Project"
                     EXTRA_PROPERTIES "WILL_FAIL;1"
                     LABELS "basic")
-# find package
+
+# Find Doxygen package
 find_package(Doxygen REQUIRED)
-# add_custom_command
+
+# Doxygen custom command to generate documentation
 if(DOXYGEN_FOUND)
     set(DOXYGEN_IN ${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile)
     set(DOXYGEN_OUT ${CMAKE_CURRENT_BINARY_DIR}/docs)
@@ -80,15 +81,10 @@ if(DOXYGEN_FOUND)
     add_custom_target(doc ALL DEPENDS ${DOXYGEN_OUT})
 endif()
 
-set(DOXYGEN_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/docs)
-
-add_custom_target(
-    generate_docs
-    COMMAND ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile
-    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-    COMMENT "Generating documentation..."
-    VERBATIM
-)
-
-add_dependencies(all generate_docs)
-
+# Optional: If you want to explicitly add a target for generating docs:
+# add_custom_target(generate_docs
+#     COMMAND ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile
+#     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+#     COMMENT "Generating documentation..."
+#     VERBATIM
+# )
