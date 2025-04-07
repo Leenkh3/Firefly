@@ -43,7 +43,6 @@ else()
 endif()
 
 
-
 # Add source subdirectory
 add_subdirectory(${CMAKE_SOURCE_DIR}/src)
 
