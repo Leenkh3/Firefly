@@ -157,6 +157,7 @@ add_regression_test( numdifftest_pass numdiff_test
 add_regression_test( numdifftest_fail numdiff_test
                      INPUTFILES src/ndiff/diag1.txt src/ndiff/diag2.txt src/ndiff/config.cfg
                      ARGS ${CMAKE_BINARY_DIR}/maddiff diag1.txt diag2.txt config.cfg
+                     EXTRA_FAIL_REGEXP "Files differ"
                      EXTRA_PROPERTIES "WILL_FAIL;1")
 
 # Configure building the gmsh mesh reader
