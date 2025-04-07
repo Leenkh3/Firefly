@@ -81,10 +81,4 @@ if(DOXYGEN_FOUND)
     add_custom_target(doc ALL DEPENDS ${DOXYGEN_OUT})
 endif()
 
-# Optional: If you want to explicitly add a target for generating docs:
-# add_custom_target(generate_docs
-#     COMMAND ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile
-#     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-#     COMMENT "Generating documentation..."
-#     VERBATIM
-# )
+
