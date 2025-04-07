@@ -57,3 +57,8 @@ dkms.conf
 /build
 cmake-3.26.4-linux-x86_64/
 *.tar.gz
+*.save
+CMakeLists-fmt-test.txt
+fmt/
+Testing/
+*.tar.gz.*
