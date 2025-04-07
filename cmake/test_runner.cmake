@@ -26,14 +26,3 @@ string(REPLACE ";" " " test_command_string "${test_command}")
 # Run the test
 message("\nRunning test command: '${test_command_string}'\n")
 execute_process(COMMAND ${test_command} RESULT_VARIABLE ERROR)
-
-# # Check return value from test
-# if(ERROR)
-
-#   message(FATAL_ERROR "Test failed to run: '${test_command_string}' returned error code: ${ERROR}")
-
-# else() # Test command ran successfully, do something extra after test run
-
-#   # ...
-
-# endif()
