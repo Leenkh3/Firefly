@@ -113,6 +113,53 @@ ExternalProject_Add(exodus
 # Exodus Library Path
 set(EXODUS_LIB "${PROJECT_BINARY_DIR}/exodus-install/lib/libexodus.so")
 
+
+if(NOT "${CMAKE_C_FLAGS}" MATCHES "std=c99")
+   if(NOT CMAKE_C_COMPILER_ID STREQUAL "Cray")
+     if(NOT (WIN32 AND CMAKE_C_COMPILER_ID STREQUAL "Intel") AND
+        NOT CMAKE_C_COMPILER_ID STREQUAL "PGI")
+        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c99")
+     else()
+        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /Qstd=c99")
+     endif()
+   endif()
+endif()
+
+file(GLOB numdiff_src src/ndiff/src/*.c)
+
+include_directories(src/ndiff/src)
+add_executable(numdiff ${numdiff_src})
+add_library(numdiff_lib STATIC ${numdiff_src})
+add_library(numdiff-Executer STATIC src/ndiff/src/ndiff-executer.cpp)
+set(OUTPUT_NAME maddiff CACHE STRING "Output name for executable")
+set_target_properties(numdiff PROPERTIES OUTPUT_NAME ${OUTPUT_NAME})
+if(UNIX)
+   target_link_libraries(numdiff m)
+endif()
+
+install(TARGETS numdiff
+   RUNTIME
+   DESTINATION bin
+   COMPONENT Runtime
+   )
+
+# add test executable for ndiff
+add_executable(numdiff_test src/ndiff/test_ndiff.cpp)
+target_link_libraries(numdiff_test PRIVATE m numdiff-Executer)
+
+# Add a test, running the numdiff_test executable, non-zero exit code will fail the test
+add_regression_test( numdifftest_pass numdiff_test
+                     INPUTFILES src/ndiff/diag1.txt src/ndiff/diag3.txt src/ndiff/config.cfg
+                     ARGS ${CMAKE_BINARY_DIR}/maddiff diag1.txt diag3.txt config.cfg)
+
+
+# Add a test, running the numdiff_test executable, non-zero exit code will fail the test
+add_regression_test( numdifftest_fail numdiff_test
+                     INPUTFILES src/ndiff/diag1.txt src/ndiff/diag2.txt src/ndiff/config.cfg
+                     ARGS ${CMAKE_BINARY_DIR}/maddiff diag1.txt diag2.txt config.cfg
+                     EXTRA_FAIL_REGEXP "Files differ"
+                     EXTRA_PROPERTIES "WILL_FAIL;1")
+
 # Configure building the gmsh mesh reader
 # add_library(GmshMeshReader GmshMeshReader.cpp GmshMeshReader.hpp)
 
