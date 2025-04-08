@@ -1,0 +1,274 @@
+
+---
+events:
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/CMake/3.27.6-GCCcore-13.2.0/share/cmake-3.27/Modules/CMakeDetermineSystem.cmake:211 (message)"
+      - "CMakeLists.txt:2 (project)"
+    message: |
+      The system is: Linux - 3.10.0-1160.53.1.el7.x86_64 - x86_64
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/CMake/3.27.6-GCCcore-13.2.0/share/cmake-3.27/Modules/CMakeDetermineCompilerId.cmake:17 (message)"
+      - "/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/CMake/3.27.6-GCCcore-13.2.0/share/cmake-3.27/Modules/CMakeDetermineCompilerId.cmake:64 (__determine_compiler_id_test)"
+      - "/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/CMake/3.27.6-GCCcore-13.2.0/share/cmake-3.27/Modules/CMakeDetermineCXXCompiler.cmake:126 (CMAKE_DETERMINE_COMPILER_ID)"
+      - "CMakeLists.txt:2 (project)"
+    message: |
+      Compiling the CXX compiler identification source file "CMakeCXXCompilerId.cpp" succeeded.
+      Compiler: /cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0/bin/c++ 
+      Build flags: 
+      Id flags:  
+      
+      The output was:
+      0
+      
+      
+      Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "a.out"
+      
+      The CXX compiler identification is GNU, found in:
+        /work/students/hpc-bvrhib/firefly/fmt-test/build/CMakeFiles/3.27.6/CompilerIdCXX/a.out
+      
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/CMake/3.27.6-GCCcore-13.2.0/share/cmake-3.27/Modules/CMakeDetermineCompilerABI.cmake:57 (try_compile)"
+      - "/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/CMake/3.27.6-GCCcore-13.2.0/share/cmake-3.27/Modules/CMakeTestCXXCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:2 (project)"
+    checks:
+      - "Detecting CXX compiler ABI info"
+    directories:
+      source: "/work/students/hpc-bvrhib/firefly/fmt-test/build/CMakeFiles/CMakeScratch/TryCompile-rwAeQY"
+      binary: "/work/students/hpc-bvrhib/firefly/fmt-test/build/CMakeFiles/CMakeScratch/TryCompile-rwAeQY"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: ""
+      CMAKE_CXX_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+    buildResult:
+      variable: "CMAKE_CXX_ABI_COMPILED"
+      cached: true
+      stdout: |
+        Change Dir: '/work/students/hpc-bvrhib/firefly/fmt-test/build/CMakeFiles/CMakeScratch/TryCompile-rwAeQY'
+        
+        Run Build Command(s): /cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/Ninja/1.11.1-GCCcore-13.2.0/bin/ninja -v cmTC_ee187
+        [1/2] /cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0/bin/c++   -v -o CMakeFiles/cmTC_ee187.dir/CMakeCXXCompilerABI.cpp.o -c /cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/CMake/3.27.6-GCCcore-13.2.0/share/cmake-3.27/Modules/CMakeCXXCompilerABI.cpp
+        Using built-in specs.
+        COLLECT_GCC=/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0/bin/c++
+        OFFLOAD_TARGET_NAMES=nvptx-none
+        Target: x86_64-pc-linux-gnu
+        Configured with: ../configure --with-sysroot=/cvmfs/software.eessi.io/versions/2023.06/compat/linux/x86_64 --enable-languages=c,c++,fortran --without-cuda-driver --enable-offload-targets=nvptx-none --enable-lto --enable-checking=release --disable-multilib --enable-shared=yes --enable-static=yes --enable-threads=posix --enable-plugins --enable-gold --enable-ld=default --prefix=/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0 --with-local-prefix=/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0 --enable-bootstrap --with-isl=/tmp/bot/easybuild/build/GCCcore/13.2.0/system-system/gcc-13.2.0/stage2_stuff --build=x86_64-pc-linux-gnu --host=x86_64-pc-linux-gnu
+        Thread model: posix
+        Supported LTO compression algorithms: zlib zstd
+        gcc version 13.2.0 (GCC) 
+        COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_ee187.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_ee187.dir/'
+         /cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0/libexec/gcc/x86_64-pc-linux-gnu/13.2.0/cc1plus -quiet -v -D_GNU_SOURCE /cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/CMake/3.27.6-GCCcore-13.2.0/share/cmake-3.27/Modules/CMakeCXXCompilerABI.cpp -quiet -dumpdir CMakeFiles/cmTC_ee187.dir/ -dumpbase CMakeCXXCompilerABI.cpp.cpp -dumpbase-ext .cpp -mtune=generic -march=x86-64 -version -o /tmp/cc5zo3Cv.s
+        GNU C++17 (GCC) version 13.2.0 (x86_64-pc-linux-gnu)
+        	compiled by GNU C version 13.2.0, GMP version 6.2.1, MPFR version 4.2.0, MPC version 1.3.1, isl version isl-0.26-GMP
+        
+        GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
+        ignoring nonexistent directory "/cvmfs/software.eessi.io/versions/2023.06/compat/linux/x86_64/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0/include"
+        ignoring nonexistent directory "/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0/lib/gcc/x86_64-pc-linux-gnu/13.2.0/include-fixed"
+        ignoring nonexistent directory "/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0/lib/gcc/x86_64-pc-linux-gnu/13.2.0/../../../../x86_64-pc-linux-gnu/include"
+        #include "..." search starts here:
+        #include <...> search starts here:
+         /cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/libiconv/1.17-GCCcore-13.2.0/include
+         /cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/libarchive/3.7.2-GCCcore-13.2.0/include
+         /cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/cURL/8.3.0-GCCcore-13.2.0/include
+         /cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/OpenSSL/1.1/include
+         /cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0/lib/gcc/x86_64-pc-linux-gnu/13.2.0/../../../../include/c++/13.2.0
+         /cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0/lib/gcc/x86_64-pc-linux-gnu/13.2.0/../../../../include/c++/13.2.0/x86_64-pc-linux-gnu
+         /cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0/lib/gcc/x86_64-pc-linux-gnu/13.2.0/../../../../include/c++/13.2.0/backward
+         /cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0/lib/gcc/x86_64-pc-linux-gnu/13.2.0/include
+         /cvmfs/software.eessi.io/versions/2023.06/compat/linux/x86_64/usr/include
+        End of search list.
+        Compiler executable checksum: d3d88cd19346dc08e545b8da53044b4d
+        COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_ee187.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_ee187.dir/'
+         as -v --64 -o CMakeFiles/cmTC_ee187.dir/CMakeCXXCompilerABI.cpp.o /tmp/cc5zo3Cv.s
+        GNU assembler version 2.40.0 (x86_64-pc-linux-gnu) using BFD version (Gentoo 2.40 p5) 2.40.0
+        COMPILER_PATH=/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0/libexec/gcc/x86_64-pc-linux-gnu/13.2.0/:/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0/libexec/gcc/x86_64-pc-linux-gnu/13.2.0/:/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0/libexec/gcc/x86_64-pc-linux-gnu/:/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0/lib/gcc/x86_64-pc-linux-gnu/13.2.0/:/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0/lib/gcc/x86_64-pc-linux-gnu/
+        LIBRARY_PATH=/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/libiconv/1.17-GCCcore-13.2.0/lib/../lib64/:/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/libarchive/3.7.2-GCCcore-13.2.0/lib/../lib64/:/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/cURL/8.3.0-GCCcore-13.2.0/lib/../lib64/:/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/OpenSSL/1.1/lib/../lib64/:/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0/lib/gcc/x86_64-pc-linux-gnu/13.2.0/:/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0/lib/gcc/x86_64-pc-linux-gnu/13.2.0/../../../../lib64/:/cvmfs/software.eessi.io/versions/2023.06/compat/linux/x86_64/lib/../lib64/:/cvmfs/software.eessi.io/versions/2023.06/compat/linux/x86_64/usr/lib/../lib64/:/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/libiconv/1.17-GCCcore-13.2.0/lib/:/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/libarchive/3.7.2-GCCcore-13.2.0/lib/:/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/cURL/8.3.0-GCCcore-13.2.0/lib/:/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/OpenSSL/1.1/lib/:/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0/lib/gcc/x86_64-pc-linux-gnu/13.2.0/../../../:/cvmfs/software.eessi.io/versions/2023.06/compat/linux/x86_64/lib/:/cvmfs/software.eessi.io/versions/2023.06/compat/linux/x86_64/usr/lib/
+        COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_ee187.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_ee187.dir/CMakeCXXCompilerABI.cpp.'
+        [2/2] : && /cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0/bin/c++  -v CMakeFiles/cmTC_ee187.dir/CMakeCXXCompilerABI.cpp.o -o cmTC_ee187   && :
+        Using built-in specs.
+        COLLECT_GCC=/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0/bin/c++
+        COLLECT_LTO_WRAPPER=/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0/libexec/gcc/x86_64-pc-linux-gnu/13.2.0/lto-wrapper
+        OFFLOAD_TARGET_NAMES=nvptx-none
+        Target: x86_64-pc-linux-gnu
+        Configured with: ../configure --with-sysroot=/cvmfs/software.eessi.io/versions/2023.06/compat/linux/x86_64 --enable-languages=c,c++,fortran --without-cuda-driver --enable-offload-targets=nvptx-none --enable-lto --enable-checking=release --disable-multilib --enable-shared=yes --enable-static=yes --enable-threads=posix --enable-plugins --enable-gold --enable-ld=default --prefix=/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0 --with-local-prefix=/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0 --enable-bootstrap --with-isl=/tmp/bot/easybuild/build/GCCcore/13.2.0/system-system/gcc-13.2.0/stage2_stuff --build=x86_64-pc-linux-gnu --host=x86_64-pc-linux-gnu
+        Thread model: posix
+        Supported LTO compression algorithms: zlib zstd
+        gcc version 13.2.0 (GCC) 
+        COMPILER_PATH=/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0/libexec/gcc/x86_64-pc-linux-gnu/13.2.0/:/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0/libexec/gcc/x86_64-pc-linux-gnu/13.2.0/:/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0/libexec/gcc/x86_64-pc-linux-gnu/:/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0/lib/gcc/x86_64-pc-linux-gnu/13.2.0/:/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0/lib/gcc/x86_64-pc-linux-gnu/
+        LIBRARY_PATH=/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/libiconv/1.17-GCCcore-13.2.0/lib/../lib64/:/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/libarchive/3.7.2-GCCcore-13.2.0/lib/../lib64/:/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/cURL/8.3.0-GCCcore-13.2.0/lib/../lib64/:/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/OpenSSL/1.1/lib/../lib64/:/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0/lib/gcc/x86_64-pc-linux-gnu/13.2.0/:/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0/lib/gcc/x86_64-pc-linux-gnu/13.2.0/../../../../lib64/:/cvmfs/software.eessi.io/versions/2023.06/compat/linux/x86_64/lib/../lib64/:/cvmfs/software.eessi.io/versions/2023.06/compat/linux/x86_64/usr/lib/../lib64/:/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/libiconv/1.17-GCCcore-13.2.0/lib/:/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/libarchive/3.7.2-GCCcore-13.2.0/lib/:/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/cURL/8.3.0-GCCcore-13.2.0/lib/:/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/OpenSSL/1.1/lib/:/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0/lib/gcc/x86_64-pc-linux-gnu/13.2.0/../../../:/cvmfs/software.eessi.io/versions/2023.06/compat/linux/x86_64/lib/:/cvmfs/software.eessi.io/versions/2023.06/compat/linux/x86_64/usr/lib/
+        COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_ee187' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-dumpdir' 'cmTC_ee187.'
+         /cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0/libexec/gcc/x86_64-pc-linux-gnu/13.2.0/collect2 -plugin /cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0/libexec/gcc/x86_64-pc-linux-gnu/13.2.0/liblto_plugin.so -plugin-opt=/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0/libexec/gcc/x86_64-pc-linux-gnu/13.2.0/lto-wrapper -plugin-opt=-fresolution=/tmp/cc4GuSY8.res -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc --sysroot=/cvmfs/software.eessi.io/versions/2023.06/compat/linux/x86_64 --eh-frame-hdr -m elf_x86_64 -dynamic-linker /cvmfs/software.eessi.io/versions/2023.06/compat/linux/x86_64/lib64/ld-linux-x86-64.so.2 -o cmTC_ee187 /cvmfs/software.eessi.io/versions/2023.06/compat/linux/x86_64/usr/lib/../lib64/crt1.o /cvmfs/software.eessi.io/versions/2023.06/compat/linux/x86_64/usr/lib/../lib64/crti.o /cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0/lib/gcc/x86_64-pc-linux-gnu/13.2.0/crtbegin.o -L/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/libiconv/1.17-GCCcore-13.2.0/lib/../lib64 -L/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/libarchive/3.7.2-GCCcore-13.2.0/lib/../lib64 -L/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/cURL/8.3.0-GCCcore-13.2.0/lib/../lib64 -L/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/OpenSSL/1.1/lib/../lib64 -L/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0/lib/gcc/x86_64-pc-linux-gnu/13.2.0 -L/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0/lib/gcc/x86_64-pc-linux-gnu/13.2.0/../../../../lib64 -L/cvmfs/software.eessi.io/versions/2023.06/compat/linux/x86_64/lib/../lib64 -L/cvmfs/software.eessi.io/versions/2023.06/compat/linux/x86_64/usr/lib/../lib64 -L/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/libiconv/1.17-GCCcore-13.2.0/lib -L/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/libarchive/3.7.2-GCCcore-13.2.0/lib -L/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/cURL/8.3.0-GCCcore-13.2.0/lib -L/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/OpenSSL/1.1/lib -L/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0/lib/gcc/x86_64-pc-linux-gnu/13.2.0/../../.. -L/cvmfs/software.eessi.io/versions/2023.06/compat/linux/x86_64/lib -L/cvmfs/software.eessi.io/versions/2023.06/compat/linux/x86_64/usr/lib CMakeFiles/cmTC_ee187.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0/lib/gcc/x86_64-pc-linux-gnu/13.2.0/crtend.o /cvmfs/software.eessi.io/versions/2023.06/compat/linux/x86_64/usr/lib/../lib64/crtn.o
+        COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_ee187' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-dumpdir' 'cmTC_ee187.'
+        
+      exitCode: 0
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/CMake/3.27.6-GCCcore-13.2.0/share/cmake-3.27/Modules/CMakeDetermineCompilerABI.cmake:127 (message)"
+      - "/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/CMake/3.27.6-GCCcore-13.2.0/share/cmake-3.27/Modules/CMakeTestCXXCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:2 (project)"
+    message: |
+      Parsed CXX implicit include dir info: rv=done
+        found start of include info
+        found start of implicit include info
+          add: [/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/libiconv/1.17-GCCcore-13.2.0/include]
+          add: [/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/libarchive/3.7.2-GCCcore-13.2.0/include]
+          add: [/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/cURL/8.3.0-GCCcore-13.2.0/include]
+          add: [/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/OpenSSL/1.1/include]
+          add: [/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0/lib/gcc/x86_64-pc-linux-gnu/13.2.0/../../../../include/c++/13.2.0]
+          add: [/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0/lib/gcc/x86_64-pc-linux-gnu/13.2.0/../../../../include/c++/13.2.0/x86_64-pc-linux-gnu]
+          add: [/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0/lib/gcc/x86_64-pc-linux-gnu/13.2.0/../../../../include/c++/13.2.0/backward]
+          add: [/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0/lib/gcc/x86_64-pc-linux-gnu/13.2.0/include]
+          add: [/cvmfs/software.eessi.io/versions/2023.06/compat/linux/x86_64/usr/include]
+        end of search list found
+        collapse include dir [/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/libiconv/1.17-GCCcore-13.2.0/include] ==> [/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/libiconv/1.17-GCCcore-13.2.0/include]
+        collapse include dir [/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/libarchive/3.7.2-GCCcore-13.2.0/include] ==> [/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/libarchive/3.7.2-GCCcore-13.2.0/include]
+        collapse include dir [/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/cURL/8.3.0-GCCcore-13.2.0/include] ==> [/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/cURL/8.3.0-GCCcore-13.2.0/include]
+        collapse include dir [/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/OpenSSL/1.1/include] ==> [/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/OpenSSL/1.1/include]
+        collapse include dir [/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0/lib/gcc/x86_64-pc-linux-gnu/13.2.0/../../../../include/c++/13.2.0] ==> [/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0/include/c++/13.2.0]
+        collapse include dir [/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0/lib/gcc/x86_64-pc-linux-gnu/13.2.0/../../../../include/c++/13.2.0/x86_64-pc-linux-gnu] ==> [/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0/include/c++/13.2.0/x86_64-pc-linux-gnu]
+        collapse include dir [/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0/lib/gcc/x86_64-pc-linux-gnu/13.2.0/../../../../include/c++/13.2.0/backward] ==> [/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0/include/c++/13.2.0/backward]
+        collapse include dir [/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0/lib/gcc/x86_64-pc-linux-gnu/13.2.0/include] ==> [/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0/lib/gcc/x86_64-pc-linux-gnu/13.2.0/include]
+        collapse include dir [/cvmfs/software.eessi.io/versions/2023.06/compat/linux/x86_64/usr/include] ==> [/cvmfs/software.eessi.io/versions/2023.06/compat/linux/x86_64/usr/include]
+        implicit include dirs: [/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/libiconv/1.17-GCCcore-13.2.0/include;/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/libarchive/3.7.2-GCCcore-13.2.0/include;/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/cURL/8.3.0-GCCcore-13.2.0/include;/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/OpenSSL/1.1/include;/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0/include/c++/13.2.0;/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0/include/c++/13.2.0/x86_64-pc-linux-gnu;/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0/include/c++/13.2.0/backward;/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0/lib/gcc/x86_64-pc-linux-gnu/13.2.0/include;/cvmfs/software.eessi.io/versions/2023.06/compat/linux/x86_64/usr/include]
+      
+      
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/CMake/3.27.6-GCCcore-13.2.0/share/cmake-3.27/Modules/CMakeDetermineCompilerABI.cmake:152 (message)"
+      - "/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/CMake/3.27.6-GCCcore-13.2.0/share/cmake-3.27/Modules/CMakeTestCXXCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:2 (project)"
+    message: |
+      Parsed CXX implicit link information:
+        link line regex: [^( *|.*[/\\])(ld|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\\]+-)?ld|collect2)[^/\\]*( |$)]
+        ignore line: [Change Dir: '/work/students/hpc-bvrhib/firefly/fmt-test/build/CMakeFiles/CMakeScratch/TryCompile-rwAeQY']
+        ignore line: []
+        ignore line: [Run Build Command(s): /cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/Ninja/1.11.1-GCCcore-13.2.0/bin/ninja -v cmTC_ee187]
+        ignore line: [[1/2] /cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0/bin/c++   -v -o CMakeFiles/cmTC_ee187.dir/CMakeCXXCompilerABI.cpp.o -c /cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/CMake/3.27.6-GCCcore-13.2.0/share/cmake-3.27/Modules/CMakeCXXCompilerABI.cpp]
+        ignore line: [Using built-in specs.]
+        ignore line: [COLLECT_GCC=/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0/bin/c++]
+        ignore line: [OFFLOAD_TARGET_NAMES=nvptx-none]
+        ignore line: [Target: x86_64-pc-linux-gnu]
+        ignore line: [Configured with: ../configure --with-sysroot=/cvmfs/software.eessi.io/versions/2023.06/compat/linux/x86_64 --enable-languages=c,c++,fortran --without-cuda-driver --enable-offload-targets=nvptx-none --enable-lto --enable-checking=release --disable-multilib --enable-shared=yes --enable-static=yes --enable-threads=posix --enable-plugins --enable-gold --enable-ld=default --prefix=/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0 --with-local-prefix=/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0 --enable-bootstrap --with-isl=/tmp/bot/easybuild/build/GCCcore/13.2.0/system-system/gcc-13.2.0/stage2_stuff --build=x86_64-pc-linux-gnu --host=x86_64-pc-linux-gnu]
+        ignore line: [Thread model: posix]
+        ignore line: [Supported LTO compression algorithms: zlib zstd]
+        ignore line: [gcc version 13.2.0 (GCC) ]
+        ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_ee187.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_ee187.dir/']
+        ignore line: [ /cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0/libexec/gcc/x86_64-pc-linux-gnu/13.2.0/cc1plus -quiet -v -D_GNU_SOURCE /cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/CMake/3.27.6-GCCcore-13.2.0/share/cmake-3.27/Modules/CMakeCXXCompilerABI.cpp -quiet -dumpdir CMakeFiles/cmTC_ee187.dir/ -dumpbase CMakeCXXCompilerABI.cpp.cpp -dumpbase-ext .cpp -mtune=generic -march=x86-64 -version -o /tmp/cc5zo3Cv.s]
+        ignore line: [GNU C++17 (GCC) version 13.2.0 (x86_64-pc-linux-gnu)]
+        ignore line: [	compiled by GNU C version 13.2.0  GMP version 6.2.1  MPFR version 4.2.0  MPC version 1.3.1  isl version isl-0.26-GMP]
+        ignore line: []
+        ignore line: [GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072]
+        ignore line: [ignoring nonexistent directory "/cvmfs/software.eessi.io/versions/2023.06/compat/linux/x86_64/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0/include"]
+        ignore line: [ignoring nonexistent directory "/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0/lib/gcc/x86_64-pc-linux-gnu/13.2.0/include-fixed"]
+        ignore line: [ignoring nonexistent directory "/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0/lib/gcc/x86_64-pc-linux-gnu/13.2.0/../../../../x86_64-pc-linux-gnu/include"]
+        ignore line: [#include "..." search starts here:]
+        ignore line: [#include <...> search starts here:]
+        ignore line: [ /cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/libiconv/1.17-GCCcore-13.2.0/include]
+        ignore line: [ /cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/libarchive/3.7.2-GCCcore-13.2.0/include]
+        ignore line: [ /cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/cURL/8.3.0-GCCcore-13.2.0/include]
+        ignore line: [ /cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/OpenSSL/1.1/include]
+        ignore line: [ /cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0/lib/gcc/x86_64-pc-linux-gnu/13.2.0/../../../../include/c++/13.2.0]
+        ignore line: [ /cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0/lib/gcc/x86_64-pc-linux-gnu/13.2.0/../../../../include/c++/13.2.0/x86_64-pc-linux-gnu]
+        ignore line: [ /cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0/lib/gcc/x86_64-pc-linux-gnu/13.2.0/../../../../include/c++/13.2.0/backward]
+        ignore line: [ /cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0/lib/gcc/x86_64-pc-linux-gnu/13.2.0/include]
+        ignore line: [ /cvmfs/software.eessi.io/versions/2023.06/compat/linux/x86_64/usr/include]
+        ignore line: [End of search list.]
+        ignore line: [Compiler executable checksum: d3d88cd19346dc08e545b8da53044b4d]
+        ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_ee187.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_ee187.dir/']
+        ignore line: [ as -v --64 -o CMakeFiles/cmTC_ee187.dir/CMakeCXXCompilerABI.cpp.o /tmp/cc5zo3Cv.s]
+        ignore line: [GNU assembler version 2.40.0 (x86_64-pc-linux-gnu) using BFD version (Gentoo 2.40 p5) 2.40.0]
+        ignore line: [COMPILER_PATH=/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0/libexec/gcc/x86_64-pc-linux-gnu/13.2.0/:/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0/libexec/gcc/x86_64-pc-linux-gnu/13.2.0/:/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0/libexec/gcc/x86_64-pc-linux-gnu/:/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0/lib/gcc/x86_64-pc-linux-gnu/13.2.0/:/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0/lib/gcc/x86_64-pc-linux-gnu/]
+        ignore line: [LIBRARY_PATH=/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/libiconv/1.17-GCCcore-13.2.0/lib/../lib64/:/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/libarchive/3.7.2-GCCcore-13.2.0/lib/../lib64/:/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/cURL/8.3.0-GCCcore-13.2.0/lib/../lib64/:/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/OpenSSL/1.1/lib/../lib64/:/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0/lib/gcc/x86_64-pc-linux-gnu/13.2.0/:/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0/lib/gcc/x86_64-pc-linux-gnu/13.2.0/../../../../lib64/:/cvmfs/software.eessi.io/versions/2023.06/compat/linux/x86_64/lib/../lib64/:/cvmfs/software.eessi.io/versions/2023.06/compat/linux/x86_64/usr/lib/../lib64/:/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/libiconv/1.17-GCCcore-13.2.0/lib/:/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/libarchive/3.7.2-GCCcore-13.2.0/lib/:/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/cURL/8.3.0-GCCcore-13.2.0/lib/:/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/OpenSSL/1.1/lib/:/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0/lib/gcc/x86_64-pc-linux-gnu/13.2.0/../../../:/cvmfs/software.eessi.io/versions/2023.06/compat/linux/x86_64/lib/:/cvmfs/software.eessi.io/versions/2023.06/compat/linux/x86_64/usr/lib/]
+        ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_ee187.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_ee187.dir/CMakeCXXCompilerABI.cpp.']
+        ignore line: [[2/2] : && /cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0/bin/c++  -v CMakeFiles/cmTC_ee187.dir/CMakeCXXCompilerABI.cpp.o -o cmTC_ee187   && :]
+        ignore line: [Using built-in specs.]
+        ignore line: [COLLECT_GCC=/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0/bin/c++]
+        ignore line: [COLLECT_LTO_WRAPPER=/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0/libexec/gcc/x86_64-pc-linux-gnu/13.2.0/lto-wrapper]
+        ignore line: [OFFLOAD_TARGET_NAMES=nvptx-none]
+        ignore line: [Target: x86_64-pc-linux-gnu]
+        ignore line: [Configured with: ../configure --with-sysroot=/cvmfs/software.eessi.io/versions/2023.06/compat/linux/x86_64 --enable-languages=c,c++,fortran --without-cuda-driver --enable-offload-targets=nvptx-none --enable-lto --enable-checking=release --disable-multilib --enable-shared=yes --enable-static=yes --enable-threads=posix --enable-plugins --enable-gold --enable-ld=default --prefix=/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0 --with-local-prefix=/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0 --enable-bootstrap --with-isl=/tmp/bot/easybuild/build/GCCcore/13.2.0/system-system/gcc-13.2.0/stage2_stuff --build=x86_64-pc-linux-gnu --host=x86_64-pc-linux-gnu]
+        ignore line: [Thread model: posix]
+        ignore line: [Supported LTO compression algorithms: zlib zstd]
+        ignore line: [gcc version 13.2.0 (GCC) ]
+        ignore line: [COMPILER_PATH=/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0/libexec/gcc/x86_64-pc-linux-gnu/13.2.0/:/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0/libexec/gcc/x86_64-pc-linux-gnu/13.2.0/:/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0/libexec/gcc/x86_64-pc-linux-gnu/:/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0/lib/gcc/x86_64-pc-linux-gnu/13.2.0/:/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0/lib/gcc/x86_64-pc-linux-gnu/]
+        ignore line: [LIBRARY_PATH=/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/libiconv/1.17-GCCcore-13.2.0/lib/../lib64/:/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/libarchive/3.7.2-GCCcore-13.2.0/lib/../lib64/:/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/cURL/8.3.0-GCCcore-13.2.0/lib/../lib64/:/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/OpenSSL/1.1/lib/../lib64/:/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0/lib/gcc/x86_64-pc-linux-gnu/13.2.0/:/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0/lib/gcc/x86_64-pc-linux-gnu/13.2.0/../../../../lib64/:/cvmfs/software.eessi.io/versions/2023.06/compat/linux/x86_64/lib/../lib64/:/cvmfs/software.eessi.io/versions/2023.06/compat/linux/x86_64/usr/lib/../lib64/:/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/libiconv/1.17-GCCcore-13.2.0/lib/:/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/libarchive/3.7.2-GCCcore-13.2.0/lib/:/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/cURL/8.3.0-GCCcore-13.2.0/lib/:/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/OpenSSL/1.1/lib/:/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0/lib/gcc/x86_64-pc-linux-gnu/13.2.0/../../../:/cvmfs/software.eessi.io/versions/2023.06/compat/linux/x86_64/lib/:/cvmfs/software.eessi.io/versions/2023.06/compat/linux/x86_64/usr/lib/]
+        ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_ee187' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-dumpdir' 'cmTC_ee187.']
+        link line: [ /cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0/libexec/gcc/x86_64-pc-linux-gnu/13.2.0/collect2 -plugin /cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0/libexec/gcc/x86_64-pc-linux-gnu/13.2.0/liblto_plugin.so -plugin-opt=/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0/libexec/gcc/x86_64-pc-linux-gnu/13.2.0/lto-wrapper -plugin-opt=-fresolution=/tmp/cc4GuSY8.res -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc --sysroot=/cvmfs/software.eessi.io/versions/2023.06/compat/linux/x86_64 --eh-frame-hdr -m elf_x86_64 -dynamic-linker /cvmfs/software.eessi.io/versions/2023.06/compat/linux/x86_64/lib64/ld-linux-x86-64.so.2 -o cmTC_ee187 /cvmfs/software.eessi.io/versions/2023.06/compat/linux/x86_64/usr/lib/../lib64/crt1.o /cvmfs/software.eessi.io/versions/2023.06/compat/linux/x86_64/usr/lib/../lib64/crti.o /cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0/lib/gcc/x86_64-pc-linux-gnu/13.2.0/crtbegin.o -L/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/libiconv/1.17-GCCcore-13.2.0/lib/../lib64 -L/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/libarchive/3.7.2-GCCcore-13.2.0/lib/../lib64 -L/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/cURL/8.3.0-GCCcore-13.2.0/lib/../lib64 -L/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/OpenSSL/1.1/lib/../lib64 -L/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0/lib/gcc/x86_64-pc-linux-gnu/13.2.0 -L/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0/lib/gcc/x86_64-pc-linux-gnu/13.2.0/../../../../lib64 -L/cvmfs/software.eessi.io/versions/2023.06/compat/linux/x86_64/lib/../lib64 -L/cvmfs/software.eessi.io/versions/2023.06/compat/linux/x86_64/usr/lib/../lib64 -L/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/libiconv/1.17-GCCcore-13.2.0/lib -L/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/libarchive/3.7.2-GCCcore-13.2.0/lib -L/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/cURL/8.3.0-GCCcore-13.2.0/lib -L/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/OpenSSL/1.1/lib -L/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0/lib/gcc/x86_64-pc-linux-gnu/13.2.0/../../.. -L/cvmfs/software.eessi.io/versions/2023.06/compat/linux/x86_64/lib -L/cvmfs/software.eessi.io/versions/2023.06/compat/linux/x86_64/usr/lib CMakeFiles/cmTC_ee187.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0/lib/gcc/x86_64-pc-linux-gnu/13.2.0/crtend.o /cvmfs/software.eessi.io/versions/2023.06/compat/linux/x86_64/usr/lib/../lib64/crtn.o]
+          arg [/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0/libexec/gcc/x86_64-pc-linux-gnu/13.2.0/collect2] ==> ignore
+          arg [-plugin] ==> ignore
+          arg [/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0/libexec/gcc/x86_64-pc-linux-gnu/13.2.0/liblto_plugin.so] ==> ignore
+          arg [-plugin-opt=/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0/libexec/gcc/x86_64-pc-linux-gnu/13.2.0/lto-wrapper] ==> ignore
+          arg [-plugin-opt=-fresolution=/tmp/cc4GuSY8.res] ==> ignore
+          arg [-plugin-opt=-pass-through=-lgcc_s] ==> ignore
+          arg [-plugin-opt=-pass-through=-lgcc] ==> ignore
+          arg [-plugin-opt=-pass-through=-lc] ==> ignore
+          arg [-plugin-opt=-pass-through=-lgcc_s] ==> ignore
+          arg [-plugin-opt=-pass-through=-lgcc] ==> ignore
+          arg [--sysroot=/cvmfs/software.eessi.io/versions/2023.06/compat/linux/x86_64] ==> ignore
+          arg [--eh-frame-hdr] ==> ignore
+          arg [-m] ==> ignore
+          arg [elf_x86_64] ==> ignore
+          arg [-dynamic-linker] ==> ignore
+          arg [/cvmfs/software.eessi.io/versions/2023.06/compat/linux/x86_64/lib64/ld-linux-x86-64.so.2] ==> ignore
+          arg [-o] ==> ignore
+          arg [cmTC_ee187] ==> ignore
+          arg [/cvmfs/software.eessi.io/versions/2023.06/compat/linux/x86_64/usr/lib/../lib64/crt1.o] ==> obj [/cvmfs/software.eessi.io/versions/2023.06/compat/linux/x86_64/usr/lib/../lib64/crt1.o]
+          arg [/cvmfs/software.eessi.io/versions/2023.06/compat/linux/x86_64/usr/lib/../lib64/crti.o] ==> obj [/cvmfs/software.eessi.io/versions/2023.06/compat/linux/x86_64/usr/lib/../lib64/crti.o]
+          arg [/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0/lib/gcc/x86_64-pc-linux-gnu/13.2.0/crtbegin.o] ==> obj [/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0/lib/gcc/x86_64-pc-linux-gnu/13.2.0/crtbegin.o]
+          arg [-L/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/libiconv/1.17-GCCcore-13.2.0/lib/../lib64] ==> dir [/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/libiconv/1.17-GCCcore-13.2.0/lib/../lib64]
+          arg [-L/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/libarchive/3.7.2-GCCcore-13.2.0/lib/../lib64] ==> dir [/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/libarchive/3.7.2-GCCcore-13.2.0/lib/../lib64]
+          arg [-L/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/cURL/8.3.0-GCCcore-13.2.0/lib/../lib64] ==> dir [/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/cURL/8.3.0-GCCcore-13.2.0/lib/../lib64]
+          arg [-L/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/OpenSSL/1.1/lib/../lib64] ==> dir [/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/OpenSSL/1.1/lib/../lib64]
+          arg [-L/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0/lib/gcc/x86_64-pc-linux-gnu/13.2.0] ==> dir [/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0/lib/gcc/x86_64-pc-linux-gnu/13.2.0]
+          arg [-L/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0/lib/gcc/x86_64-pc-linux-gnu/13.2.0/../../../../lib64] ==> dir [/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0/lib/gcc/x86_64-pc-linux-gnu/13.2.0/../../../../lib64]
+          arg [-L/cvmfs/software.eessi.io/versions/2023.06/compat/linux/x86_64/lib/../lib64] ==> dir [/cvmfs/software.eessi.io/versions/2023.06/compat/linux/x86_64/lib/../lib64]
+          arg [-L/cvmfs/software.eessi.io/versions/2023.06/compat/linux/x86_64/usr/lib/../lib64] ==> dir [/cvmfs/software.eessi.io/versions/2023.06/compat/linux/x86_64/usr/lib/../lib64]
+          arg [-L/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/libiconv/1.17-GCCcore-13.2.0/lib] ==> dir [/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/libiconv/1.17-GCCcore-13.2.0/lib]
+          arg [-L/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/libarchive/3.7.2-GCCcore-13.2.0/lib] ==> dir [/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/libarchive/3.7.2-GCCcore-13.2.0/lib]
+          arg [-L/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/cURL/8.3.0-GCCcore-13.2.0/lib] ==> dir [/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/cURL/8.3.0-GCCcore-13.2.0/lib]
+          arg [-L/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/OpenSSL/1.1/lib] ==> dir [/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/OpenSSL/1.1/lib]
+          arg [-L/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0/lib/gcc/x86_64-pc-linux-gnu/13.2.0/../../..] ==> dir [/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0/lib/gcc/x86_64-pc-linux-gnu/13.2.0/../../..]
+          arg [-L/cvmfs/software.eessi.io/versions/2023.06/compat/linux/x86_64/lib] ==> dir [/cvmfs/software.eessi.io/versions/2023.06/compat/linux/x86_64/lib]
+          arg [-L/cvmfs/software.eessi.io/versions/2023.06/compat/linux/x86_64/usr/lib] ==> dir [/cvmfs/software.eessi.io/versions/2023.06/compat/linux/x86_64/usr/lib]
+          arg [CMakeFiles/cmTC_ee187.dir/CMakeCXXCompilerABI.cpp.o] ==> ignore
+          arg [-lstdc++] ==> lib [stdc++]
+          arg [-lm] ==> lib [m]
+          arg [-lgcc_s] ==> lib [gcc_s]
+          arg [-lgcc] ==> lib [gcc]
+          arg [-lc] ==> lib [c]
+          arg [-lgcc_s] ==> lib [gcc_s]
+          arg [-lgcc] ==> lib [gcc]
+          arg [/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0/lib/gcc/x86_64-pc-linux-gnu/13.2.0/crtend.o] ==> obj [/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0/lib/gcc/x86_64-pc-linux-gnu/13.2.0/crtend.o]
+          arg [/cvmfs/software.eessi.io/versions/2023.06/compat/linux/x86_64/usr/lib/../lib64/crtn.o] ==> obj [/cvmfs/software.eessi.io/versions/2023.06/compat/linux/x86_64/usr/lib/../lib64/crtn.o]
+        collapse obj [/cvmfs/software.eessi.io/versions/2023.06/compat/linux/x86_64/usr/lib/../lib64/crt1.o] ==> [/cvmfs/software.eessi.io/versions/2023.06/compat/linux/x86_64/usr/lib64/crt1.o]
+        collapse obj [/cvmfs/software.eessi.io/versions/2023.06/compat/linux/x86_64/usr/lib/../lib64/crti.o] ==> [/cvmfs/software.eessi.io/versions/2023.06/compat/linux/x86_64/usr/lib64/crti.o]
+        collapse obj [/cvmfs/software.eessi.io/versions/2023.06/compat/linux/x86_64/usr/lib/../lib64/crtn.o] ==> [/cvmfs/software.eessi.io/versions/2023.06/compat/linux/x86_64/usr/lib64/crtn.o]
+        collapse library dir [/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/libiconv/1.17-GCCcore-13.2.0/lib/../lib64] ==> [/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/libiconv/1.17-GCCcore-13.2.0/lib64]
+        collapse library dir [/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/libarchive/3.7.2-GCCcore-13.2.0/lib/../lib64] ==> [/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/libarchive/3.7.2-GCCcore-13.2.0/lib64]
+        collapse library dir [/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/cURL/8.3.0-GCCcore-13.2.0/lib/../lib64] ==> [/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/cURL/8.3.0-GCCcore-13.2.0/lib64]
+        collapse library dir [/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/OpenSSL/1.1/lib/../lib64] ==> [/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/OpenSSL/1.1/lib64]
+        collapse library dir [/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0/lib/gcc/x86_64-pc-linux-gnu/13.2.0] ==> [/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0/lib/gcc/x86_64-pc-linux-gnu/13.2.0]
+        collapse library dir [/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0/lib/gcc/x86_64-pc-linux-gnu/13.2.0/../../../../lib64] ==> [/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0/lib64]
+        collapse library dir [/cvmfs/software.eessi.io/versions/2023.06/compat/linux/x86_64/lib/../lib64] ==> [/cvmfs/software.eessi.io/versions/2023.06/compat/linux/x86_64/lib64]
+        collapse library dir [/cvmfs/software.eessi.io/versions/2023.06/compat/linux/x86_64/usr/lib/../lib64] ==> [/cvmfs/software.eessi.io/versions/2023.06/compat/linux/x86_64/usr/lib64]
+        collapse library dir [/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/libiconv/1.17-GCCcore-13.2.0/lib] ==> [/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/libiconv/1.17-GCCcore-13.2.0/lib]
+        collapse library dir [/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/libarchive/3.7.2-GCCcore-13.2.0/lib] ==> [/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/libarchive/3.7.2-GCCcore-13.2.0/lib]
+        collapse library dir [/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/cURL/8.3.0-GCCcore-13.2.0/lib] ==> [/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/cURL/8.3.0-GCCcore-13.2.0/lib]
+        collapse library dir [/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/OpenSSL/1.1/lib] ==> [/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/OpenSSL/1.1/lib]
+        collapse library dir [/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0/lib/gcc/x86_64-pc-linux-gnu/13.2.0/../../..] ==> [/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0/lib]
+        collapse library dir [/cvmfs/software.eessi.io/versions/2023.06/compat/linux/x86_64/lib] ==> [/cvmfs/software.eessi.io/versions/2023.06/compat/linux/x86_64/lib]
+        collapse library dir [/cvmfs/software.eessi.io/versions/2023.06/compat/linux/x86_64/usr/lib] ==> [/cvmfs/software.eessi.io/versions/2023.06/compat/linux/x86_64/usr/lib]
+        implicit libs: [stdc++;m;gcc_s;gcc;c;gcc_s;gcc]
+        implicit objs: [/cvmfs/software.eessi.io/versions/2023.06/compat/linux/x86_64/usr/lib64/crt1.o;/cvmfs/software.eessi.io/versions/2023.06/compat/linux/x86_64/usr/lib64/crti.o;/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0/lib/gcc/x86_64-pc-linux-gnu/13.2.0/crtbegin.o;/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0/lib/gcc/x86_64-pc-linux-gnu/13.2.0/crtend.o;/cvmfs/software.eessi.io/versions/2023.06/compat/linux/x86_64/usr/lib64/crtn.o]
+        implicit dirs: [/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/libiconv/1.17-GCCcore-13.2.0/lib64;/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/libarchive/3.7.2-GCCcore-13.2.0/lib64;/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/cURL/8.3.0-GCCcore-13.2.0/lib64;/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/OpenSSL/1.1/lib64;/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0/lib/gcc/x86_64-pc-linux-gnu/13.2.0;/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0/lib64;/cvmfs/software.eessi.io/versions/2023.06/compat/linux/x86_64/lib64;/cvmfs/software.eessi.io/versions/2023.06/compat/linux/x86_64/usr/lib64;/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/libiconv/1.17-GCCcore-13.2.0/lib;/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/libarchive/3.7.2-GCCcore-13.2.0/lib;/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/cURL/8.3.0-GCCcore-13.2.0/lib;/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/OpenSSL/1.1/lib;/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/GCCcore/13.2.0/lib;/cvmfs/software.eessi.io/versions/2023.06/compat/linux/x86_64/lib;/cvmfs/software.eessi.io/versions/2023.06/compat/linux/x86_64/usr/lib]
+        implicit fwks: []
+      
+      
+...
