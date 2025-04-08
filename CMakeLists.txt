@@ -7,10 +7,10 @@ project(Firefly VERSION 1.0 LANGUAGES CXX)
 # Set cmake modules directory
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
-# Add source subdirectory
+# Add source subdirectory for the main code
 add_subdirectory(${CMAKE_SOURCE_DIR}/src)
 
-# Adding matrix to the build
+# Libraries to handle matrix operations
 add_library(MatrixLib
     src/matrix/Dense.cpp
     src/matrix/Matrix.h
@@ -19,41 +19,41 @@ add_library(MatrixLib
     src/matrix/SparseCSR.cpp
 )
 
-# Configure a CSR matrix class
+# Configure CSR matrix class
 add_library(CSR src/laplacian/CSR.cpp)
 
-# Configure functions needed to compute the Laplacian
+# Configure Laplacian computation functions
 add_library(Laplacian src/laplacian/Laplacian.cpp)
 
-# Configure building the executable to test the Laplacian
+# Test executables
 add_executable(LaplacianTests src/laplacian/testLaplacian.cpp)
 target_link_libraries(LaplacianTests PRIVATE CSR Laplacian)
 
-# Add the main executable
+# Main executable
 add_executable(firefly firefly.cpp)
 
-# Build & test 
+# Enable testing framework
 enable_testing()
 
-# Add testing subdirectory
+# Add testing subdirectory for additional tests
 add_subdirectory(${CMAKE_SOURCE_DIR}/src/test)
 
-# Add test executables for the Matrix library
+# Test executable for Matrix library
 add_executable(MatrixTests src/matrix/test_matrix.cpp)
 target_link_libraries(MatrixTests PRIVATE MatrixLib)
 
-# Add tests for executables
+# Register tests with CTest
 add_test(NAME firefly COMMAND firefly)
 add_test(NAME MatrixTests COMMAND MatrixTests)
 add_test(NAME laplacian COMMAND LaplacianTests)
 
-# Include function used to add regression tests
+# Include function for adding regression tests
 include(add_regression_test)
 
 # Set paths required for running tests
 set(TEST_RUNNER ${CMAKE_SOURCE_DIR}/cmake/test_runner.cmake)
 
-# Add regression tests
+# Add regression tests with specific pass/fail expectations
 add_regression_test(test_example_pass_regexp firefly
                     EXTRA_PASS_REGEXP "Firefly Project"
                     LABELS "basic")
@@ -62,10 +62,9 @@ add_regression_test(test_example_fail_regexp firefly
                     EXTRA_PROPERTIES "WILL_FAIL;1"
                     LABELS "basic")
 
-# Find Doxygen package
+# Doxygen documentation configuration
 find_package(Doxygen REQUIRED)
 
-# Doxygen custom command to generate documentation
 if(DOXYGEN_FOUND)
     set(DOXYGEN_IN ${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile)
     set(DOXYGEN_OUT ${CMAKE_CURRENT_BINARY_DIR}/docs)
@@ -78,7 +77,9 @@ if(DOXYGEN_FOUND)
         VERBATIM
     )
 
+
     add_custom_target(doc ALL DEPENDS ${DOXYGEN_OUT})
-endif()
 
  
+    add_dependencies(all doc)
+endif()
