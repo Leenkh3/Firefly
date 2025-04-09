@@ -42,7 +42,6 @@ else()
     include_directories(${EIGEN_INCLUDE_DIR})  
 endif()
 
-
 # Add source subdirectory
 add_subdirectory(${CMAKE_SOURCE_DIR}/src)
 
@@ -53,6 +52,9 @@ add_library(MatrixLib
     src/matrix/Dense.h
     src/matrix/SparseCSR.h
     src/matrix/SparseCSR.cpp
+    src/CG/CGDense.cpp      # CG dense matrix operations (from HEAD)
+    src/CG/CGMatrix.h       # CG matrix function declarations (from HEAD)
+    src/CG/CGDense.h        # CG dense matrix header (from HEAD)
     src/cholesky/Cholesky_dense.cpp
     src/cholesky/cholesky.hpp
     src/cholesky/Cholesky_CRS.cpp
@@ -67,36 +69,40 @@ add_library(Laplacian src/laplacian/Laplacian.cpp)
 
 # Configure building the executable to test the Laplacian
 add_executable(LaplacianTests src/laplacian/testLaplacian.cpp)
-
 target_link_libraries(LaplacianTests PRIVATE MatrixLib CSR Laplacian)
 
 # Configure building the executable to test the Cholesky
 add_executable(cholesky_test src/cholesky/cholesky_test.cpp)
-
 target_link_libraries(cholesky_test PRIVATE MatrixLib)
 
 add_executable(test_cholesky_CRS src/cholesky/test_cholesky_CRS.cpp)
-
 target_link_libraries(test_cholesky_CRS PRIVATE MatrixLib)
 
-
+# Configure building the CG solver executable
+add_executable(ConjugateGradientSolver src/CG/ConjugateGradientSolver.cpp)
+target_link_libraries(ConjugateGradientSolver PRIVATE MatrixLib)
 
 add_executable(firefly firefly.cpp)  # Configure cmake's testing system
+
+# Configure cmake's testing system
 enable_testing()
 
 # Add testing subdirectory
 add_subdirectory(${CMAKE_SOURCE_DIR}/src/test)
 
 add_executable(MatrixTests src/matrix/test_matrix.cpp)
+target_link_libraries(MatrixTests PRIVATE MatrixLib)
+
+# Add testing executable for CG matrix
+add_executable(CGMatrixTests src/CG/CGTestMatrix.cpp)
 
 # Link the Matrix library to the main executable
-target_link_libraries(MatrixTests PRIVATE MatrixLib)
+target_link_libraries(CGMatrixTests PRIVATE MatrixLib)
 
 add_dependencies(MatrixLib eigen)
 add_dependencies(MatrixTests eigen)
 add_dependencies(test_cholesky_CRS eigen)
 add_dependencies(cholesky_test eigen)
-
 
 # Add a test, running the chillax executable, non-zero exit code will fail the test
 add_test(NAME firefly COMMAND firefly)
@@ -107,9 +113,12 @@ add_test(NAME MatrixTests COMMAND MatrixTests)
 # Add tests for the Laplacian
 add_test(NAME laplacian COMMAND LaplacianTests)
 
+# Add tests for CG solver
+add_test(NAME ConjugateGradientSolver COMMAND ConjugateGradientSolver)
+add_test(NAME CGMatrixTests COMMAND CGMatrixTests)
+
 # Add tests for the Cholesky
 add_test(NAME cholesky_dense COMMAND cholesky_test)
-
 add_test(NAME cholesky_crs COMMAND test_cholesky_CRS)
 
 # Include function used to add regression tests
@@ -124,12 +133,21 @@ add_regression_test(test_example_pass_regexp firefly
                     LABELS "basic")
 add_regression_test(test_example_fail_regexp firefly
                     EXTRA_FAIL_REGEXP "Firefly Project"
-                    EXTRA_PROPERTIES "WILL_FAIL;1")
+                    EXTRA_PROPERTIES "WILL_FAIL;1"
+                    LABELS "basic")
+
+# Add regression tests for CG solver
+add_regression_test(test_cg_pass_regexp ConjugateGradientSolver
+                    EXTRA_PASS_REGEXP "Firefly Project"
+                    LABELS "basic")
+add_regression_test(test_cg_fail_regexp ConjugateGradientSolver
+                    EXTRA_FAIL_REGEXP "Firefly Project"
+                    EXTRA_PROPERTIES "WILL_FAIL;1"
+                    LABELS "basic")
 
 find_package(MPI)
 
 # === KEEPING NetCDF ExternalProject ===
-
 ExternalProject_Add(netcdf
     GIT_REPOSITORY https://github.com/Unidata/netcdf-c.git
     GIT_TAG main
@@ -146,25 +164,17 @@ ExternalProject_Add(netcdf
       -DENABLE_BYTERANGE=OFF
 )
 
-
-
 # NetCDF Library Path
 set(NETCDF_LIB "${PROJECT_BINARY_DIR}/netcdf-install/lib/libnetcdf.so")
 set(NETCDF_INCLUDE_DIR "${PROJECT_BINARY_DIR}/netcdf-install/include")
 
-
-
 # Install Exodus using the official Sandia Labs SEACAS repository
-
 
 # fmt is required because SEACAS (Exodus) depends on it.
 # We build it locally to ensure compatibility with NetCDF and SEAC
 
-
 # === Add External fmt build ===
-
-
-ExternalProject_Add(fmt    
+ExternalProject_Add(fmt   
   GIT_REPOSITORY https://github.com/fmtlib/fmt.git
   GIT_TAG 10.1.1
   CMAKE_ARGS
@@ -177,9 +187,6 @@ ExternalProject_Add(fmt
 )
 
 set(fmt_DIR "${PROJECT_BINARY_DIR}/fmt-install/lib/cmake/fmt")
-
-
-
 
 ExternalProject_Add(exodus
     GIT_REPOSITORY https://github.com/sandialabs/seacas.git
@@ -201,12 +208,8 @@ ExternalProject_Add(exodus
         -DSeacas_ENABLE_SEACASNemesis=ON
 )
 
-
-
-
 # Exodus Library Path
 set(EXODUS_LIB "${PROJECT_BINARY_DIR}/exodus-install/lib/libexodus.so")
-
 
 if(NOT "${CMAKE_C_FLAGS}" MATCHES "std=c99")
    if(NOT CMAKE_C_COMPILER_ID STREQUAL "Cray")
@@ -235,7 +238,7 @@ install(TARGETS numdiff
    RUNTIME
    DESTINATION bin
    COMPONENT Runtime
-   )
+  )
 
 # add test executable for ndiff
 add_executable(numdiff_test src/ndiff/test_ndiff.cpp)
@@ -245,7 +248,6 @@ target_link_libraries(numdiff_test PRIVATE m numdiff-Executer)
 add_regression_test( numdifftest_pass numdiff_test
                      INPUTFILES src/ndiff/diag1.txt src/ndiff/diag3.txt src/ndiff/config.cfg
                      ARGS ${CMAKE_BINARY_DIR}/maddiff diag1.txt diag3.txt config.cfg)
-
 
 # Add a test, running the numdiff_test executable, non-zero exit code will fail the test
 add_regression_test( numdifftest_fail numdiff_test
