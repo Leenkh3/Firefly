@@ -1,11 +1,8 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <lua.h>
-#include <lauxlib.h>
-#include <lualib.h>
+#include "user_input.h"
 
-int main(int argc, char *argv[]) {
+
+// Function definitions
+int processInput(int argc, char *argv[]) {
 
     printf("Starting program...\n");
 
