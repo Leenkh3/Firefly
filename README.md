@@ -8,10 +8,16 @@
 - Miklós Vajkai
 - Aili Torvinen
 - Zoltán Kaszai
-- Leen Khouri
+- Leen Alkhouri
 - József Bakosi
 - Dániel Doma
 - Ali Hasan
+- Hana Bejaoui
+- Husayn Zaweedi
+- Erkin Bektenov
+- Sahir Kaju
+- Aqib Shahzad
+- Obay Daoudi
 
 ## Instructions
 

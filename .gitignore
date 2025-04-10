@@ -58,3 +58,14 @@ LUA*
 *~
 *sw?
 /build
+cmake-3.26.4-linux-x86_64/
+*.tar.gz
+*.save
+CMakeLists-fmt-test.txt
+fmt/
+Testing/
+*.tar.gz.*
+CMakeLists.txt.save
+CMakeLists.txt.save.1
+CMakeLists-fmt-test.txt
+cmake-3.26.4-linux-x86_64.tar.gz.1
