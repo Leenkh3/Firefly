@@ -67,7 +67,9 @@ ExternalProject_Add(lua
 set(LUA_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/src/user_input/LUA/include")
 set(LUA_LIBRARIES "${CMAKE_SOURCE_DIR}/src/user_input/LUA/lib/liblua.a")
 
-add_executable(user_input src/user_input/user_input.c)
+add_library(user_input STATIC src/user_input/user_input.c)
+target_include_directories(user_input PUBLIC ${CMAKE_SOURCE_DIR})
+target_link_libraries(user_input PRIVATE lua::lua)
 add_dependencies(user_input lua)
 target_include_directories(user_input PRIVATE ${LUA_INCLUDE_DIR})
 target_link_libraries(user_input PRIVATE ${LUA_LIBRARIES} m) # 'm' for the math library

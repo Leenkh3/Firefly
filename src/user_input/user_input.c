@@ -123,3 +123,7 @@ int processInput(int argc, char *argv[]) {
     printf("Program finished.\n");
     return 0;
 }
+
+// EOF
+// End of file
+// *****************************************************************************
