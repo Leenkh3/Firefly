@@ -63,6 +63,10 @@ ExternalProject_Add(lua
     COMMAND ${CMAKE_COMMAND} -E copy_directory ${PROJECT_BINARY_DIR}/lua-install/lib ${CMAKE_SOURCE_DIR}/src/user_input/LUA/lib
 )
 
+# Set Lua paths for other targets to use
+set(LUA_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/src/user_input/LUA/include")
+set(LUA_LIBRARIES "${CMAKE_SOURCE_DIR}/src/user_input/LUA/lib/liblua.a")
+
 # Create an imported target for Lua
 add_library(lua::lua STATIC IMPORTED)
 set_target_properties(lua::lua PROPERTIES
