@@ -63,14 +63,22 @@ ExternalProject_Add(lua
     COMMAND ${CMAKE_COMMAND} -E copy_directory ${PROJECT_BINARY_DIR}/lua-install/lib ${CMAKE_SOURCE_DIR}/src/user_input/LUA/lib
 )
 
-# Set Lua paths for other targets to use
-set(LUA_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/src/user_input/LUA/include")
-set(LUA_LIBRARIES "${CMAKE_SOURCE_DIR}/src/user_input/LUA/lib/liblua.a")
+# Create an imported target for Lua
+add_library(lua::lua STATIC IMPORTED)
+set_target_properties(lua::lua PROPERTIES
+    IMPORTED_LOCATION "${LUA_LIBRARIES}"
+    INTERFACE_INCLUDE_DIRECTORIES "${LUA_INCLUDE_DIR}"
+)
+add_dependencies(lua::lua lua)  # Make sure lua is built before using the target
 
+# Now you can use the lua::lua target
 add_library(user_input STATIC src/user_input/user_input.c)
+target_include_directories(user_input PUBLIC ${CMAKE_SOURCE_DIR})
+target_link_libraries(user_input PRIVATE lua::lua)
 add_dependencies(user_input lua)
-target_include_directories(user_input PRIVATE ${LUA_INCLUDE_DIR})
-target_link_libraries(user_input PRIVATE ${LUA_LIBRARIES} m) # 'm' for the math library
+target_include_directories(user_input PRIVATE ${LUA_INCLUDE_DIR}) # This is now redundant but harmless
+target_link_libraries(user_input PRIVATE m) # 'm' for the math library
+
 
 #[[ END ]]
 #[===] LUA [===]
