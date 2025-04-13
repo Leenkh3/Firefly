@@ -8,6 +8,22 @@ project(Firefly VERSION 1.0 LANGUAGES C CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+# Options for controlling tests and dependencies
+option(FIREFLY_BUILD_TESTS "Build Firefly tests" ON)
+option(FIREFLY_SKIP_EXODUS "Skip building EXODUS dependency" OFF)
+option(FIREFLY_SKIP_NETCDF "Skip building NetCDF dependency" OFF)
+
+# Check for critical dependencies if building tests
+if(FIREFLY_BUILD_TESTS)
+    # Check for Lua
+    find_package(Lua QUIET)
+    if(NOT LUA_FOUND)
+        message(WARNING "Lua not found - user input tests will be disabled")
+        message(STATUS "Install Lua or run scripts/install_dependencies.sh")
+        set(FIREFLY_SKIP_USER_INPUT_TESTS TRUE)
+    endif()
+endif()
+
 # Set cmake modules directory
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
@@ -132,9 +148,10 @@ add_executable(firefly firefly.cpp)  # Configure cmake's testing system
 # Configure cmake's testing system
 enable_testing()
 
-# Add testing subdirectory
-add_subdirectory(${CMAKE_SOURCE_DIR}/src/test)
-add_subdirectory(test)
+# Add the test directory conditionally
+if(FIREFLY_BUILD_TESTS)
+    add_subdirectory(test)
+endif()
 
 add_executable(MatrixTests src/matrix/test_matrix.cpp)
 target_link_libraries(MatrixTests PRIVATE MatrixLib)
