@@ -1,4 +1,3 @@
-
 #Tell Cmake the featureset we require
 cmake_minimum_required(VERSION 3.15)
 
@@ -135,6 +134,7 @@ enable_testing()
 
 # Add testing subdirectory
 add_subdirectory(${CMAKE_SOURCE_DIR}/src/test)
+add_subdirectory(test)
 
 add_executable(MatrixTests src/matrix/test_matrix.cpp)
 target_link_libraries(MatrixTests PRIVATE MatrixLib)
