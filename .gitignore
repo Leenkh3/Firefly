@@ -51,6 +51,9 @@ Module.symvers
 Mkfile.old
 dkms.conf
 
+# User Input ignores --martin
+LUA*
+ 
 # Vim swap and undo files, build dir
 *~
 *sw?
