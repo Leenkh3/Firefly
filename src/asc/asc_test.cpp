@@ -9,11 +9,11 @@ int test()
     {
         const auto &coords = reader.getCoordinates();
         std::cout << "Successfully read " << reader.getCoordinatesCount()
-                  << " coordinates:" << std::endl;
+                  << " coordinates." << std::endl;
 
         const auto &conns = reader.getConnections();
         std::cout << "Successfully read " << reader.getConnectionsCount()
-                << " connections:" << std::endl;
+                << " connections." << std::endl;
 
         return 0;
     }
