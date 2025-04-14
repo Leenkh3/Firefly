@@ -3,7 +3,7 @@
 
 int test()
 {
-    ASCReader reader("../../Resources/sedov_coarse.asc_mesh");
+    ASCReader reader("Resources/sedov_coarse.asc_mesh");
 
     if (reader.readFile())
     {

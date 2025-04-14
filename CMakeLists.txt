@@ -63,6 +63,7 @@ add_library(asc src/asc/asc.cpp)
 add_executable(AscTest src/asc/asc_test.cpp)
 target_link_libraries(AscTest PRIVATE asc)
 add_test(NAME AscTest COMMAND AscTest)
+file(COPY "${CMAKE_SOURCE_DIR}/Resources" DESTINATION "${CMAKE_BINARY_DIR}")
 
 # Include function used to add regression tests
 include(add_regression_test)
