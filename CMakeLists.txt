@@ -58,6 +58,12 @@ add_test(NAME MatrixTests COMMAND MatrixTests)
 # Add tests for the Laplacian
 add_test(NAME laplacian COMMAND LaplacianTests)
 
+# Add ASC reader file
+add_library(asc src/asc/asc.cpp)
+add_executable(AscTest src/asc/asc_test.cpp)
+target_link_libraries(AscTest PRIVATE asc)
+add_test(NAME AscTest COMMAND AscTest)
+
 # Include function used to add regression tests
 include(add_regression_test)
 
@@ -112,11 +118,6 @@ ExternalProject_Add(exodus
 
 # Exodus Library Path
 set(EXODUS_LIB "${PROJECT_BINARY_DIR}/exodus-install/lib/libexodus.so")
-
-# Add ASC reader file
-add_executable(asc src/asc/asc.cpp)
-add_executable(AscTest src/asc/asc_test.cpp)
-add_test(NAME AscTest COMMAND AscTest)
 
 # Configure building the gmsh mesh reader
 # add_library(GmshMeshReader GmshMeshReader.cpp GmshMeshReader.hpp)

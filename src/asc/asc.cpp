@@ -3,15 +3,15 @@
 #include <fstream>
 #include <sstream>
 
-ASCReader::Coordinate(double x_val, double y_val, double z_val)
+ASCReader::Coordinate::Coordinate(double x_val, double y_val, double z_val)
     : x(x_val), y(y_val), z(z_val) {}
 
-ASCReader::Connectivity(int x_val, int y_val, int z_val, int a_val, int b_val, int c_val)
+ASCReader::Connectivity::Connectivity(int x_val, int y_val, int z_val, int a_val, int b_val, int c_val)
     : x(x_val), y(y_val), z(z_val), a(a_val), b(b_val), c(c_val) {}
 
 ASCReader::ASCReader(const std::string &file_path) : filename(file_path) {}
 
-ASCReader::parseLine(const std::string &line, Coordinate &coord)
+bool ASCReader::parseLine(const std::string &line, Coordinate &coord)
 {
     std::istringstream iss(line);
     int index;
@@ -23,7 +23,7 @@ ASCReader::parseLine(const std::string &line, Coordinate &coord)
     return false;
 }
 
-ASCReader::readFile()
+bool ASCReader::readFile()
 {
     std::ifstream file(filename);
 
@@ -100,33 +100,33 @@ ASCReader::readFile()
     return true;
 }
 
-ASCReader::&getCoordinates() const
+const std::vector<ASCReader::Coordinate>& ASCReader::getCoordinates() const
 {
     return coordinates;
 }
 
-ASCReader::getCoordinatesCount() const
+int ASCReader::getCoordinatesCount() const
 {
     return coordinates.size();
 }
 
-ASCReader::clearCoordinates()
+void ASCReader::clearCoordinates()
 {
     coordinates.clear();
     coordinates.shrink_to_fit();
 }
 
-ASCReader::&getConnections() const
+const std::vector<ASCReader::Connectivity>& ASCReader::getConnections() const
 {
     return connections;
 }
 
-ASCReader::getConnectionsCount() const
+int ASCReader::getConnectionsCount() const
 {
     return connections.size();
 }
 
-ASCReader::clearConnections()
+void ASCReader::clearConnections()
 {
     connections.clear();
     connections.shrink_to_fit();
