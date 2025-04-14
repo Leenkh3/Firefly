@@ -11,12 +11,24 @@ ASCReader::Connectivity::Connectivity(int x_val, int y_val, int z_val, int a_val
 
 ASCReader::ASCReader(const std::string &file_path) : filename(file_path) {}
 
-bool ASCReader::parseLine(const std::string &line, Coordinate &coord)
+bool ASCReader::parseCoordinateLine(const std::string &line, Coordinate &coord)
 {
     std::istringstream iss(line);
     int index;
 
     if (iss >> index >> coord.x >> coord.y >> coord.z)
+    {
+        return true;
+    }
+    return false;
+}
+
+bool ASCReader::parseConnectivityLine(const std::string &line, Connectivity &conn)
+{
+    std::istringstream iss(line);
+    int index;
+
+    if (iss >> index >> conn.x >> conn.y >> conn.z >> conn.a >> conn.b >> conn.c)
     {
         return true;
     }
@@ -72,7 +84,7 @@ bool ASCReader::readFile()
                 continue;
 
             Coordinate coord;
-            if (parseLine(line, coord))
+            if (parseCoordinateLine(line, coord))
             {
                 coordinates.push_back(coord);
             }
@@ -83,9 +95,38 @@ bool ASCReader::readFile()
             }
         }
 
+        std::getline(file, line);
+        std::istringstream iss(line);
+        std::string temp;
+        if (iss >> temp >> connections_count && temp == "*cells")
+        {
+            std::cout << "Connections count: " << connections_count << std::endl;
+        }
+        else
+        {
+            throw new std::runtime_error("Invalid format in connections line: " + line);
+        }
+
         // Parse connections
-        connections.reserve(1000);
-        // while ()
+        line_number = 0;
+        connections.reserve(connections_count);
+        while (std::getline(file, line) && line_number < connections_count)
+        {
+            line_number++;
+            if (line.empty())
+                continue;
+
+            Connectivity conn;
+            if (parseConnectivityLine(line, conn))
+            {
+                connections.push_back(conn);
+            }
+            else
+            {
+                std::cerr << "Warning: Invalid format at line "
+                          << line_number << ": " << line << std::endl;
+            }
+        }
     }
     catch (const std::exception &e)
     {

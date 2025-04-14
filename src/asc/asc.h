@@ -44,7 +44,8 @@ private:
     std::vector<Coordinate> coordinates;
     std::vector<Connectivity> connections;
 
-    bool parseLine(const std::string &line, Coordinate &coord);
+    bool parseCoordinateLine(const std::string &line, Coordinate &coord);
+    bool parseConnectivityLine(const std::string &line, Connectivity &conn);
 };
 
 #endif
