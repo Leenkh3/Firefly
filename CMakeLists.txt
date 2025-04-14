@@ -1,16 +1,16 @@
-# Tell cmake the featureset we require
+# تحديد الحد الأدنى لإصدار CMake المطلوب
 cmake_minimum_required(VERSION 3.15)
 
-# Project name and version with languages/compilers required
+# اسم المشروع والإصدار واللغات المستخدمة
 project(Firefly VERSION 1.0 LANGUAGES CXX)
 
-# Set cmake modules directory
+# تعيين مسار الوحدات الإضافية
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
-# Add source subdirectory for the main code
+# إضافة دليل المصدر للمشروع الرئيسي
 add_subdirectory(${CMAKE_SOURCE_DIR}/src)
 
-# Libraries to handle matrix operations
+# المكتبة للتعامل مع المصفوفات
 add_library(MatrixLib
     src/matrix/Dense.cpp
     src/matrix/Matrix.h
@@ -19,41 +19,34 @@ add_library(MatrixLib
     src/matrix/SparseCSR.cpp
 )
 
-# Configure CSR matrix class
+# مكتبة CSR
 add_library(CSR src/laplacian/CSR.cpp)
 
-# Configure Laplacian computation functions
+# مكتبة التدرج (Laplacian)
 add_library(Laplacian src/laplacian/Laplacian.cpp)
 
-# Test executables
+# برامج الاختبار
 add_executable(LaplacianTests src/laplacian/testLaplacian.cpp)
 target_link_libraries(LaplacianTests PRIVATE CSR Laplacian)
 
-# Main executable
-add_executable(firefly firefly.cpp)
-
-# Enable testing framework
-enable_testing()
-
-# Add testing subdirectory for additional tests
-add_subdirectory(${CMAKE_SOURCE_DIR}/src/test)
-
-# Test executable for Matrix library
 add_executable(MatrixTests src/matrix/test_matrix.cpp)
 target_link_libraries(MatrixTests PRIVATE MatrixLib)
 
-# Register tests with CTest
+# الملف التنفيذي الرئيسي
+add_executable(firefly firefly.cpp)
+
+# تمكين بيئة الاختبار
+enable_testing()
+
+# إضافة اختبارات إلى المشروع
 add_test(NAME firefly COMMAND firefly)
 add_test(NAME MatrixTests COMMAND MatrixTests)
 add_test(NAME laplacian COMMAND LaplacianTests)
 
-# Include function for adding regression tests
+# إضافة وظيفة لاختبارات الانحدار
 include(add_regression_test)
 
-# Set paths required for running tests
-set(TEST_RUNNER ${CMAKE_SOURCE_DIR}/cmake/test_runner.cmake)
-
-# Add regression tests with specific pass/fail expectations
+# إعداد اختبارات الانحدار مع نتائج النجاح/الفشل المتوقعة
 add_regression_test(test_example_pass_regexp firefly
                     EXTRA_PASS_REGEXP "Firefly Project"
                     LABELS "basic")
@@ -62,7 +55,7 @@ add_regression_test(test_example_fail_regexp firefly
                     EXTRA_PROPERTIES "WILL_FAIL;1"
                     LABELS "basic")
 
-# Doxygen documentation configuration
+# إعداد وثائق Doxygen
 find_package(Doxygen REQUIRED)
 
 if(DOXYGEN_FOUND)
@@ -77,9 +70,9 @@ if(DOXYGEN_FOUND)
         VERBATIM
     )
 
-
+    # تعريف الهدف لتوليد الوثائق
     add_custom_target(doc ALL DEPENDS ${DOXYGEN_OUT})
 
- 
-    add_dependencies(all doc)
+    # إضافة تبعية الوثائق إلى الهدف الرئيسي (على سبيل المثال firefly)
+    add_dependencies(firefly doc)
 endif()
