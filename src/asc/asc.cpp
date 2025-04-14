@@ -65,6 +65,7 @@ bool ASCReader::readFile()
 
                 if (iss >> temp >> coordinates_count)
                 {
+                    std::cout << "Coordinates count: " << coordinates_count << std::endl;
                     break;
                 }
                 else
@@ -95,10 +96,12 @@ bool ASCReader::readFile()
             }
         }
 
+        // Read the number of connections
         std::getline(file, line);
+        std::cout << "Line: " << line << std::endl;
         std::istringstream iss(line);
         std::string temp;
-        if (iss >> temp >> connections_count && temp == "*cells")
+        if (iss >> temp >> connections_count && temp[0] == '*')
         {
             std::cout << "Connections count: " << connections_count << std::endl;
         }
