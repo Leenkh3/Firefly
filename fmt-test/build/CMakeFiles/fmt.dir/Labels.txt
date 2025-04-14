@@ -1,0 +1,13 @@
+# Target labels
+ fmt
+# Source files and their labels
+/work/students/hpc-bvrhib/firefly/fmt-test/build/CMakeFiles/fmt
+/work/students/hpc-bvrhib/firefly/fmt-test/build/CMakeFiles/fmt.rule
+/work/students/hpc-bvrhib/firefly/fmt-test/build/CMakeFiles/fmt-complete.rule
+/work/students/hpc-bvrhib/firefly/fmt-test/build/fmt-prefix/src/fmt-stamp/fmt-build.rule
+/work/students/hpc-bvrhib/firefly/fmt-test/build/fmt-prefix/src/fmt-stamp/fmt-configure.rule
+/work/students/hpc-bvrhib/firefly/fmt-test/build/fmt-prefix/src/fmt-stamp/fmt-download.rule
+/work/students/hpc-bvrhib/firefly/fmt-test/build/fmt-prefix/src/fmt-stamp/fmt-install.rule
+/work/students/hpc-bvrhib/firefly/fmt-test/build/fmt-prefix/src/fmt-stamp/fmt-mkdir.rule
+/work/students/hpc-bvrhib/firefly/fmt-test/build/fmt-prefix/src/fmt-stamp/fmt-patch.rule
+/work/students/hpc-bvrhib/firefly/fmt-test/build/fmt-prefix/src/fmt-stamp/fmt-update.rule
