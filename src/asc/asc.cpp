@@ -97,8 +97,6 @@ bool ASCReader::readFile()
         }
 
         // Read the number of connections
-        std::getline(file, line);
-        std::cout << "Line: " << line << std::endl;
         std::istringstream iss(line);
         std::string temp;
         if (iss >> temp >> connections_count && temp[0] == '*')
