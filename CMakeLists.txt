@@ -203,8 +203,8 @@ ExternalProject_Add(fmt
 
 set(fmt_DIR "${PROJECT_BINARY_DIR}/fmt-install/lib/cmake/fmt")
 
-find_package(Seacas)
-if(NOT Seacas_FOUND)
+find_package(SEACASIoss CONFIG)
+if(NOT SEACASIoss_FOUND)
     message(STATUS "Seacas NOT found. Downloading with ExternalProject_Add().")
     # Install Exodus using the official Sandia Labs SEACAS repository
     ExternalProject_Add(exodus
