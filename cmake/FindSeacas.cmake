@@ -2,7 +2,7 @@ if(SEACAS_INCLUDE_DIRS AND SEACAS_LIBRARIES)
   set(SEACAS_FIND_QUIETLY TRUE)
 endif()
 
-find_path(SEACAS_INCLUDE_DIR exodusII.h
+find_path(SEACAS_INCLUDE_DIR SEACASIoss_config.h
           PATHS ${SEACAS_INSTALL_DIR}
                 $ENV{SEACAS_DIR}
                 ${CMAKE_BINARY_DIR}/seacas/install
