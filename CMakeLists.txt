@@ -147,7 +147,7 @@ add_regression_test(test_cg_fail_regexp ConjugateGradientSolver
 
 find_package(MPI)
 
-#set(CMAKE_PREFIX_PATH "/usr/local")
+set(CMAKE_PREFIX_PATH "/usr/local")
 find_package(NetCDF)
 if(NOT NetCDF_FOUND)
     message(STATUS "NetCDF NOT found. Downloading with ExternalProject_Add().")
