@@ -147,10 +147,10 @@ add_regression_test(test_cg_fail_regexp ConjugateGradientSolver
 
 find_package(MPI)
 
-set(CMAKE_PREFIX_PATH "/usr/local")
+#set(CMAKE_PREFIX_PATH "/usr/local")
 find_package(NetCDF)
 if(NOT NetCDF_FOUND)
-    message(STATUS "NetCDF NOT found.")
+    message(STATUS "NetCDF NOT found. Downloading with ExternalProject_Add().")
     ExternalProject_Add(netcdf
         GIT_REPOSITORY https://github.com/Unidata/netcdf-c.git
         GIT_TAG main
@@ -180,27 +180,7 @@ else()
     set(NETCDF_INCLUDE_DIRS "${CMAKE_PREFIX_PATH}/netcdf-install/include")
 endif()
 
-find_package(Seacas)
-if(NOT Seacas_FOUND)
-    message(STATUS "Seacas NOT found.")
-    # Install Exodus using the official Sandia Labs SEACAS repository
-    ExternalProject_Add(exodus
-        GIT_REPOSITORY https://github.com/sandialabs/seacas.git
-        GIT_TAG master
-        DEPENDS netcdf  # Ensure NetCDF is built before Exodus
-        CMAKE_ARGS -DCMAKE_C_COMPILER=${CMAKE_C_COMPILER}
-                -DNetCDF_DIR=${PROJECT_BINARY_DIR}/netcdf-install
-                -DBUILD_SHARED_LIBS=on
-                -DCMAKE_INSTALL_PREFIX=${PROJECT_BINARY_DIR}/exodus-install
-    )
-    # Exodus Library Path
-    set(EXODUS_LIB "${PROJECT_BINARY_DIR}/exodus-install/lib/libexodus.so")
-else()
-    message(STATUS "Seacas found.")
-    set(EXODUS_LIB "${CMAKE_PREFIX_PATH}/exodus-install/lib/libexodus.so")
-endif()
 
-include_directories(${Seacas_})
 # Install Exodus using the official Sandia Labs SEACAS repository
 
 # fmt is required because SEACAS (Exodus) depends on it.
@@ -221,7 +201,11 @@ ExternalProject_Add(fmt
 
 set(fmt_DIR "${PROJECT_BINARY_DIR}/fmt-install/lib/cmake/fmt")
 
-ExternalProject_Add(exodus
+find_package(Seacas)
+if(NOT Seacas_FOUND)
+    message(STATUS "Seacas NOT found. Downloading with ExternalProject_Add().")
+    # Install Exodus using the official Sandia Labs SEACAS repository
+    ExternalProject_Add(exodus
     GIT_REPOSITORY https://github.com/sandialabs/seacas.git
     GIT_TAG master
     DEPENDS fmt netcdf
@@ -232,17 +216,21 @@ ExternalProject_Add(exodus
         -DCMAKE_INSTALL_PREFIX=${PROJECT_BINARY_DIR}/exodus-install
         -DNetCDF_DIR=${PROJECT_BINARY_DIR}/netcdf-install
         -Dfmt_DIR=${PROJECT_BINARY_DIR}/fmt-install/lib/cmake/fmt
-  #      -DTPL_ENABLE_fmt=ON
- #       -DTPL_fmt_INCLUDE_DIRS=${PROJECT_BINARY_DIR}/fmt-install/include
+#        -DTPL_ENABLE_fmt=ON
+#        -DTPL_fmt_INCLUDE_DIRS=${PROJECT_BINARY_DIR}/fmt-install/include
 #        -DTPL_fmt_LIBRARIES=${PROJECT_BINARY_DIR}/fmt-install/lib64/libfmt.a
         -DSeacas_ENABLE_SEACAS=ON
         -DSeacas_ENABLE_SEACASExodus=ON
         -DSeacas_ENABLE_SEACASIoss=ON
         -DSeacas_ENABLE_SEACASNemesis=ON
-)
+    )
+    # Exodus Library Path
+    set(EXODUS_LIB "${PROJECT_BINARY_DIR}/exodus-install/lib/libexodus.so")
+else()
+    message(STATUS "Seacas found.")
+    set(EXODUS_LIB "${CMAKE_PREFIX_PATH}/exodus-install/lib/libexodus.so")
+endif()
 
-# Exodus Library Path
-set(EXODUS_LIB "${PROJECT_BINARY_DIR}/exodus-install/lib/libexodus.so")
 
 if(NOT "${CMAKE_C_FLAGS}" MATCHES "std=c99")
    if(NOT CMAKE_C_COMPILER_ID STREQUAL "Cray")
