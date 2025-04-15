@@ -177,9 +177,9 @@ if(NOT NetCDF_FOUND)
     set(NETCDF_DIR "${PROJECT_BINARY_DIR}/netcdf-install")
 else()
     message(STATUS "NetCDF found.")
-    set(NETCDF_LIB "${CMAKE_PREFIX_PATH}/netcdf-install/lib/libnetcdf.so")
-    set(NETCDF_INCLUDE_DIRS "${CMAKE_PREFIX_PATH}/netcdf-install/include")
-    set(NETCDF_DIR "${CMAKE_PREFIX_PATH}/netcdf-install")
+    set(NETCDF_LIB "${CMAKE_PREFIX_PATH}/lib/libnetcdf.so")
+    set(NETCDF_INCLUDE_DIRS "${CMAKE_PREFIX_PATH}/include")
+    set(NETCDF_DIR "${CMAKE_PREFIX_PATH}")
 endif()
 
 
@@ -203,9 +203,9 @@ ExternalProject_Add(fmt
 
 set(fmt_DIR "${PROJECT_BINARY_DIR}/fmt-install/lib/cmake/fmt")
 
-find_package(Seacas)
-if(NOT Seacas_FOUND)
-    message(STATUS "Seacas NOT found. Downloading with ExternalProject_Add().")
+find_package(Exodus)
+if(NOT Exodus_FOUND)
+    message(STATUS "Exodus NOT found. Downloading with ExternalProject_Add().")
     # Install Exodus using the official Sandia Labs SEACAS repository
     ExternalProject_Add(exodus
     GIT_REPOSITORY https://github.com/sandialabs/seacas.git
@@ -230,7 +230,7 @@ if(NOT Seacas_FOUND)
     set(EXODUS_LIB "${PROJECT_BINARY_DIR}/exodus-install/lib/libexodus.so")
 else()
     message(STATUS "Seacas found.")
-    set(EXODUS_LIB "${CMAKE_PREFIX_PATH}/exodus-install/lib/libexodus.so")
+    set(EXODUS_LIB "${CMAKE_PREFIX_PATH}/lib/libexodus.so")
 endif()
 
 
