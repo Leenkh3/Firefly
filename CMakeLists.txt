@@ -216,7 +216,7 @@ if(NOT Seacas_FOUND)
         -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}
 
         -DCMAKE_INSTALL_PREFIX=${PROJECT_BINARY_DIR}/exodus-install
-        -DNetCDF_DIR=${NETCDF_INCLUDE_DIRS}
+        -DNetCDF_DIR=${PROJECT_BINARY_DIR}/netcdf-install
         -Dfmt_DIR=${PROJECT_BINARY_DIR}/fmt-install/lib/cmake/fmt
 #        -DTPL_ENABLE_fmt=ON
 #        -DTPL_fmt_INCLUDE_DIRS=${PROJECT_BINARY_DIR}/fmt-install/include

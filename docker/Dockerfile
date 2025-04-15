@@ -60,14 +60,32 @@ RUN git clone --depth=1 https://github.com/Unidata/netcdf-c.git /opt/netcdf-c \
     && make -j$(nproc) && make install \
     && rm -rf /opt/netcdf-c
 
+# Install fmt required for Seacas
+RUN git clone --depth=1 https://github.com/fmtlib/fmt.git /opt/fmt \
+    && cd /opt/fmt \
+    && mkdir build && cd build \
+    && cmake .. -DCMAKE_INSTALL_PREFIX=/usr/local/ \
+                -DFMT_DOC=OFF \
+                -DFMT_TEST=OFF \
+                -DBUILD_SHARED_LIBS=OFF \
+                -DCMAKE_POSITION_INDEPENDENT_CODE=ON \
+                -DFMT_INSTALL=ON \
+    && make -j$(nproc) && make install \
+    && rm -rf /opt/fmt
+
 # Install SEACAS
 RUN git clone --depth=1 https://github.com/sandialabs/seacas.git /opt/seacas \
     && cd /opt/seacas \
     && mkdir build && cd build \
     && cmake .. -DCMAKE_C_COMPILER=/usr/bin/gcc \
                 -DNetCDF_DIR=/usr/local \
+                -Dfmt_DIR=/usr/local \
                 -DBUILD_SHARED_LIBS=on \
                 -DCMAKE_INSTALL_PREFIX=/usr/local/ \
+                -DSeacas_ENABLE_SEACAS=ON \
+                -DSeacas_ENABLE_SEACASExodus=ON \
+                -DSeacas_ENABLE_SEACASIoss=ON \
+                -DSeacas_ENABLE_SEACASNemesis=ON \
     && make -j$(nproc) && make install \
     && rm -rf /opt/seacas
 

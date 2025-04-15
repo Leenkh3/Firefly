@@ -1,52 +1,28 @@
-find_path(SEACAS_INCLUDE_DIR
-  NAMES
-    SEACAS_Config.h
-  PATHS
-    ENV SEACAS_ROOT
-    /usr/local/include
-    /opt/seacas/include
-    /usr/include
-  PATH_SUFFIXES seacas)
+if(SEACAS_INCLUDE_DIRS AND SEACAS_LIBRARIES)
+  set(SEACAS_FIND_QUIETLY TRUE)
+endif()
 
-find_library(SEACAS_LIBRARY
-  NAMES seacas
-  PATHS
-    ENV SEACAS_ROOT
-    /usr/local/lib
-    /opt/seacas/lib
-    /usr/lib
-)
+find_path(SEACAS_INCLUDE_DIR exodus_config.h
+          PATHS ${SEACAS_INSTALL_DIR}
+                $ENV{SEACAS_DIR}
+                ${CMAKE_BINARY_DIR}/seacas/install
+                /usr/include/seacas
+                /usr/local/include/seacas
+          PATH_SUFFIXES include)
 
-find_library(EXODUS_LIBRARY
-  NAMES exodus
-  PATHS
-    ENV SEACAS_ROOT
-    /usr/local/lib
-    /opt/seacas/lib
-    /usr/lib
-)
+set(SEACAS_INCLUDE_DIRS ${SEACAS_INCLUDE_DIR})
 
-find_library(NEMESIS_LIBRARY
-  NAMES nemesis
-  PATHS
-    ENV SEACAS_ROOT
-    /usr/local/lib
-    /opt/seacas/lib
-    /usr/lib
-)
+find_library(SEACAS_LIBRARY NAMES seacas libseacas
+             PATHS ${SEACAS_INSTALL_DIR}
+                   $ENV{SEACAS_DIR}
+                   ${CMAKE_BINARY_DIR}/seacas/install
+                   /usr/lib
+                   /usr/local/lib
+             PATH_SUFFIXES lib)
 
-find_library(NF_LIBRARY
-  NAMES netcdf
-  PATHS
-    ENV NETCDF_ROOT
-    /usr/local/lib
-    /opt/netcdf/lib
-    /usr/lib
-)
+set(SEACAS_LIBRARIES ${SEACAS_LIBRARY})
 
 include(FindPackageHandleStandardArgs)
-find_package_handle_standard_args(Seacas DEFAULT_MSG
-  SEACAS_LIBRARY
-  SEACAS_INCLUDE_DIR
-)
+find_package_handle_standard_args(Seacas DEFAULT_MSG SEACAS_INCLUDE_DIRS SEACAS_LIBRARIES)
 
+mark_as_advanced(SEACAS_INCLUDE_DIRS SEACAS_LIBRARIES)
