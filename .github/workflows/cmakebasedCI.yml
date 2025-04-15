@@ -2,7 +2,7 @@ name: CMake build tests
 
 on:
   push:
-    branches: [ "main", "kzoli39-CI" ]
+    branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
 
