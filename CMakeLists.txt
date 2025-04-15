@@ -147,7 +147,6 @@ add_regression_test(test_cg_fail_regexp ConjugateGradientSolver
 
 find_package(MPI)
 
-<<<<<<< HEAD
 set(CMAKE_PREFIX_PATH "/usr/local")
 find_package(NetCDF)
 if(NOT NetCDF_FOUND)
@@ -302,6 +301,5 @@ add_regression_test( numdifftest_fail numdiff_test
 #enable_testing()
 # Add a test, running the chillax executable, non-zero exit code will fail the test
 #add_test(NAME firefly COMMAND firefly)
->>>>>>> origin/main
 
 message("Install path: ${PROJECT_BINARY_DIR}")
