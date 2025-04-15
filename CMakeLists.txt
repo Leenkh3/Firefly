@@ -1,16 +1,16 @@
-# تحديد الحد الأدنى لإصدار CMake المطلوب
+# Specify the minimum CMake version required
 cmake_minimum_required(VERSION 3.15)
 
-# اسم المشروع والإصدار واللغات المستخدمة
+# Project name, version, and languages ​​used
 project(Firefly VERSION 1.0 LANGUAGES CXX)
 
-# تعيين مسار الوحدات الإضافية
+# Set the path of the additional modules
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
-# إضافة دليل المصدر للمشروع الرئيسي
+# Add source directory to main project
 add_subdirectory(${CMAKE_SOURCE_DIR}/src)
 
-# المكتبة للتعامل مع المصفوفات
+# Library for dealing with arrays
 add_library(MatrixLib
     src/matrix/Dense.cpp
     src/matrix/Matrix.h
@@ -19,34 +19,34 @@ add_library(MatrixLib
     src/matrix/SparseCSR.cpp
 )
 
-# مكتبة CSR
+#CSR Library
 add_library(CSR src/laplacian/CSR.cpp)
 
-# مكتبة التدرج (Laplacian)
+# Laplacian Gradient Library
 add_library(Laplacian src/laplacian/Laplacian.cpp)
 
-# برامج الاختبار
+# Testing programs
 add_executable(LaplacianTests src/laplacian/testLaplacian.cpp)
 target_link_libraries(LaplacianTests PRIVATE CSR Laplacian)
 
 add_executable(MatrixTests src/matrix/test_matrix.cpp)
 target_link_libraries(MatrixTests PRIVATE MatrixLib)
 
-# الملف التنفيذي الرئيسي
+# Main executable file
 add_executable(firefly firefly.cpp)
 
-# تمكين بيئة الاختبار
+# Enable testing environment
 enable_testing()
 
-# إضافة اختبارات إلى المشروع
+# Add tests to the project
 add_test(NAME firefly COMMAND firefly)
 add_test(NAME MatrixTests COMMAND MatrixTests)
 add_test(NAME laplacian COMMAND LaplacianTests)
 
-# إضافة وظيفة لاختبارات الانحدار
+# Add functionality for regression tests
 include(add_regression_test)
 
-# إعداد اختبارات الانحدار مع نتائج النجاح/الفشل المتوقعة
+# Prepare regression tests with expected pass/fail results.
 add_regression_test(test_example_pass_regexp firefly
                     EXTRA_PASS_REGEXP "Firefly Project"
                     LABELS "basic")
@@ -55,7 +55,7 @@ add_regression_test(test_example_fail_regexp firefly
                     EXTRA_PROPERTIES "WILL_FAIL;1"
                     LABELS "basic")
 
-# إعداد وثائق Doxygen
+# Doxygen Document Preparation
 find_package(Doxygen REQUIRED)
 
 if(DOXYGEN_FOUND)
@@ -70,9 +70,9 @@ if(DOXYGEN_FOUND)
         VERBATIM
     )
 
-    # تعريف الهدف لتوليد الوثائق
+#Define the goal for generating documents
     add_custom_target(doc ALL DEPENDS ${DOXYGEN_OUT})
 
-    # إضافة تبعية الوثائق إلى الهدف الرئيسي (على سبيل المثال firefly)
+# Add document dependency to main target
     add_dependencies(firefly doc)
 endif()
