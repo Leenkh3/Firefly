@@ -174,10 +174,12 @@ if(NOT NetCDF_FOUND)
     # NetCDF Library Path
     set(NETCDF_LIB "${PROJECT_BINARY_DIR}/netcdf-install/lib/libnetcdf.so")
     set(NETCDF_INCLUDE_DIR "${PROJECT_BINARY_DIR}/netcdf-install/include")
+    set(NETCDF_DIR "${PROJECT_BINARY_DIR}/netcdf-install")
 else()
     message(STATUS "NetCDF found.")
     set(NETCDF_LIB "${CMAKE_PREFIX_PATH}/netcdf-install/lib/libnetcdf.so")
     set(NETCDF_INCLUDE_DIRS "${CMAKE_PREFIX_PATH}/netcdf-install/include")
+    set(NETCDF_DIR "${CMAKE_PREFIX_PATH}/netcdf-install")
 endif()
 
 
@@ -214,7 +216,7 @@ if(NOT Seacas_FOUND)
         -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}
 
         -DCMAKE_INSTALL_PREFIX=${PROJECT_BINARY_DIR}/exodus-install
-        -DNetCDF_DIR=${NETCDF_INCLUDE_DIRS}/..
+        -DNetCDF_DIR=${NETCDF_INCLUDE_DIRS}
         -Dfmt_DIR=${PROJECT_BINARY_DIR}/fmt-install/lib/cmake/fmt
 #        -DTPL_ENABLE_fmt=ON
 #        -DTPL_fmt_INCLUDE_DIRS=${PROJECT_BINARY_DIR}/fmt-install/include
