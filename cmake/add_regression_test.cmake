@@ -4,7 +4,11 @@
 # \brief     Function used to add a regression test to the ctest test suite
 #
 ################################################################################
-
+# add soft link for the regression test runner script
+function(softlink target link_name)
+  set(LN_COMMAND "ln -sf ${target} ${link_name}")
+  exec_program(${LN_COMMAND} OUTPUT_VARIABLE ln_output RETURN_VALUE ln_retval)
+endfunction()
 # ##############################################################################
 # Function used to add a regression test to the ctest test suite
 # add_regression_test( <test_name> <executable>
@@ -77,6 +81,18 @@ function(ADD_REGRESSION_TEST test_name executable)
 
   set(EXECUTABLE "${CMAKE_BINARY_DIR}/${executable}")
 
+
+  # this is for linking argument files to the build
+  set(reqfiles)
+  foreach(file IN LISTS ARG_INPUTFILES ARG_BASELINES) # create list of files required
+    list(APPEND reqfiles "${CMAKE_CURRENT_SOURCE_DIR}/${file}")
+  endforeach()
+  foreach(target ${reqfiles}) # softlink files required
+    softlink( "${target}" "${workdir}" )
+  endforeach()
+
+
+
   # Add the test. See test_runner.cmake for documentation of the arguments.
   add_test(NAME ${test_name}
            COMMAND ${CMAKE_COMMAND}
@@ -111,5 +127,7 @@ function(ADD_REGRESSION_TEST test_name executable)
   # TEST_LABELS is a cmake list and passing in lists of lists does not work as
   # expected.
   set_property(TEST ${test_name} PROPERTY LABELS ${TEST_LABELS})
+
+
 
 endfunction()
