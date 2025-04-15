@@ -147,27 +147,31 @@ add_regression_test(test_cg_fail_regexp ConjugateGradientSolver
 
 find_package(MPI)
 
-ExternalProject_Add(netcdf
-    GIT_REPOSITORY https://github.com/Unidata/netcdf-c.git
-    GIT_TAG main
-    CMAKE_ARGS -DCMAKE_C_COMPILER=${CMAKE_C_COMPILER}
-               -DENABLE_NETCDF_4=on
-               -DBUILD_SHARED_LIBS=on
-               -DENABLE_EXAMPLES=off
-               -DENABLE_FSYNC=off
-               -DENABLE_DAP=off
-               -DENABLE_TESTS=off
-               -DENABLE_CONVERSION_WARNINGS=off
-               -DENABLE_DAP_REMOTE_TESTS=off
-               -DENABLE_EXTREME_NUMBERS=off
-               -DENABLE_PARALLEL4=on
-               -DENABLE_PARALLEL_TESTS=off
-               -DENABLE_BASH_SCRIPT_TESTING=off
-               -DENABLE_V2_API=off
-               -DNETCDF_ENABLE_HDF5=off
-               -DCMAKE_INSTALL_PREFIX=${PROJECT_BINARY_DIR}/netcdf-install
-)
-
+<<<<<<< HEAD
+set(CMAKE_PREFIX_PATH "/usr/local")
+find_package(NetCDF)
+if(NOT NetCDF_FOUND)
+    message(STATUS "NetCDF NOT found.")
+    ExternalProject_Add(netcdf
+        GIT_REPOSITORY https://github.com/Unidata/netcdf-c.git
+        GIT_TAG main
+        CMAKE_ARGS -DCMAKE_C_COMPILER=${CMAKE_C_COMPILER}
+                -DENABLE_NETCDF_4=on
+                -DBUILD_SHARED_LIBS=on
+                -DENABLE_EXAMPLES=off
+                -DENABLE_FSYNC=off
+                -DENABLE_DAP=off
+                -DENABLE_TESTS=off
+                -DENABLE_CONVERSION_WARNINGS=off
+                -DENABLE_DAP_REMOTE_TESTS=off
+                -DENABLE_EXTREME_NUMBERS=off
+                -DENABLE_PARALLEL4=on
+                -DENABLE_PARALLEL_TESTS=off
+                -DENABLE_BASH_SCRIPT_TESTING=off
+                -DENABLE_V2_API=off
+                -DNETCDF_ENABLE_HDF5=off
+                -DCMAKE_INSTALL_PREFIX=${PROJECT_BINARY_DIR}/netcdf-install
+    )
     # NetCDF Library Path
     set(NETCDF_LIB "${PROJECT_BINARY_DIR}/netcdf-install/lib/libnetcdf.so")
     set(NETCDF_INCLUDE_DIR "${PROJECT_BINARY_DIR}/netcdf-install/include")
@@ -177,19 +181,114 @@ else()
     set(NETCDF_INCLUDE_DIRS "${CMAKE_PREFIX_PATH}/netcdf-install/include")
 endif()
 
+find_package(Seacas)
+if(NOT Seacas_FOUND)
+    message(STATUS "Seacas NOT found.")
+    # Install Exodus using the official Sandia Labs SEACAS repository
+    ExternalProject_Add(exodus
+        GIT_REPOSITORY https://github.com/sandialabs/seacas.git
+        GIT_TAG master
+        DEPENDS netcdf  # Ensure NetCDF is built before Exodus
+        CMAKE_ARGS -DCMAKE_C_COMPILER=${CMAKE_C_COMPILER}
+                -DNetCDF_DIR=${PROJECT_BINARY_DIR}/netcdf-install
+                -DBUILD_SHARED_LIBS=on
+                -DCMAKE_INSTALL_PREFIX=${PROJECT_BINARY_DIR}/exodus-install
+    )
+    # Exodus Library Path
+    set(EXODUS_LIB "${PROJECT_BINARY_DIR}/exodus-install/lib/libexodus.so")
+else()
+    message(STATUS "Seacas found.")
+    set(EXODUS_LIB "${CMAKE_PREFIX_PATH}/exodus-install/lib/libexodus.so")
+endif()
+
+include_directories(${Seacas_})
 # Install Exodus using the official Sandia Labs SEACAS repository
+
+# fmt is required because SEACAS (Exodus) depends on it.
+# We build it locally to ensure compatibility with NetCDF and SEAC
+
+# === Add External fmt build ===
+ExternalProject_Add(fmt   
+  GIT_REPOSITORY https://github.com/fmtlib/fmt.git
+  GIT_TAG 10.1.1
+  CMAKE_ARGS
+    -DCMAKE_INSTALL_PREFIX=${PROJECT_BINARY_DIR}/fmt-install
+    -DFMT_DOC=OFF
+    -DFMT_TEST=OFF
+    -DBUILD_SHARED_LIBS=OFF
+    -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+    -DFMT_INSTALL=ON
+)
+
+set(fmt_DIR "${PROJECT_BINARY_DIR}/fmt-install/lib/cmake/fmt")
+
 ExternalProject_Add(exodus
     GIT_REPOSITORY https://github.com/sandialabs/seacas.git
     GIT_TAG master
-    DEPENDS netcdf  # Ensure NetCDF is built before Exodus
-    CMAKE_ARGS -DCMAKE_C_COMPILER=${CMAKE_C_COMPILER}
-               -DNetCDF_DIR=${PROJECT_BINARY_DIR}/netcdf-install
-               -DBUILD_SHARED_LIBS=on
-               -DCMAKE_INSTALL_PREFIX=${PROJECT_BINARY_DIR}/exodus-install
+    DEPENDS fmt netcdf
+    CMAKE_ARGS
+        -DCMAKE_C_COMPILER=${CMAKE_C_COMPILER}
+        -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}
+
+        -DCMAKE_INSTALL_PREFIX=${PROJECT_BINARY_DIR}/exodus-install
+        -DNetCDF_DIR=${PROJECT_BINARY_DIR}/netcdf-install
+        -Dfmt_DIR=${PROJECT_BINARY_DIR}/fmt-install/lib/cmake/fmt
+  #      -DTPL_ENABLE_fmt=ON
+ #       -DTPL_fmt_INCLUDE_DIRS=${PROJECT_BINARY_DIR}/fmt-install/include
+#        -DTPL_fmt_LIBRARIES=${PROJECT_BINARY_DIR}/fmt-install/lib64/libfmt.a
+        -DSeacas_ENABLE_SEACAS=ON
+        -DSeacas_ENABLE_SEACASExodus=ON
+        -DSeacas_ENABLE_SEACASIoss=ON
+        -DSeacas_ENABLE_SEACASNemesis=ON
 )
 
 # Exodus Library Path
 set(EXODUS_LIB "${PROJECT_BINARY_DIR}/exodus-install/lib/libexodus.so")
+
+if(NOT "${CMAKE_C_FLAGS}" MATCHES "std=c99")
+   if(NOT CMAKE_C_COMPILER_ID STREQUAL "Cray")
+     if(NOT (WIN32 AND CMAKE_C_COMPILER_ID STREQUAL "Intel") AND
+        NOT CMAKE_C_COMPILER_ID STREQUAL "PGI")
+        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c99")
+     else()
+        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /Qstd=c99")
+     endif()
+   endif()
+endif()
+
+file(GLOB numdiff_src src/ndiff/src/*.c)
+
+include_directories(src/ndiff/src)
+add_executable(numdiff ${numdiff_src})
+add_library(numdiff_lib STATIC ${numdiff_src})
+add_library(numdiff-Executer STATIC src/ndiff/src/ndiff-executer.cpp)
+set(OUTPUT_NAME maddiff CACHE STRING "Output name for executable")
+set_target_properties(numdiff PROPERTIES OUTPUT_NAME ${OUTPUT_NAME})
+if(UNIX)
+   target_link_libraries(numdiff m)
+endif()
+
+install(TARGETS numdiff
+   RUNTIME
+   DESTINATION bin
+   COMPONENT Runtime
+  )
+
+# add test executable for ndiff
+add_executable(numdiff_test src/ndiff/test_ndiff.cpp)
+target_link_libraries(numdiff_test PRIVATE m numdiff-Executer)
+
+# Add a test, running the numdiff_test executable, non-zero exit code will fail the test
+add_regression_test( numdifftest_pass numdiff_test
+                     INPUTFILES src/ndiff/diag1.txt src/ndiff/diag3.txt src/ndiff/config.cfg
+                     ARGS ${CMAKE_BINARY_DIR}/maddiff diag1.txt diag3.txt config.cfg)
+
+# Add a test, running the numdiff_test executable, non-zero exit code will fail the test
+add_regression_test( numdifftest_fail numdiff_test
+                     INPUTFILES src/ndiff/diag1.txt src/ndiff/diag2.txt src/ndiff/config.cfg
+                     ARGS ${CMAKE_BINARY_DIR}/maddiff diag1.txt diag2.txt config.cfg
+                     EXTRA_FAIL_REGEXP "Files differ"
+                     EXTRA_PROPERTIES "WILL_FAIL;1")
 
 # Configure building the gmsh mesh reader
 # add_library(GmshMeshReader GmshMeshReader.cpp GmshMeshReader.hpp)
@@ -203,5 +302,6 @@ set(EXODUS_LIB "${PROJECT_BINARY_DIR}/exodus-install/lib/libexodus.so")
 #enable_testing()
 # Add a test, running the chillax executable, non-zero exit code will fail the test
 #add_test(NAME firefly COMMAND firefly)
+>>>>>>> origin/main
 
 message("Install path: ${PROJECT_BINARY_DIR}")
