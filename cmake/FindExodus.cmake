@@ -9,6 +9,8 @@
 find_path(Exodus_INCLUDE_DIR
     NAMES exodusII.h
     PATHS
+        ${NETCDF_INSTALL_DIR}
+        $ENV{NETCDF_DIR}
         ${EXODUS_ROOT}/include
         /usr/include
         /usr/local/include
@@ -19,6 +21,8 @@ find_path(Exodus_INCLUDE_DIR
 find_library(Exodus_LIBRARY
     NAMES exodus exoIIv2c
     PATHS
+        ${NETCDF_INSTALL_DIR}
+        $ENV{NETCDF_DIR}
         ${EXODUS_ROOT}/lib
         /usr/lib
         /usr/local/lib
