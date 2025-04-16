@@ -10,25 +10,46 @@ env:
   BUILD_TYPE: Release
 
 jobs:
-  build:
-    runs-on: ${{ matrix.os }}
-    name: ${{ matrix.os }} / ${{ matrix.build_type }} / ${{ matrix.cpp_compiler }}
+  build-linux:
+    runs-on: ubuntu-latest
+    container: 
+      image: docker.io/kzoli39/custom-ubuntu-firefly:latest
+      volumes: 
+        - ${{ github.workspace }}:/firefly
+
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, macos-latest]
         build_type: [Release, Debug]
         cpp_compiler: [g++, clang++]
-        include:
-          - os: macos-latest
-            cpp_compiler: clang++
-          - os: ubuntu-latest
-            cpp_compiler: g++
-          - os: ubuntu-latest
-            cpp_compiler: clang++
-        exclude:
-          - os: macos-latest
-            cpp_compiler: g++
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Configure CMake
+      run: >
+        cmake -B /firefly/build
+        -DCMAKE_CXX_COMPILER=${{ matrix.cpp_compiler }}
+        -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
+        -S /firefly
+
+    - name: Build
+      run: cmake --build /firefly/build --config ${{ matrix.build_type }}
+
+    - name: Test
+      working-directory: /firefly/build
+      run: |
+        ctest --build-config ${{ matrix.build_type }}
+        ctest -R test_example_pass_regexp -V
+
+  build-macos:
+    runs-on: macos-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        build_type: [Release, Debug]
+        cpp_compiler: [clang++]
 
     steps:
     - uses: actions/checkout@v4
@@ -39,12 +60,7 @@ jobs:
       run: |
         echo "build-output-dir=${{ github.workspace }}/build" >> "$GITHUB_OUTPUT"
 
-    - name: Install MPI (Ubuntu)
-      if: runner.os == 'Linux'
-      run: sudo apt-get update && sudo apt-get install -y mpich
-  
     - name: Install MPI (macOS)
-      if: runner.os == 'macOS'
       run: brew install mpich gcc
 
     - name: Set Fortran Compiler
