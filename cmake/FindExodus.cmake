@@ -8,6 +8,8 @@ if (SEACASExodus_FOUND)
 
   find_path(exodus_INCLUDE_DIR NAMES exodusII.h PATHS "${SEACASExodus_INCLUDE_DIRS}")
   mark_as_advanced(exodus_INCLUDE_DIR)
+else()
+  message(STATUS "Exodus package NOT found.")
 endif()
 
 if (NOT TARGET SEACASExodus::exodus)
