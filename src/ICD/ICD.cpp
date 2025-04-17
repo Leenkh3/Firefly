@@ -94,7 +94,7 @@ vector<double> backwardSolve(const vector<vector<double> >& L, const vector<doub
 }
 
 // Conjugate Gradient method with preconditioning using ICD
-void conjugateGradient(const vector<vector<double> >& A, const vector<double>& b, vector<double>& x, const vector<vector<double> >& L) {
+void conjugateGradientwithICD(const vector<vector<double> >& A, const vector<double>& b, vector<double>& x, const vector<vector<double> >& L) {
     int N = A.size();
     vector<double> r = b;  // Initial residual
     vector<double> p = r;  // Initial search direction
