@@ -1,6 +1,8 @@
 #ifndef AMGCL_FIREFLY
 #define AMGCL_FIREFLY
 
+#include <SparseCSR.h>
+
 typedef std::tuple<int, double> SolverResult;
 
 enum AmgclPrecondType
@@ -27,6 +29,33 @@ SolverResult solveAMGCL(
     const std::vector<double> &values,
     const std::vector<double> &rhs,
     std::vector<double> &x
+);
+
+
+/*
+Input:
+- preconditioner: AmgclPrecondType enum value specifying preconditioner
+- A: SparseCSR matrix
+- x: unknown x vector
+- b: RHS b vector
+Returns: tuple of number of iterations used and the error.
+*/
+SolverResult solveAMGCL(
+    const AmgclPrecondType &preconditioner,
+    SparseCSR A,
+    std::vector<double> x,
+    std::vector<double> b
+);
+
+/*
+Input:
+- preconditioner: AmgclPrecondType enum value specifying preconditioner
+- laplaceResults: a tuple of A, x and b, taken from the output of laplacian
+Returns: tuple of number of iterations used and the error.
+*/
+SolverResult solveAMGCL(
+    const AmgclPrecondType &preconditioner,
+    std::tuple<SparseCSR, std::vector<double>, std::vector<double>> laplaceResults
 );
 
 #endif

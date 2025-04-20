@@ -61,9 +61,18 @@ SolverResult solveAMGCL(
 {
     int n = row_endpoints.size() - 1;
 
-
     if (x.size() != n)
         x.assign(n, 0);
+    
+    // std::cerr << "x length: " << x.size() << std::endl;
+    // std::cerr << "rhs length: " << rhs.size() << std::endl;
+    // std::cerr << "values length: " << values.size() << std::endl;
+    // std::cerr << "row_endpoints length: " << row_endpoints.size() << std::endl;
+    // std::cerr << "col_indices length: " << col_indices.size() << std::endl;
+    // std::cerr << "row_endpoints first: " << row_endpoints[0] << " row_endpoints last: "
+    //     << row_endpoints[row_endpoints.size() - 1] << std::endl;
+    // std::cerr << "col_indices first: " << col_indices[0] << " col_indices last: "
+    //     << col_indices[col_indices.size() - 1] << std::endl;
 
     // Define the solver type
     if (preconditioner == AmgclPrecond_GaussSeidel)
@@ -85,4 +94,38 @@ SolverResult solveAMGCL(
     {
         throw -1;
     }
+}
+
+SolverResult solveAMGCL(
+    const AmgclPrecondType &preconditioner,
+    SparseCSR A,
+    std::vector<double> x,
+    std::vector<double> b
+)
+{
+    auto rptr = A.getRPtr();
+    auto cols = A.getCols();
+    
+    // shift indices by 1 - this is what AMGCL expects
+    for (auto& n : rptr) --n;
+    for (auto& n : cols) --n;
+
+    int iters; double error;
+    return solveAMGCL(
+        preconditioner,
+        rptr,
+        cols,
+        A.getVals(),
+        b,
+        x
+    );
+}
+
+SolverResult solveAMGCL(
+    const AmgclPrecondType &preconditioner,
+    std::tuple<SparseCSR, std::vector<double>, std::vector<double>> laplaceResults
+)
+{
+    auto [A, x, b] = laplaceResults;
+    return solveAMGCL(preconditioner, A, x, b);
 }

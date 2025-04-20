@@ -42,9 +42,6 @@ else()
     include_directories(${EIGEN_INCLUDE_DIR})  
 endif()
 
-# Add source subdirectory
-add_subdirectory(${CMAKE_SOURCE_DIR}/src)
-
 # adding matrix to the build
 add_library(MatrixLib
     src/matrix/Dense.cpp
@@ -81,6 +78,9 @@ target_link_libraries(test_cholesky_CRS PRIVATE MatrixLib)
 # Configure building the CG solver executable
 add_executable(ConjugateGradientSolver src/CG/ConjugateGradientSolver.cpp)
 target_link_libraries(ConjugateGradientSolver PRIVATE MatrixLib)
+
+# Add source subdirectory
+add_subdirectory(${CMAKE_SOURCE_DIR}/src)
 
 add_executable(firefly firefly.cpp)  # Configure cmake's testing system
 
