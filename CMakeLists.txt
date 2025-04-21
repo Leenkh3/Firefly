@@ -62,46 +62,58 @@ add_subdirectory(${CMAKE_SOURCE_DIR}/src)
 
 #[===[ LUA ]===]
 #[[ BEGIN ]]
-# Add Lua as an external project dependency
-ExternalProject_Add(lua
-    URL http://www.lua.org/ftp/lua-5.4.4.tar.gz
-    URL_HASH SHA256=164c7849653b80ae67bec4b7473b884bf5cc8d2dca05653475ec2ed27b9ebf61
-    DOWNLOAD_EXTRACT_TIMESTAMP TRUE
-    CONFIGURE_COMMAND ""    # No configure step
-    BUILD_IN_SOURCE 1
-    BUILD_COMMAND ${CMAKE_COMMAND} -E echo "Building Lua for ${CMAKE_SYSTEM_NAME}"
-    # More comprehensive platform detection
-    COMMAND ${CMAKE_COMMAND} -E env
-      ${CMAKE_COMMAND} -P ${CMAKE_SOURCE_DIR}/cmake/BuildLua.cmake
-    INSTALL_COMMAND make INSTALL_TOP=${PROJECT_BINARY_DIR}/lua-install install
-    COMMAND ${CMAKE_COMMAND} -E copy_directory ${PROJECT_BINARY_DIR}/lua-install/include ${CMAKE_SOURCE_DIR}/src/user_input/LUA/include
-    COMMAND ${CMAKE_COMMAND} -E copy_directory ${PROJECT_BINARY_DIR}/lua-install/lib ${CMAKE_SOURCE_DIR}/src/user_input/LUA/lib
-)
+# First, try to find Lua on the system
+find_package(Lua QUIET)
 
-# 1. Create the directories
-file(MAKE_DIRECTORY "${CMAKE_SOURCE_DIR}/src/user_input/LUA/include")
-file(MAKE_DIRECTORY "${CMAKE_SOURCE_DIR}/src/user_input/LUA/lib")
+# Conditionally add Lua as external dependency only if not found
+if(NOT LUA_FOUND)
+  message(STATUS "System Lua not found. Building from source...")
+  
+  # Add Lua as an external project dependency
+  ExternalProject_Add(lua
+      URL http://www.lua.org/ftp/lua-5.4.4.tar.gz
+      URL_HASH SHA256=164c7849653b80ae67bec4b7473b884bf5cc8d2dca05653475ec2ed27b9ebf61
+      DOWNLOAD_EXTRACT_TIMESTAMP TRUE
+      CONFIGURE_COMMAND ""    # No configure step
+      BUILD_IN_SOURCE 1
+      BUILD_COMMAND ${CMAKE_COMMAND} -P ${CMAKE_SOURCE_DIR}/cmake/BuildLua.cmake
+      INSTALL_COMMAND make INSTALL_TOP=${PROJECT_BINARY_DIR}/lua-install install
+  )
+  
+  # Set variables for built Lua
+  set(LUA_INCLUDE_DIR "${PROJECT_BINARY_DIR}/lua-install/include")
+  set(LUA_LIBRARIES "${PROJECT_BINARY_DIR}/lua-install/lib/liblua.a")
+else()
+  message(STATUS "Using system Lua: ${LUA_LIBRARIES}")
+endif()
 
-# 2. Set the paths
-set(LUA_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/src/user_input/LUA/include")
-set(LUA_LIBRARIES "${CMAKE_SOURCE_DIR}/src/user_input/LUA/lib/liblua.a")
+# Make Lua headers available for include
+include_directories(${LUA_INCLUDE_DIR})
 
-# 3. Create an imported target for Lua
+# Create an imported target for Lua
 add_library(lua::lua STATIC IMPORTED)
 set_target_properties(lua::lua PROPERTIES
     IMPORTED_LOCATION "${LUA_LIBRARIES}"
     INTERFACE_INCLUDE_DIRECTORIES "${LUA_INCLUDE_DIR}"
 )
-add_dependencies(lua::lua lua)  # Make sure lua is built before using the target
+
+# Conditional dependencies on the ExternalProject target
+if(NOT LUA_FOUND)
+    add_dependencies(lua::lua lua)
+endif()
 
 # Now you can use the lua::lua target
 add_library(user_input STATIC src/user_input/user_input.c)
 target_include_directories(user_input PUBLIC ${CMAKE_SOURCE_DIR})
 target_link_libraries(user_input PRIVATE lua::lua)
-add_dependencies(user_input lua)
+
+# Conditional dependency for user_input
+if(NOT LUA_FOUND)
+    add_dependencies(user_input lua)
+endif()
+
 target_include_directories(user_input PRIVATE ${LUA_INCLUDE_DIR}) # This is now redundant but harmless
 target_link_libraries(user_input PRIVATE m) # 'm' for the math library
-
 
 #[[ END ]]
 #[===] LUA [===]
@@ -150,7 +162,7 @@ enable_testing()
 
 # Add the test directory conditionally
 if(FIREFLY_BUILD_TESTS)
-    add_subdirectory(test)
+    add_subdirectory(src/test)
 endif()
 
 add_executable(MatrixTests src/matrix/test_matrix.cpp)
