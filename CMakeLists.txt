@@ -69,6 +69,11 @@ find_package(Lua QUIET)
 if(NOT LUA_FOUND)
   message(STATUS "System Lua not found. Building from source...")
   
+  # Create the directories during configuration time
+  file(MAKE_DIRECTORY "${PROJECT_BINARY_DIR}/lua-install")
+  file(MAKE_DIRECTORY "${PROJECT_BINARY_DIR}/lua-install/include")
+  file(MAKE_DIRECTORY "${PROJECT_BINARY_DIR}/lua-install/lib")
+  
   # Add Lua as an external project dependency
   ExternalProject_Add(lua
       URL http://www.lua.org/ftp/lua-5.4.4.tar.gz
@@ -78,13 +83,11 @@ if(NOT LUA_FOUND)
       BUILD_IN_SOURCE 1
       BUILD_COMMAND ${CMAKE_COMMAND} -P ${CMAKE_SOURCE_DIR}/cmake/BuildLua.cmake
       INSTALL_COMMAND make INSTALL_TOP=${PROJECT_BINARY_DIR}/lua-install install
-      COMMAND ${CMAKE_COMMAND} -E copy_directory ${PROJECT_BINARY_DIR}/lua-install/include ${CMAKE_SOURCE_DIR}/src/user_input/LUA/include
-      COMMAND ${CMAKE_COMMAND} -E copy_directory ${PROJECT_BINARY_DIR}/lua-install/lib ${CMAKE_SOURCE_DIR}/src/user_input/LUA/lib
   )
   
   # Set variables for built Lua
-  set(LUA_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/src/user_input/LUA/include")
-  set(LUA_LIBRARIES "${CMAKE_SOURCE_DIR}/src/user_input/LUA/lib/liblua.a")
+  set(LUA_INCLUDE_DIR "${PROJECT_BINARY_DIR}/lua-install/include")
+  set(LUA_LIBRARIES "${PROJECT_BINARY_DIR}/lua-install/lib/liblua.a")
 else()
   message(STATUS "Using system Lua: ${LUA_LIBRARIES}")
 endif()
@@ -197,6 +200,30 @@ add_test(NAME CGMatrixTests COMMAND CGMatrixTests)
 # Add tests for the Cholesky
 add_test(NAME cholesky_dense COMMAND cholesky_test)
 add_test(NAME cholesky_crs COMMAND test_cholesky_CRS)
+
+# Define the source and destination paths for the Resources directory symlink
+set(RESOURCES_DIR "${CMAKE_SOURCE_DIR}/Resources")
+set(SYMLINK_DIR "${CMAKE_BINARY_DIR}/Resources")
+
+# Check if the symlink or directory already exists
+if(NOT EXISTS "${SYMLINK_DIR}")
+  # Create a symbolic link in the build folder to the Resources directory in the src folder
+  execute_process(
+    COMMAND ${CMAKE_COMMAND} -E create_symlink "${RESOURCES_DIR}" "${SYMLINK_DIR}"
+    RESULT_VARIABLE ügy
+  )
+  if(result)
+    message(WARNING "Failed to create symlink to resources directory: ${result}")
+  else()
+    message(STATUS "Created symlink to Resources at: ${SYMLINK_DIR}")
+  endif()
+endif()
+
+# Add ASC reader file
+add_library(asc src/asc/asc.cpp)
+add_executable(AscTest src/asc/asc_test.cpp)
+target_link_libraries(AscTest PRIVATE asc)
+add_test(NAME AscTest COMMAND AscTest)
 
 # Include function used to add regression tests
 include(add_regression_test)
@@ -337,8 +364,6 @@ add_regression_test( numdifftest_fail numdiff_test
 # add_library(GmshMeshReader GmshMeshReader.cpp GmshMeshReader.hpp)
 
 # Configure building the main executable
-#add_executable(firefly firefly.cpp)
-
 # Configure the link command
 # target_link_libraries(firefly PRIVATE GmshMeshReader)
 # Configure cmake's testing system
