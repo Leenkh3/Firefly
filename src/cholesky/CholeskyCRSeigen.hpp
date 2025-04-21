@@ -8,7 +8,12 @@
 #include <array>
 #include <Eigen/Sparse>
 
-// Cross product of two 3D vectors
+// Dot product
+inline double dot(const std::array<double, 3>& a, const std::array<double, 3>& b) {
+  return a[0]*b[0] + a[1]*b[1] + a[2]*b[2];
+}
+
+// Cross product
 inline std::array<double, 3> cross(const std::array<double, 3>& a, const std::array<double, 3>& b) {
   return {
     a[1]*b[2] - a[2]*b[1],
@@ -17,18 +22,23 @@ inline std::array<double, 3> cross(const std::array<double, 3>& a, const std::ar
   };
 }
 
-// Dot product of two 3D vectors
-inline double dot(const std::array<double, 3>& a, const std::array<double, 3>& b) {
-  return a[0]*b[0] + a[1]*b[1] + a[2]*b[2];
-}
-
-// Scalar triple product: a · (b × c)
+// Scalar triple product
 inline double triple(const std::array<double, 3>& a,
                      const std::array<double, 3>& b,
                      const std::array<double, 3>& c) {
   return dot(a, cross(b, c));
 }
 
+// Cross product divided by scalar
+inline std::array<double, 3> crossdiv(const std::array<double, 3>& a,
+                                      const std::array<double, 3>& b,
+                                      double j) {
+  return {
+    (a[1]*b[2] - a[2]*b[1]) / j,
+    (a[2]*b[0] - a[0]*b[2]) / j,
+    (a[0]*b[1] - a[1]*b[0]) / j
+  };
+}
 
 
 // ------
