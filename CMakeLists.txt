@@ -57,6 +57,8 @@ add_library(MatrixLib
     src/cholesky/cholesky.hpp
     src/cholesky/Cholesky_CRS.cpp
     src/cholesky/cholesky_CRS.hpp
+    src/cholesky/CholeskyCRSeigen.hpp
+
 )
 
 # Configure a CSR matrix class
@@ -78,6 +80,10 @@ target_link_libraries(cholesky_test PRIVATE MatrixLib)
 add_executable(test_cholesky_CRS src/cholesky/test_cholesky_CRS.cpp)
 
 target_link_libraries(test_cholesky_CRS PRIVATE MatrixLib)
+
+add_executable(testCholeskyCRSeigen src/cholesky/testCholeskyCRSeigen.cpp)
+
+target_link_libraries(testCholeskyCRSeigen PRIVATE MatrixLib)
 
 
 
