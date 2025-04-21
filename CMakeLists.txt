@@ -69,6 +69,11 @@ find_package(Lua QUIET)
 if(NOT LUA_FOUND)
   message(STATUS "System Lua not found. Building from source...")
   
+  # Create the directories during configuration time
+  file(MAKE_DIRECTORY "${PROJECT_BINARY_DIR}/lua-install")
+  file(MAKE_DIRECTORY "${PROJECT_BINARY_DIR}/lua-install/include")
+  file(MAKE_DIRECTORY "${PROJECT_BINARY_DIR}/lua-install/lib")
+  
   # Add Lua as an external project dependency
   ExternalProject_Add(lua
       URL http://www.lua.org/ftp/lua-5.4.4.tar.gz
