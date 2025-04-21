@@ -59,6 +59,9 @@ add_library(MatrixLib
     src/cholesky/cholesky.hpp
     src/cholesky/Cholesky_CRS.cpp
     src/cholesky/cholesky_CRS.hpp
+    src/cholesky/CholeskyCRSeigen.cpp
+    src/laplacian/Laplacian.cpp
+
     src/cholesky/CholeskyCRSeigen.hpp
 
 )
@@ -80,7 +83,6 @@ target_link_libraries(cholesky_test PRIVATE MatrixLib)
 add_executable(test_cholesky_CRS src/cholesky/test_cholesky_CRS.cpp)
 target_link_libraries(test_cholesky_CRS PRIVATE MatrixLib)
 
-<<<<<<< HEAD
 add_executable(testCholeskyCRSeigen src/cholesky/testCholeskyCRSeigen.cpp)
 
 target_link_libraries(testCholeskyCRSeigen PRIVATE MatrixLib)
@@ -114,6 +116,7 @@ add_dependencies(MatrixTests eigen)
 add_dependencies(test_cholesky_CRS eigen)
 add_dependencies(cholesky_test eigen)
 
+add_dependencies(testCholeskyCRSeigen eigen)
 # Add a test, running the chillax executable, non-zero exit code will fail the test
 add_test(NAME firefly COMMAND firefly)
 
@@ -130,6 +133,7 @@ add_test(NAME CGMatrixTests COMMAND CGMatrixTests)
 # Add tests for the Cholesky
 add_test(NAME cholesky_dense COMMAND cholesky_test)
 add_test(NAME cholesky_crs COMMAND test_cholesky_CRS)
+add_test(NAME testCholeskyCRSeigen COMMAND testCholeskyCRSeigen)
 
 # Define the source and destination paths for the Resources directory symlink
 set(RESOURCES_DIR "${CMAKE_SOURCE_DIR}/Resources")
