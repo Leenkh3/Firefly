@@ -10,6 +10,17 @@ std::array<double, 3> crossdiv(const std::array<double, 3>& a, const std::array<
     (a[0]*b[1] - a[1]*b[0]) / j
   };
 }
+double dot(const std::array<double, 3>& a, const std::array<double, 3>& b) {
+  return a[0]*b[0] + a[1]*b[1] + a[2]*b[2];
+}
+
+double triple(const std::array<double, 3>& a,
+              const std::array<double, 3>& b,
+              const std::array<double, 3>& c) {
+  return dot(a, cross(b, c));
+}
+
+
 
 // Generate matrix A using Eigen::SparseMatrix and triplets
 Eigen::SparseMatrix<double>
