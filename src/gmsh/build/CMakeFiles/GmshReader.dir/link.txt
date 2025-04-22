@@ -1,1 +1,0 @@
-/usr/bin/cc CMakeFiles/GmshReader.dir/gmsh_reader.c.o -o GmshReader

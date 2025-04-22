@@ -1,1 +1,0 @@
-cmd='/cvmfs/software.eessi.io/versions/2023.06/software/linux/x86_64/generic/software/CMake/3.27.6-GCCcore-13.2.0/bin/cmake;-DCMAKE_INSTALL_PREFIX=/work/students/hpc-bvrhib/firefly/fmt-test/build/fmt-install;-DFMT_DOC=OFF;-DFMT_TEST=OFF;-DBUILD_SHARED_LIBS=OFF;-DFMT_INSTALL=ON;-DCMAKE_POSITION_INDEPENDENT_CODE=ON;-GNinja;-S;<SOURCE_DIR><SOURCE_SUBDIR>;-B;<BINARY_DIR>'
