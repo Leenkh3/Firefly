@@ -1,3 +1,0 @@
-RunGmshReader 1 0.00216698
-CompareOutput 1 0.00876017
----
