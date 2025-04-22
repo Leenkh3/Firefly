@@ -1,59 +1,91 @@
+#include "ICD.h"
 #include <iostream>
 #include <vector>
 #include <cmath>
-#include <cstdlib>  // Added for exit() function
+#include <stdexcept>
 
-using namespace std;
-
-// Dot product of two vectors
-double dotProduct(const vector<double>& a, const vector<double>& b) {
-    double result = 0.0;
-    for (size_t i = 0; i < a.size(); i++) {
-        result += a[i] * b[i];
-    }
-    return result;
-}
-
-// Vector addition: a = a + alpha * b
-void vectorAdd(vector<double>& a, const vector<double>& b, double alpha) {
-    for (size_t i = 0; i < a.size(); i++) {
-        a[i] += alpha * b[i];
-    }
-}
-
-// Vector subtraction: a = a - alpha * b
-void vectorSub(vector<double>& a, const vector<double>& b, double alpha) {
-    for (size_t i = 0; i < a.size(); i++) {
-        a[i] -= alpha * b[i];
-    }
-}
-
-// Function to compute matrix-vector product
-vector<double> matVecMult(const vector<vector<double> >& A, const vector<double>& v) {
-    int N = A.size();
-    vector<double> result(N, 0.0);
-    for (int i = 0; i < N; i++) {
-        for (int j = 0; j < N; j++) {
-            result[i] += A[i][j] * v[j];
+// ===== Helper Functions in Anonymous Namespace =====
+namespace {
+    double dotProduct(const std::vector<double>& a, const std::vector<double>& b) {
+        if (a.size() != b.size()) {
+            throw std::runtime_error("dotProduct: Vector dimensions do not match.");
         }
+        double result = 0.0;
+        for (size_t i = 0; i < a.size(); i++) {
+            result += a[i] * b[i];
+        }
+        return result;
     }
-    return result;
+
+    std::vector<double> matVecMult(const std::vector<std::vector<double>>& A, const std::vector<double>& v) {
+        if (A.empty() || A[0].size() != v.size()) {
+            throw std::runtime_error("matVecMult: Matrix/vector dimensions incompatible.");
+        }
+        std::vector<double> result(A.size(), 0.0);
+        for (size_t i = 0; i < A.size(); i++) {
+            for (size_t j = 0; j < A[i].size(); j++) {
+                result[i] += A[i][j] * v[j];
+            }
+        }
+        return result;
+    }
+
+    // Forward substitution for solving L * y = b
+    std::vector<double> forwardSolve(const std::vector<std::vector<double>>& L, const std::vector<double>& b) {
+        int N = L.size();
+        std::vector<double> y(N, 0.0);
+        for (int i = 0; i < N; i++) {
+            double sum = 0.0;
+            for (int j = 0; j < i; j++) {
+                sum += L[i][j] * y[j];
+            }
+            y[i] = (b[i] - sum) / L[i][i];
+        }
+        return y;
+    }
+
+    // Backward substitution for solving L^T * x = y
+    std::vector<double> backwardSolve(const std::vector<std::vector<double>>& L, const std::vector<double>& y) {
+        int N = L.size();
+        std::vector<double> x(N, 0.0);
+        for (int i = N - 1; i >= 0; i--) {
+            double sum = 0.0;
+            for (int j = i + 1; j < N; j++) {
+                sum += L[j][i] * x[j];
+            }
+            x[i] = (y[i] - sum) / L[i][i];
+        }
+        return x;
+    }
 }
 
-// Incomplete Cholesky decomposition function
-vector<vector<double> > incompleteCholesky(const vector<vector<double> >& A) {
-    int N = A.size();
-    vector<vector<double> > L(N, vector<double>(N, 0.0));
+// ===== ICD Implementation =====
+std::vector<std::vector<double>> incompleteCholesky(const std::vector<std::vector<double>>& A) {
+    if (A.empty() || A.size() != A[0].size()) {
+        throw std::runtime_error("incompleteCholesky: Matrix must be square.");
+    }
+
+    const int N = A.size();
+    std::vector<std::vector<double>> L(N, std::vector<double>(N, 0.0));
 
     for (int i = 0; i < N; i++) {
         for (int j = 0; j <= i; j++) {
-            if (i == j) {
+            // Skip zeros to preserve sparsity
+            if (A[i][j] == 0.0) {
+                L[i][j] = 0.0;
+                continue;
+            }
+
+            if (i == j) {  // Diagonal elements
                 double sum = 0.0;
                 for (int k = 0; k < j; k++) {
                     sum += L[j][k] * L[j][k];
                 }
+                if (A[j][j] - sum <= 0.0) {
+                    throw std::runtime_error("incompleteCholesky: Matrix is not positive definite.");
+                }
                 L[j][j] = sqrt(A[j][j] - sum);
-            } else {
+            } else {  // Off-diagonal elements
                 double sum = 0.0;
                 for (int k = 0; k < j; k++) {
                     sum += L[i][k] * L[j][k];
@@ -65,78 +97,20 @@ vector<vector<double> > incompleteCholesky(const vector<vector<double> >& A) {
     return L;
 }
 
-// Forward substitution for solving L * y = b
-vector<double> forwardSolve(const vector<vector<double> >& L, const vector<double>& b) {
-    int N = L.size();
-    vector<double> y(N, 0.0);
-    for (int i = 0; i < N; i++) {
-        double sum = 0.0;
-        for (int j = 0; j < i; j++) {
-            sum += L[i][j] * y[j];
-        }
-        y[i] = (b[i] - sum) / L[i][i];
+ICD::ICD(const std::vector<std::vector<double>>& A) {
+    if (A.empty()) {
+        throw std::runtime_error("ICD: Input matrix is empty.");
     }
-    return y;
+    L = incompleteCholesky(A);
 }
 
-// Backward substitution for solving L^T * x = y
-vector<double> backwardSolve(const vector<vector<double> >& L, const vector<double>& y) {
-    int N = L.size();
-    vector<double> x(N, 0.0);
-    for (int i = N - 1; i >= 0; i--) {
-        double sum = 0.0;
-        for (int j = i + 1; j < N; j++) {
-            sum += L[j][i] * x[j];
-        }
-        x[i] = (y[i] - sum) / L[i][i];
+std::vector<double> ICD::solve(const std::vector<double>& b) const {
+    if (b.size() != L.size()) {
+        throw std::runtime_error("ICD::solve: Vector size does not match matrix dimensions.");
     }
+
+    // Use the forward/backward substitution from anonymous namespace
+    std::vector<double> y = forwardSolve(L, b);
+    std::vector<double> x = backwardSolve(L, y);
     return x;
-}
-
-// Conjugate Gradient method with preconditioning using ICD
-void conjugateGradientwithICD(const vector<vector<double> >& A, const vector<double>& b, vector<double>& x, const vector<vector<double> >& L) {
-    int N = A.size();
-    vector<double> r = b;  // Initial residual
-    vector<double> p = r;  // Initial search direction
-
-    // Solve L * y = r to precondition the residual
-    vector<double> y = forwardSolve(L, r);
-
-    // Update r to be preconditioned residual
-    vector<double> r_preconditioned = y;
-
-    double rsold = dotProduct(r_preconditioned, r_preconditioned);
-
-    for (int i = 0; i < N; i++) {
-        // Matrix-vector multiplication A * p
-        vector<double> Ap = matVecMult(A, p);
-
-        // Compute alpha
-        double alpha = rsold / dotProduct(p, Ap);
-
-        // Update the solution
-        vectorAdd(x, p, alpha);
-
-        // Update the residual: r = r - alpha * A * p
-        vectorSub(r, Ap, alpha);
-
-        // Solve L * y = r to precondition the residual
-        y = forwardSolve(L, r);
-
-        // Update the preconditioned residual
-        r_preconditioned = y;
-        double rsnew = dotProduct(r_preconditioned, r_preconditioned);
-        if (sqrt(rsnew) < 1e-6)  // Convergence check
-            break;
-
-        // Compute beta
-        double beta = rsnew / rsold;
-
-        // Update the search direction
-        for (int i = 0; i < N; i++) {
-            p[i] = r_preconditioned[i] + beta * p[i];
-        }
-
-        rsold = rsnew;
-    }
 }
