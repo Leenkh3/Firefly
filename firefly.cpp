@@ -1,8 +1,7 @@
 #include <iostream>
 
-int main() {
+int main()
+{
     std::cout << "Firefly Project - Main Execution" << std::endl;
-   
     return 0;
 }
-
