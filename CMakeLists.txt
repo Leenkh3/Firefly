@@ -90,6 +90,7 @@ target_link_libraries(ConjugateGradientSolver PRIVATE MatrixLib)
 
 # Configure building the executable to test the ICD
 add_executable(test_ICD src/ICD/tests/test_ICD.cpp)
+target_include_directories(test_ICD PRIVATE ${PROJECT_SOURCE_DIR}/src/ICD)
 target_link_libraries(test_ICD PRIVATE MatrixLib)
 
 
