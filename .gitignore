@@ -1,72 +1,124 @@
-# Prerequisites
-*.d
+# =============================
+# General file ignores
+# =============================
 
-# Object files
+# Compiled object files and executables
 *.o
-*.ko
 *.obj
-*.elf
-
-# Linker output
-*.ilk
-*.map
-*.exp
-
-# Precompiled Headers
-*.gch
-*.pch
-
-# Libraries
-*.lib
-*.a
-*.la
-*.lo
-
-# Shared objects (inc. Windows DLLs)
-*.dll
 *.so
 *.so.*
+*.dll
 *.dylib
-
-# Executables
+*.a
+*.lib
+*.la
+*.lo
 *.exe
 *.out
 *.app
-*.i*86
-*.x86_64
 *.hex
+*.elf
 
-# Debug files
-*.dSYM/
-*.su
-*.idb
+# Linker and debug files
+*.ilk
+*.map
+*.exp
 *.pdb
-
-# Kernel Module Compile Results
+*.idb
 *.mod*
 *.cmd
+*.su
+
+# Precompiled headers
+*.gch
+*.pch
+
+# Temporary files and editor swaps
+*~
+*.sw?
+*.save
+*.bak
+*.tmp
+
+# Core dumps
+core
+
+# =============================
+# Build system (CMake, Ninja)
+# =============================
+
+# CMake artifacts
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+
+# Ninja artifacts
+*.ninja
+*.ninja_log
+*.ninja_deps
+
+# Any build directory (recursive)
+build/
+*/build/
+**/build/
+
+# Local/installed CMake distributions
+cmake-*/
+*.tar.gz
+*.tar.gz.*
+
+# =============================
+# Project-specific ignores
+# =============================
+
+# Eigen source is imported, don’t ignore it
+
+# fmt-test: ignore build output
+fmt-test/build/
+
+# Testing folder outputs
+**/Testing/
+
+# Old or temporary project files
+CMakeLists.txt.save
+CMakeLists.txt.save.1
+CMakeLists-fmt-test.txt
+
+cmake-3.26.4-linux-x86_64.tar.gz.1
+
+# =============================
+# OS and Tool specific
+# =============================
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+desktop.ini
+
+# Linux kernel module
 .tmp_versions/
 modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
 
-# Vim swap and undo files, build dir
-*~
-*sw?
-/build
-*/build/
-cmake-3.26.4-linux-x86_64/
-*.tar.gz
-*.save
-CMakeLists-fmt-test.txt
-fmt/
-Testing/
-*.tar.gz.*
-CMakeLists.txt.save
-CMakeLists.txt.save.1
-CMakeLists-fmt-test.txt
-cmake-3.26.4-linux-x86_64.tar.gz.1
+# =============================
+# IDEs and Editors
+# =============================
 
-build/
+# VS Code
+.vscode/
+
+# JetBrains
+.idea/
+*.iml
+
+# Vim
+*.s[a-v][a-z]
+*.un~
+.netrwhist
+>>>>>>> replaced gitignore with a clean and complete version
 
