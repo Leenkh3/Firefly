@@ -121,6 +121,30 @@ add_test(NAME CGMatrixTests COMMAND CGMatrixTests)
 add_test(NAME cholesky_dense COMMAND cholesky_test)
 add_test(NAME cholesky_crs COMMAND test_cholesky_CRS)
 
+# Define the source and destination paths for the Resources directory symlink
+set(RESOURCES_DIR "${CMAKE_SOURCE_DIR}/Resources")
+set(SYMLINK_DIR "${CMAKE_BINARY_DIR}/Resources")
+
+# Check if the symlink or directory already exists
+if(NOT EXISTS "${SYMLINK_DIR}")
+  # Create a symbolic link in the build folder to the Resources directory in the src folder
+  execute_process(
+    COMMAND ${CMAKE_COMMAND} -E create_symlink "${RESOURCES_DIR}" "${SYMLINK_DIR}"
+    RESULT_VARIABLE ügy
+  )
+  if(result)
+    message(WARNING "Failed to create symlink to resources directory: ${result}")
+  else()
+    message(STATUS "Created symlink to Resources at: ${SYMLINK_DIR}")
+  endif()
+endif()
+
+# Add ASC reader file
+add_library(asc src/asc/asc.cpp)
+add_executable(AscTest src/asc/asc_test.cpp)
+target_link_libraries(AscTest PRIVATE asc)
+add_test(NAME AscTest COMMAND AscTest)
+
 # Include function used to add regression tests
 include(add_regression_test)
 
@@ -283,8 +307,6 @@ add_regression_test( numdifftest_fail numdiff_test
 # add_library(GmshMeshReader GmshMeshReader.cpp GmshMeshReader.hpp)
 
 # Configure building the main executable
-#add_executable(firefly firefly.cpp)
-
 # Configure the link command
 # target_link_libraries(firefly PRIVATE GmshMeshReader)
 # Configure cmake's testing system
