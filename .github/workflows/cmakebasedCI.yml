@@ -75,5 +75,5 @@ jobs:
     - name: Test
       working-directory: ${{ steps.strings.outputs.build-output-dir }}
       run: |
-        ctest --build-config ${{ matrix.build_type }}
-        ctest -R test_example_pass_regexp -V
+        ctest --build-config ${{ matrix.build_type }} --output-on-failure
+        ctest -R test_example_pass_regexp -V --output-on-failure
