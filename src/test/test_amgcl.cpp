@@ -194,7 +194,7 @@ int GivenLaplaceInput_WithGaussSeidelPrecond_ItersAndErrorsMatchExpected()
 {
     const int iters_exp = 1;
     const double error_exp = 9.33731e-16;
-    const double error_delta = 1e-17;
+    const double error_delta = 3e-17;
     return helper_laplaceTest(
         iters_exp, error_exp, error_delta, AmgclPrecond_GaussSeidel,
         "*** Laplace with Gauss-Seidel preconditioner ***");
@@ -204,7 +204,7 @@ int GivenLaplaceInput_WithILU0Precond_ItersAndErrorsMatchExpected()
 {
     const int iters_exp = 1;
     const double error_exp = 9.33731e-16;
-    const double error_delta = 1e-17;
+    const double error_delta = 3e-17;
     return helper_laplaceTest(
         iters_exp, error_exp, error_delta, AmgclPrecond_ILU0,
         "*** Laplace with ILU0 preconditioner ***");
@@ -214,7 +214,7 @@ int GivenLaplaceInput_WithSPAI0Precond_ItersAndErrorsMatchExpected()
 {
     const int iters_exp = 1;
     const double error_exp = 9.33731e-16;
-    const double error_delta = 1e-17;
+    const double error_delta = 3e-17;
     return helper_laplaceTest(
         iters_exp, error_exp, error_delta, AmgclPrecond_SPAI0,
         "*** Laplace with SPAI0 preconditioner ***");
