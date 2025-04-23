@@ -85,7 +85,6 @@ CMakeLists.txt.save
 CMakeLists.txt.save.1
 CMakeLists-fmt-test.txt
 
-cmake-3.26.4-linux-x86_64.tar.gz.1
 
 # =============================
 # OS and Tool specific
@@ -120,5 +119,5 @@ dkms.conf
 *.s[a-v][a-z]
 *.un~
 .netrwhist
->>>>>>> replaced gitignore with a clean and complete version
+
 
