@@ -334,7 +334,7 @@ SparseCSR::write_matlab( std::ostream& os ) const
 
 void SparseCSR::dirichlet(std::size_t i, double val, std::vector< double >& b)
 {
-   for (std::size_t r = 0; r < rows_ptr.size(); ++r) {
+   for (std::size_t r = 0; r < rows_ptr.size() - 1; ++r) {
       for (std::size_t j = rows_ptr[r] - 1; j < rows_ptr[r + 1] - 1; ++j) {
         if (i + 1 == cols[j]) {
           b[r] += vals[j] * val;
