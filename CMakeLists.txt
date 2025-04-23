@@ -59,9 +59,16 @@ add_library(MatrixLib
     src/cholesky/cholesky.hpp
     src/cholesky/Cholesky_CRS.cpp
     src/cholesky/cholesky_CRS.hpp
+
     src/ICD/ICD.cpp
     src/ICD/ICD.h	
 
+
+
+    src/cholesky/CholeskyCRSeigen.cpp
+    src/laplacian/Laplacian.cpp
+
+    src/cholesky/CholeskyCRSeigen.hpp
 
 
 )
@@ -83,15 +90,24 @@ target_link_libraries(cholesky_test PRIVATE MatrixLib)
 add_executable(test_cholesky_CRS src/cholesky/test_cholesky_CRS.cpp)
 target_link_libraries(test_cholesky_CRS PRIVATE MatrixLib)
 
+add_executable(testCholeskyCRSeigen src/cholesky/testCholeskyCRSeigen.cpp)
+
+target_link_libraries(testCholeskyCRSeigen PRIVATE MatrixLib)
+
+
+
 # Configure building the CG solver executable
 add_executable(ConjugateGradientSolver src/CG/ConjugateGradientSolver.cpp)
 target_link_libraries(ConjugateGradientSolver PRIVATE MatrixLib)
+
 
 
 # Configure building the executable to test the ICD
 add_executable(test_ICD src/ICD/tests/test_ICD.cpp)
 target_include_directories(test_ICD PRIVATE ${PROJECT_SOURCE_DIR}/src/ICD)
 target_link_libraries(test_ICD PRIVATE MatrixLib)
+
+
 
 
 
@@ -118,6 +134,10 @@ add_dependencies(test_cholesky_CRS eigen)
 add_dependencies(cholesky_test eigen)
 
 
+
+
+add_dependencies(testCholeskyCRSeigen eigen)
+
 # Add a test, running the chillax executable, non-zero exit code will fail the test
 add_test(NAME firefly COMMAND firefly)
 
@@ -134,6 +154,31 @@ add_test(NAME CGMatrixTests COMMAND CGMatrixTests)
 # Add tests for the Cholesky
 add_test(NAME cholesky_dense COMMAND cholesky_test)
 add_test(NAME cholesky_crs COMMAND test_cholesky_CRS)
+add_test(NAME testCholeskyCRSeigen COMMAND testCholeskyCRSeigen)
+
+# Define the source and destination paths for the Resources directory symlink
+set(RESOURCES_DIR "${CMAKE_SOURCE_DIR}/Resources")
+set(SYMLINK_DIR "${CMAKE_BINARY_DIR}/Resources")
+
+# Check if the symlink or directory already exists
+if(NOT EXISTS "${SYMLINK_DIR}")
+  # Create a symbolic link in the build folder to the Resources directory in the src folder
+  execute_process(
+    COMMAND ${CMAKE_COMMAND} -E create_symlink "${RESOURCES_DIR}" "${SYMLINK_DIR}"
+    RESULT_VARIABLE ügy
+  )
+  if(result)
+    message(WARNING "Failed to create symlink to resources directory: ${result}")
+  else()
+    message(STATUS "Created symlink to Resources at: ${SYMLINK_DIR}")
+  endif()
+endif()
+
+# Add ASC reader file
+add_library(asc src/asc/asc.cpp)
+add_executable(AscTest src/asc/asc_test.cpp)
+target_link_libraries(AscTest PRIVATE asc)
+add_test(NAME AscTest COMMAND AscTest)
 
 
 #  Add test for ICD 
@@ -280,8 +325,6 @@ add_regression_test( numdifftest_fail numdiff_test
 # add_library(GmshMeshReader GmshMeshReader.cpp GmshMeshReader.hpp)
 
 # Configure building the main executable
-#add_executable(firefly firefly.cpp)
-
 # Configure the link command
 # target_link_libraries(firefly PRIVATE GmshMeshReader)
 # Configure cmake's testing system
