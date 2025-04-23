@@ -59,10 +59,17 @@ add_library(MatrixLib
     src/cholesky/cholesky.hpp
     src/cholesky/Cholesky_CRS.cpp
     src/cholesky/cholesky_CRS.hpp
+
+    src/ICD/ICD.cpp
+    src/ICD/ICD.h	
+
+
+
     src/cholesky/CholeskyCRSeigen.cpp
     src/laplacian/Laplacian.cpp
 
     src/cholesky/CholeskyCRSeigen.hpp
+
 
 )
 
@@ -94,6 +101,16 @@ add_executable(ConjugateGradientSolver src/CG/ConjugateGradientSolver.cpp)
 target_link_libraries(ConjugateGradientSolver PRIVATE MatrixLib)
 
 
+
+# Configure building the executable to test the ICD
+add_executable(test_ICD src/ICD/tests/test_ICD.cpp)
+target_include_directories(test_ICD PRIVATE ${PROJECT_SOURCE_DIR}/src/ICD)
+target_link_libraries(test_ICD PRIVATE MatrixLib)
+
+
+
+
+
 add_executable(firefly firefly.cpp)  # Configure cmake's testing system
 
 # Configure cmake's testing system
@@ -116,7 +133,11 @@ add_dependencies(MatrixTests eigen)
 add_dependencies(test_cholesky_CRS eigen)
 add_dependencies(cholesky_test eigen)
 
+
+
+
 add_dependencies(testCholeskyCRSeigen eigen)
+
 # Add a test, running the chillax executable, non-zero exit code will fail the test
 add_test(NAME firefly COMMAND firefly)
 
@@ -158,6 +179,12 @@ add_library(asc src/asc/asc.cpp)
 add_executable(AscTest src/asc/asc_test.cpp)
 target_link_libraries(AscTest PRIVATE asc)
 add_test(NAME AscTest COMMAND AscTest)
+
+
+#  Add test for ICD 
+add_test(NAME test_ICD COMMAND test_ICD)
+
+
 
 # Include function used to add regression tests
 include(add_regression_test)
@@ -236,7 +263,7 @@ ExternalProject_Add(exodus
 
         -DCMAKE_INSTALL_PREFIX=${PROJECT_BINARY_DIR}/exodus-install
         -DNetCDF_DIR=${PROJECT_BINARY_DIR}/netcdf-install
-        -Dfmt_DIR=${PROJECT_BINARY_DIR}/fmt-install/lib/cmake/fmt
+        -Dfmt_DIR=${FMT_INSTALL_DIR}
   #      -DTPL_ENABLE_fmt=ON
  #       -DTPL_fmt_INCLUDE_DIRS=${PROJECT_BINARY_DIR}/fmt-install/include
 #        -DTPL_fmt_LIBRARIES=${PROJECT_BINARY_DIR}/fmt-install/lib64/libfmt.a
