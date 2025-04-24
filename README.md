@@ -6,6 +6,7 @@
 - Miklós Vajkai
 - Aili Torvinen
 - Zoltán Kaszai
+<<<<<<< HEAD
 - Leen Alkhouri
 - József Bakosi
 - Dániel Doma
@@ -16,3 +17,9 @@
 - Sahir Kaju
 - Aqib Shahzad
 - Obay Daoudi
+=======
+- Leen Khouri
+- József Bakosi
+- Dániel Doma
+- Ali Hasan
+>>>>>>> Create README.md

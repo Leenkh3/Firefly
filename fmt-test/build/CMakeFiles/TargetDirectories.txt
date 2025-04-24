@@ -1,3 +1,0 @@
-/work/students/hpc-bvrhib/firefly/fmt-test/build/CMakeFiles/fmt.dir
-/work/students/hpc-bvrhib/firefly/fmt-test/build/CMakeFiles/edit_cache.dir
-/work/students/hpc-bvrhib/firefly/fmt-test/build/CMakeFiles/rebuild_cache.dir
