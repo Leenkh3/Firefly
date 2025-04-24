@@ -184,26 +184,42 @@ add_regression_test(test_cg_fail_regexp ConjugateGradientSolver
 
 find_package(MPI)
 
-# === KEEPING NetCDF ExternalProject ===
-ExternalProject_Add(netcdf
-    GIT_REPOSITORY https://github.com/Unidata/netcdf-c.git
-    GIT_TAG main
-    CMAKE_ARGS
-      -DCMAKE_C_COMPILER=${CMAKE_C_COMPILER}
-      -DCMAKE_INSTALL_PREFIX=${PROJECT_BINARY_DIR}/netcdf-install
-      -DNETCDF_ENABLE_HDF5=off
-      -DNETCDF_ENABLE_PARALLEL=off
-      -DBUILD_SHARED_LIBS=on
-      -DNETCDF_ENABLE_TESTS=off
-      -DNETCDF_ENABLE_EXAMPLES=off
-      -DNETCDF_ENABLE_FSYNC=off
-      -DENABLE_DAP=OFF
-      -DENABLE_BYTERANGE=OFF
-)
+set(CMAKE_PREFIX_PATH "/usr/local")
+find_package(NetCDF)
+if(NOT NetCDF_FOUND)
+    message(STATUS "NetCDF NOT found. Downloading with ExternalProject_Add().")
+    ExternalProject_Add(netcdf
+        GIT_REPOSITORY https://github.com/Unidata/netcdf-c.git
+        GIT_TAG main
+        CMAKE_ARGS -DCMAKE_C_COMPILER=${CMAKE_C_COMPILER}
+                -DENABLE_NETCDF_4=on
+                -DBUILD_SHARED_LIBS=on
+                -DENABLE_EXAMPLES=off
+                -DENABLE_FSYNC=off
+                -DENABLE_DAP=off
+                -DENABLE_TESTS=off
+                -DENABLE_CONVERSION_WARNINGS=off
+                -DENABLE_DAP_REMOTE_TESTS=off
+                -DENABLE_EXTREME_NUMBERS=off
+                -DENABLE_PARALLEL4=on
+                -DENABLE_PARALLEL_TESTS=off
+                -DENABLE_BASH_SCRIPT_TESTING=off
+                -DENABLE_V2_API=off
+                -DNETCDF_ENABLE_HDF5=off
+                -DCMAKE_INSTALL_PREFIX=${PROJECT_BINARY_DIR}/netcdf-install
+    )
+    # NetCDF Library Path
+    set(NETCDF_LIB "${PROJECT_BINARY_DIR}/netcdf-install/lib/libnetcdf.so")
+    set(NETCDF_INCLUDE_DIR "${PROJECT_BINARY_DIR}/netcdf-install/include")
+    set(NETCDF_DIR "${PROJECT_BINARY_DIR}/netcdf-install")
+else()
+    message(STATUS "NetCDF found.")
+    set(netcdf "")
+    #set(NETCDF_LIB "${CMAKE_PREFIX_PATH}/lib/libnetcdf.so")
+    #set(NETCDF_INCLUDE_DIRS "${CMAKE_PREFIX_PATH}/include")
+    #set(NETCDF_DIR "${CMAKE_PREFIX_PATH}")
+endif()
 
-# NetCDF Library Path
-set(NETCDF_LIB "${PROJECT_BINARY_DIR}/netcdf-install/lib/libnetcdf.so")
-set(NETCDF_INCLUDE_DIR "${PROJECT_BINARY_DIR}/netcdf-install/include")
 
 # Install Exodus using the official Sandia Labs SEACAS repository
 
@@ -225,28 +241,39 @@ ExternalProject_Add(fmt
 
 set(fmt_DIR "${PROJECT_BINARY_DIR}/fmt-install/lib/cmake/fmt")
 
-ExternalProject_Add(exodus
+find_package(Exodus)
+if(NOT Exodus_FOUND)
+    message(STATUS "Exodus NOT found. Downloading with ExternalProject_Add().")
+    # Install Exodus using the official Sandia Labs SEACAS repository
+    ExternalProject_Add(exodus
     GIT_REPOSITORY https://github.com/sandialabs/seacas.git
     GIT_TAG master
-    DEPENDS fmt netcdf
+    DEPENDS fmt ${netcdf}
     CMAKE_ARGS
-        -DCMAKE_C_COMPILER=${CMAKE_C_COMPILER}
-        -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}
+        -DCMAKE_C_COMPILER=${MPI_C_COMPILER}
+        -DCMAKE_CXX_COMPILER=${MPI_CXX_COMPILER}
 
         -DCMAKE_INSTALL_PREFIX=${PROJECT_BINARY_DIR}/exodus-install
-        -DNetCDF_DIR=${PROJECT_BINARY_DIR}/netcdf-install
+        #-DNetCDF_DIR=${PROJECT_BINARY_DIR}/netcdf-install
+        -DNetCDF_ROOT=${NETCDF_DIR}
+        -DNetCDF_LIBRARIES=${NETCDF_LIBRARIES}
+        -DNetCDF_INCLUDE_DIRS=${NETCDF_INCLUDE_DIRS}
         -Dfmt_DIR=${PROJECT_BINARY_DIR}/fmt-install/lib/cmake/fmt
-  #      -DTPL_ENABLE_fmt=ON
- #       -DTPL_fmt_INCLUDE_DIRS=${PROJECT_BINARY_DIR}/fmt-install/include
+#        -DTPL_ENABLE_fmt=ON
+#        -DTPL_fmt_INCLUDE_DIRS=${PROJECT_BINARY_DIR}/fmt-install/include
 #        -DTPL_fmt_LIBRARIES=${PROJECT_BINARY_DIR}/fmt-install/lib64/libfmt.a
         -DSeacas_ENABLE_SEACAS=ON
         -DSeacas_ENABLE_SEACASExodus=ON
-        -DSeacas_ENABLE_SEACASIoss=ON
-        -DSeacas_ENABLE_SEACASNemesis=ON
-)
+        -DSeacas_ENABLE_SEACASIoss=OFF
+        #-DSeacas_ENABLE_SEACASNemesis=ON
+    )
+    # Exodus Library Path
+    set(EXODUS_LIB "${PROJECT_BINARY_DIR}/exodus-install/lib/libexodus.so")
+else()
+    message(STATUS "Seacas found.")
+    set(EXODUS_LIB "${CMAKE_PREFIX_PATH}/lib/libexodus.so")
+endif()
 
-# Exodus Library Path
-set(EXODUS_LIB "${PROJECT_BINARY_DIR}/exodus-install/lib/libexodus.so")
 
 if(NOT "${CMAKE_C_FLAGS}" MATCHES "std=c99")
    if(NOT CMAKE_C_COMPILER_ID STREQUAL "Cray")
