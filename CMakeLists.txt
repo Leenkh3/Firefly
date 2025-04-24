@@ -1,4 +1,4 @@
- saher
+ 
 # Specify the minimum CMake version required
 cmake_minimum_required(VERSION 3.15)
 
@@ -15,12 +15,12 @@ project(Firefly VERSION 1.0 LANGUAGES C CXX)
 # Set the compiler version to 17
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
- main
+ 
 
 # Set the path of the additional modules
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
- saher
+ 
 # Add source directory to main project
 add_subdirectory(${CMAKE_SOURCE_DIR}/src)
 
@@ -53,7 +53,7 @@ else()
     set(EIGEN_INCLUDE_DIR "${PROJECT_BINARY_DIR}/eigen-install/include/eigen3")
     include_directories(${EIGEN_INCLUDE_DIR})  
 endif()
- main
+ 
 
 # Library for dealing with arrays
 add_library(MatrixLib
@@ -79,11 +79,11 @@ add_library(MatrixLib
 #CSR Library
 add_library(CSR src/laplacian/CSR.cpp)
 
- saher
+ 
 # Laplacian Gradient Library
 
 # Configure a functions needed to compute the Laplacian
- main
+ 
 add_library(Laplacian src/laplacian/Laplacian.cpp)
 
 # Testing programs
@@ -102,7 +102,7 @@ add_executable(testCholeskyCRSeigen src/cholesky/testCholeskyCRSeigen.cpp)
 target_link_libraries(testCholeskyCRSeigen PRIVATE MatrixLib)
 
 
- saher
+ 
 add_executable(MatrixTests src/matrix/test_matrix.cpp)
 target_link_libraries(MatrixTests PRIVATE MatrixLib)
 
@@ -118,12 +118,12 @@ target_link_libraries(ConjugateGradientSolver PRIVATE MatrixLib)
 add_subdirectory(${CMAKE_SOURCE_DIR}/src)
 
 add_executable(firefly firefly.cpp)  # Configure cmake's testing system
- main
+ 
 
 # Enable testing environment
 enable_testing()
 
- saher
+ 
 # Add tests to the project
 
 # Add testing subdirectory
@@ -145,10 +145,10 @@ add_dependencies(cholesky_test eigen)
 
 add_dependencies(testCholeskyCRSeigen eigen)
 # Add a test, running the chillax executable, non-zero exit code will fail the test
- main
+ 
 add_test(NAME firefly COMMAND firefly)
 add_test(NAME MatrixTests COMMAND MatrixTests)
- saher
+ 
 add_test(NAME laplacian COMMAND LaplacianTests)
 
 # Add functionality for regression tests
@@ -191,7 +191,7 @@ target_link_libraries(AscTest PRIVATE asc)
 add_test(NAME AscTest COMMAND AscTest)
 
 # Include function used to add regression tests
- main
+ 
 include(add_regression_test)
 
 # Prepare regression tests with expected pass/fail results.
@@ -203,7 +203,7 @@ add_regression_test(test_example_fail_regexp firefly
                     EXTRA_PROPERTIES "WILL_FAIL;1"
                     LABELS "basic")
 
- saher
+ 
 # Doxygen Document Preparation
 find_package(Doxygen REQUIRED)
 
@@ -385,4 +385,4 @@ add_regression_test( numdifftest_fail numdiff_test
 #add_test(NAME firefly COMMAND firefly)
 
 message("Install path: ${PROJECT_BINARY_DIR}")
- main
+ 
