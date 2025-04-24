@@ -201,9 +201,10 @@ if(NOT NetCDF_FOUND)
     set(NETCDF_DIR "${PROJECT_BINARY_DIR}/netcdf-install")
 else()
     message(STATUS "NetCDF found.")
-    set(NETCDF_LIB "${CMAKE_PREFIX_PATH}/lib/libnetcdf.so")
-    set(NETCDF_INCLUDE_DIRS "${CMAKE_PREFIX_PATH}/include")
-    set(NETCDF_DIR "${CMAKE_PREFIX_PATH}")
+    set(netcdf "")
+    #set(NETCDF_LIB "${CMAKE_PREFIX_PATH}/lib/libnetcdf.so")
+    #set(NETCDF_INCLUDE_DIRS "${CMAKE_PREFIX_PATH}/include")
+    #set(NETCDF_DIR "${CMAKE_PREFIX_PATH}")
 endif()
 
 
@@ -232,23 +233,27 @@ if(NOT Exodus_FOUND)
     message(STATUS "Exodus NOT found. Downloading with ExternalProject_Add().")
     # Install Exodus using the official Sandia Labs SEACAS repository
     ExternalProject_Add(exodus
-    GIT_REPOSITORY https://github.com/sandialabs/seacas.git
+    #GIT_REPOSITORY https://github.com/sandialabs/seacas.git
+    GIT_REPOSITORY /home/jbakosi/code/exodus
     GIT_TAG master
-    DEPENDS fmt netcdf
+    DEPENDS fmt ${netcdf}
     CMAKE_ARGS
-        -DCMAKE_C_COMPILER=${CMAKE_C_COMPILER}
-        -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}
+        -DCMAKE_C_COMPILER=${MPI_C_COMPILER}
+        -DCMAKE_CXX_COMPILER=${MPI_CXX_COMPILER}
 
         -DCMAKE_INSTALL_PREFIX=${PROJECT_BINARY_DIR}/exodus-install
-        -DNetCDF_DIR=${PROJECT_BINARY_DIR}/netcdf-install
+        #-DNetCDF_DIR=${PROJECT_BINARY_DIR}/netcdf-install
+        #-DNetCDF_ROOT=${NETCDF_DIR}
+        -DNetCDF_LIBRARIES=${NETCDF_LIBRARIES}
+        -DNetCDF_INCLUDE_DIRS=${NETCDF_INCLUDE_DIRS}
         -Dfmt_DIR=${PROJECT_BINARY_DIR}/fmt-install/lib/cmake/fmt
 #        -DTPL_ENABLE_fmt=ON
 #        -DTPL_fmt_INCLUDE_DIRS=${PROJECT_BINARY_DIR}/fmt-install/include
 #        -DTPL_fmt_LIBRARIES=${PROJECT_BINARY_DIR}/fmt-install/lib64/libfmt.a
         -DSeacas_ENABLE_SEACAS=ON
         -DSeacas_ENABLE_SEACASExodus=ON
-        -DSeacas_ENABLE_SEACASIoss=ON
-        -DSeacas_ENABLE_SEACASNemesis=ON
+        -DSeacas_ENABLE_SEACASIoss=OFF
+        #-DSeacas_ENABLE_SEACASNemesis=ON
     )
     # Exodus Library Path
     set(EXODUS_LIB "${PROJECT_BINARY_DIR}/exodus-install/lib/libexodus.so")
