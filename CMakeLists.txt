@@ -1,4 +1,3 @@
-
 #Tell Cmake the featureset we require
 cmake_minimum_required(VERSION 3.15)
 
@@ -8,6 +7,22 @@ project(Firefly VERSION 1.0 LANGUAGES C CXX)
 # Set the compiler version to 17
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+# Options for controlling tests and dependencies
+option(FIREFLY_BUILD_TESTS "Build Firefly tests" ON)
+option(FIREFLY_SKIP_EXODUS "Skip building EXODUS dependency" OFF)
+option(FIREFLY_SKIP_NETCDF "Skip building NetCDF dependency" OFF)
+
+# Check for critical dependencies if building tests
+if(FIREFLY_BUILD_TESTS)
+    # Check for Lua
+    find_package(Lua QUIET)
+    if(NOT LUA_FOUND)
+        message(WARNING "Lua not found - user input tests will be disabled")
+        message(STATUS "Install Lua or run scripts/install_dependencies.sh")
+        set(FIREFLY_SKIP_USER_INPUT_TESTS TRUE)
+    endif()
+endif()
 
 # Set cmake modules directory
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
@@ -44,6 +59,69 @@ endif()
 
 # Add source subdirectory
 add_subdirectory(${CMAKE_SOURCE_DIR}/src)
+
+#[===[ LUA ]===]
+#[[ BEGIN ]]
+# First, try to find Lua on the system
+find_package(Lua QUIET)
+
+# Conditionally add Lua as external dependency only if not found
+if(NOT LUA_FOUND)
+  message(STATUS "System Lua not found. Building from source...")
+  
+  # Create the directories during configuration time
+  file(MAKE_DIRECTORY "${PROJECT_BINARY_DIR}/lua-install")
+  file(MAKE_DIRECTORY "${PROJECT_BINARY_DIR}/lua-install/include")
+  file(MAKE_DIRECTORY "${PROJECT_BINARY_DIR}/lua-install/lib")
+  
+  # Add Lua as an external project dependency
+  ExternalProject_Add(lua
+      URL http://www.lua.org/ftp/lua-5.4.4.tar.gz
+      URL_HASH SHA256=164c7849653b80ae67bec4b7473b884bf5cc8d2dca05653475ec2ed27b9ebf61
+      DOWNLOAD_EXTRACT_TIMESTAMP TRUE
+      CONFIGURE_COMMAND ""    # No configure step
+      BUILD_IN_SOURCE 1
+      BUILD_COMMAND ${CMAKE_COMMAND} -P ${CMAKE_SOURCE_DIR}/cmake/BuildLua.cmake
+      INSTALL_COMMAND make INSTALL_TOP=${PROJECT_BINARY_DIR}/lua-install install
+  )
+  
+  # Set variables for built Lua
+  set(LUA_INCLUDE_DIR "${PROJECT_BINARY_DIR}/lua-install/include")
+  set(LUA_LIBRARIES "${PROJECT_BINARY_DIR}/lua-install/lib/liblua.a")
+else()
+  message(STATUS "Using system Lua: ${LUA_LIBRARIES}")
+endif()
+
+# Make Lua headers available for include
+include_directories(${LUA_INCLUDE_DIR})
+
+# Create an imported target for Lua
+add_library(lua::lua STATIC IMPORTED)
+set_target_properties(lua::lua PROPERTIES
+    IMPORTED_LOCATION "${LUA_LIBRARIES}"
+    INTERFACE_INCLUDE_DIRECTORIES "${LUA_INCLUDE_DIR}"
+)
+
+# Conditional dependencies on the ExternalProject target
+if(NOT LUA_FOUND)
+    add_dependencies(lua::lua lua)
+endif()
+
+# Now you can use the lua::lua target
+add_library(user_input STATIC src/user_input/user_input.c)
+target_include_directories(user_input PUBLIC ${CMAKE_SOURCE_DIR})
+target_link_libraries(user_input PRIVATE lua::lua)
+
+# Conditional dependency for user_input
+if(NOT LUA_FOUND)
+    add_dependencies(user_input lua)
+endif()
+
+target_include_directories(user_input PRIVATE ${LUA_INCLUDE_DIR}) # This is now redundant but harmless
+target_link_libraries(user_input PRIVATE m) # 'm' for the math library
+
+#[[ END ]]
+#[===] LUA [===]
 
 # adding matrix to the build
 add_library(MatrixLib
@@ -99,8 +177,10 @@ add_executable(firefly firefly.cpp)  # Configure cmake's testing system
 # Configure cmake's testing system
 enable_testing()
 
-# Add testing subdirectory
-add_subdirectory(${CMAKE_SOURCE_DIR}/src/test)
+# Add the test directory conditionally
+if(FIREFLY_BUILD_TESTS)
+    add_subdirectory(src/test)
+endif()
 
 add_executable(MatrixTests src/matrix/test_matrix.cpp)
 target_link_libraries(MatrixTests PRIVATE MatrixLib)
