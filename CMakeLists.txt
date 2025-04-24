@@ -233,8 +233,7 @@ if(NOT Exodus_FOUND)
     message(STATUS "Exodus NOT found. Downloading with ExternalProject_Add().")
     # Install Exodus using the official Sandia Labs SEACAS repository
     ExternalProject_Add(exodus
-    #GIT_REPOSITORY https://github.com/sandialabs/seacas.git
-    GIT_REPOSITORY /home/jbakosi/code/exodus
+    GIT_REPOSITORY https://github.com/sandialabs/seacas.git
     GIT_TAG master
     DEPENDS fmt ${netcdf}
     CMAKE_ARGS
