@@ -242,7 +242,7 @@ if(NOT Exodus_FOUND)
 
         -DCMAKE_INSTALL_PREFIX=${PROJECT_BINARY_DIR}/exodus-install
         #-DNetCDF_DIR=${PROJECT_BINARY_DIR}/netcdf-install
-        #-DNetCDF_ROOT=${NETCDF_DIR}
+        -DNetCDF_ROOT=${NETCDF_DIR}
         -DNetCDF_LIBRARIES=${NETCDF_LIBRARIES}
         -DNetCDF_INCLUDE_DIRS=${NETCDF_INCLUDE_DIRS}
         -Dfmt_DIR=${PROJECT_BINARY_DIR}/fmt-install/lib/cmake/fmt
