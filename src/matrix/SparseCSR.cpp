@@ -252,7 +252,21 @@ SparseCSR::SparseCSR(const std::vector<std::size_t> &connectivity, int shape_poi
    this->print();
     std::cerr<<"Out of Range - Element not found!" << row<< " " << col << " where cols length is" << cols.size();
     throw; 
- };   
+ };
+
+ double SparseCSR::getAt(int row, int col) { 
+   if (row > rows_ptr.size() || row < 0 || col > rows_ptr.size() || col < 0)
+   {
+      this->print();
+      std::cerr<<"Out of Range - Element not found!" << row<< " " << col << " where cols length is" << cols.size();
+      throw;
+   }
+   for(int j = rows_ptr[row] - 1 ; j < rows_ptr[row+1] -1 ; j++)
+       if(cols[j] == col + 1)  return vals[j];
+
+   // non-stored elements are 0
+   return 0;
+};   
 
 
  std::vector<int> SparseCSR::shape() {
@@ -316,4 +330,22 @@ SparseCSR::write_matlab( std::ostream& os ) const
   os << "]\n";
 
   return os;
+}
+
+void SparseCSR::dirichlet(std::size_t i, double val, std::vector< double >& b)
+{
+   for (std::size_t r = 0; r < rows_ptr.size() - 1; ++r) {
+      for (std::size_t j = rows_ptr[r] - 1; j < rows_ptr[r + 1] - 1; ++j) {
+        if (i + 1 == cols[j]) {
+          b[r] += vals[j] * val;
+          vals[j] = 0.0;
+          break;
+        }
+      }
+    }
+  
+    // zero row and put in diagonal
+    for (std::size_t j=rows_ptr[i] - 1; j < rows_ptr[i + 1] - 1; ++j) {
+      if (i + 1 == cols[j]) vals[j] = 1.0; else vals[j] = 0.0;
+    }
 }

@@ -403,6 +403,39 @@ int test_CRS_vector_multiplication(){
 
 }
 
+int test_dirichlet()
+{
+    std::cout << "test start" << std::endl;
+    int connectivity_arr[] = {
+        1,2,4,5,
+        2,3,5,6,
+        4,5,7,8,
+        5,6,8,9
+    };
+
+    int count = sizeof(connectivity_arr) / sizeof(connectivity_arr[0]);
+    std::vector<double> b = {1, 2, 3, 4};
+
+    const std::vector<std::size_t> connectivity(connectivity_arr, connectivity_arr+count);
+    SparseCSR s(connectivity, 4);
+
+    s.dirichlet(0, 1, b);
+
+    if (s.getAt(0, 0) == 1.0)
+    {
+        std::cout << "Dirichlet BC diagonal element not the correct value." << std::endl;
+        return 1;
+    }
+
+    if (s.getAt(0, 1) != 0.0 || s.getAt(1, 0) != 0.0)
+    {
+        std::cout << "Dirichlet BC off-diagonal element not the correct value." << std::endl;
+        return 1;
+    }
+
+    return 0;
+}
+
 int main() {
     int result = 0;
 
@@ -415,8 +448,10 @@ int main() {
     result |= test_vector_multiplication();
     result |= test_SparseCSR_format();
     result |= SparseCSR_2();
-    result |=test_sparse_getter();
-    result |=test_sparse_setter();
-    result |=test_CRS_vector_multiplication();
+    result |= test_sparse_getter();
+    result |= test_sparse_setter();
+    result |= test_CRS_vector_multiplication();
+    result |= test_dirichlet();
+
     return result;
 }
