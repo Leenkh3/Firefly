@@ -37,17 +37,68 @@
 #include <algorithm>
 #include <iostream>
 #include "SparseCSR.h"
+#include <cassert>
 
 
-SparseCSR::SparseCSR(std::vector<int> &connectivity, int shape_points) {
-   // check the validity of connectivity vector
-   if (connectivity.size() % shape_points != 0) {
-       std::cerr << "Wrong connectivity vector provided! connectivity size:" 
-                 << connectivity.size() 
-                 << " is not divisible by shape_points:" 
-                 << shape_points << std::endl;
-       return;
-   }
+SparseCSR::SparseCSR(const std::vector<std::size_t> &connectivity, int shape_points) {
+   /*!
+   * \brief Constructs a SparseCSR object from mesh connectivity data.
+   *
+   * This constructor builds a compressed sparse row (CSR) representation
+   * of a mesh's connectivity structure.
+   *
+   * The connectivity data defines how shape nodes are connected in space,
+   * resulting in a symmetric matrix. In order to optimize memory usage and
+   * computational effort, only the upper triangular portion of the matrix
+   * is stored. From this upper triangular matrix, two vectors are created:
+   *
+   * - **row_ptr**: This vector records the index in the \c cols vector where
+   *   each row's nonzero elements begin.
+   * - **cols**: This vector holds the column indices corresponding to the
+   *   nonzero entries.
+   *
+   * Additionally, a hash table is employed to cache intermediate connectivity
+   * information, which accelerates subsequent computations. For example, if point
+   * 0 connects to point 8, the hash table stores an association such as:
+   *   \code
+   *   [8] : [0, ...]
+   *   \endcode
+   * Later, when processing row 8, the algorithm retrieves the pre-saved connectivity
+   * from the hash table for efficient computation.
+   *
+   * \param[in] connectivity A vector that encodes the connectivity of the mesh.
+   *                         Its organization produces a symmetric matrix.
+   * \param[in] shape_points The number of points per element, which defines
+   *                         the overall structure of the mesh.
+   *
+   * \note Example:
+   * Consider the symmetric matrix:
+   *
+   * \verbatim
+   *   1  1  0  0  0
+   *   1  1  1  0  0
+   *   0  1  1  1  0
+   *   0  0  1  1  1
+   *   0  0  0  1  1
+   * \endverbatim
+   *
+   * Its stored upper triangular part is:
+   *
+   * \verbatim
+   *   1  1  -  -  -
+   *      1  1  -  -
+   *         1  1  -
+   *            1  1
+   *               1
+   * \endverbatim
+   *
+   * Initially, the hash table will, for instance, store an entry like [1] : [0].
+   * When processing row \(i = 1\), the constructor consults the hash table to
+   * quickly access pre-saved connectivity data, and so on.
+   */
+
+   assert (connectivity.size() % shape_points == 0) ;
+       
 
    // Use std::map and std::set for our connectivity hash table.
    std::map<int, std::set<int> > hash;
@@ -97,8 +148,8 @@ SparseCSR::SparseCSR(std::vector<int> &connectivity, int shape_points) {
        // Use operator[] instead of .at() so that it works in older compilers.
        std::set<int>& connSet = hash[*it];
        for (std::set<int>::iterator j = connSet.begin(); j != connSet.end(); ++j) {
-           cols.push_back(*j);
-           vals.push_back(1); // all elements values are initialized as 1
+           cols.push_back(*j +  1);
+           vals.push_back(0); // all elements values are initialized as 0
        }
        count += (int)connSet.size();
        rows_ptr.push_back(count);
@@ -116,10 +167,13 @@ SparseCSR::SparseCSR(std::vector<int> &connectivity, int shape_points) {
  };    
  
  
- std::vector<double> SparseCSR::mult(std::vector<double> &vec)  const{ 
-
-    if(vec.size() != rows_ptr.size()-1){
-      std::cerr<<"Cannot multiply matrix by vector : Wrong shapes" << vec.size() << " != "<< rows_ptr.size()<<std::endl;
+ std::vector<double> SparseCSR::mult(std::vector<double> &x)  const{ 
+// *****************************************************************************
+//  Multiply CSR matrix with vector from the right: r = A * x
+//! \param[in] x Vector to multiply matrix with from the right
+// *****************************************************************************
+    if(x.size() != rows_ptr.size()-1){
+      std::cerr<<"Cannot multiply matrix by vector : Wrong shapes" << x.size() << " != "<< rows_ptr.size()<<std::endl;
       throw;
     }
    
@@ -128,7 +182,7 @@ SparseCSR::SparseCSR(std::vector<int> &connectivity, int shape_points) {
    int i = 1,j=0;
    while(i < rows_ptr.size() && j < cols.size()){
     
-      sum+=vals[j] * vec[cols[j] - 1];
+      sum+=vals[j] * x[cols[j] - 1];
       j++;
       if(j == rows_ptr[i] -1){ 
          i++;
@@ -142,6 +196,10 @@ SparseCSR::SparseCSR(std::vector<int> &connectivity, int shape_points) {
 
  };           
  void SparseCSR::print() const {
+
+// *****************************************************************************
+//! \short Write out CSR as stored
+// *****************************************************************************
    std::size_t i;
 
   std::cout << "rows_ptr[rsize+1=" << rows_ptr.size() << "] = { ";
@@ -159,7 +217,9 @@ SparseCSR::SparseCSR(std::vector<int> &connectivity, int shape_points) {
  };     
  
  void SparseCSR::print_matrix() const {
- 
+ // *****************************************************************************
+//! \short Write out CSR as a real matrix
+// *****************************************************************************
    int nrows = rows_ptr.size()-1;
    int ncols = nrows;
 
@@ -187,11 +247,26 @@ SparseCSR::SparseCSR(std::vector<int> &connectivity, int shape_points) {
  double& SparseCSR::at(int row, int col) { 
     // this function is to get a value based on 0-indexed matrix (first element is 0 not 1)
     for(int j = rows_ptr[row] - 1 ; j < rows_ptr[row+1] -1 ; j++)
-        if(cols[j] == col + 1)  return vals[ j ];
+        if(cols[j] == col + 1 )  return vals[ j ];
        
-    std::cerr<<"Out of Range - Element not found!";
+   this->print();
+    std::cerr<<"Out of Range - Element not found!" << row<< " " << col << " where cols length is" << cols.size();
     throw; 
- };   
+ };
+
+ double SparseCSR::getAt(int row, int col) { 
+   if (row > rows_ptr.size() || row < 0 || col > rows_ptr.size() || col < 0)
+   {
+      this->print();
+      std::cerr<<"Out of Range - Element not found!" << row<< " " << col << " where cols length is" << cols.size();
+      throw;
+   }
+   for(int j = rows_ptr[row] - 1 ; j < rows_ptr[row+1] -1 ; j++)
+       if(cols[j] == col + 1)  return vals[j];
+
+   // non-stored elements are 0
+   return 0;
+};   
 
 
  std::vector<int> SparseCSR::shape() {
@@ -230,3 +305,47 @@ SparseCSR::SparseCSR(std::vector<int> &connectivity, int shape_points) {
         if(a[i]!=b[i]) return false;
     return true;
  }
+
+
+
+ std::ostream&
+SparseCSR::write_matlab( std::ostream& os ) const
+// *****************************************************************************
+//  Write out CSR in Matlab/Octave format
+//! \param[in,out] os Output stream to write to
+//! \return Updated output stream
+// *****************************************************************************
+{
+  os << "A = [ ";
+  for (std::size_t i=0; i<rows_ptr.size()-1 ; ++i) {
+    for (std::size_t j=1; j<cols[rows_ptr[i]-1]; ++j) os << "0 ";
+    for ( std::size_t n=rows_ptr[i]-1; n<rows_ptr[i+1]-1; ++n) {
+      if (n > rows_ptr[i]-1)
+        for (std::size_t j=cols[n-1]; j<cols[n]-1; ++j) os << "0 ";
+      os << vals[n] << ' ';
+    }
+    for (std::size_t j=cols[rows_ptr[i+1]-2]; j<rows_ptr.size()-1 ; ++j) os << "0 ";
+    os << ";\n";
+  }
+  os << "]\n";
+
+  return os;
+}
+
+void SparseCSR::dirichlet(std::size_t i, double val, std::vector< double >& b)
+{
+   for (std::size_t r = 0; r < rows_ptr.size() - 1; ++r) {
+      for (std::size_t j = rows_ptr[r] - 1; j < rows_ptr[r + 1] - 1; ++j) {
+        if (i + 1 == cols[j]) {
+          b[r] += vals[j] * val;
+          vals[j] = 0.0;
+          break;
+        }
+      }
+    }
+  
+    // zero row and put in diagonal
+    for (std::size_t j=rows_ptr[i] - 1; j < rows_ptr[i + 1] - 1; ++j) {
+      if (i + 1 == cols[j]) vals[j] = 1.0; else vals[j] = 0.0;
+    }
+}

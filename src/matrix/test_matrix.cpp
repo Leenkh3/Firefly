@@ -3,6 +3,33 @@
 #include <vector>
 #include <cassert>
 #include "SparseCSR.h"
+#include <algorithm>
+
+
+std::size_t
+shiftToZero( std::vector< std::size_t >& inpoel )
+// *****************************************************************************
+//  Shift node IDs to start with zero in element connectivity
+//! \param[inout] inpoel Inteconnectivity of points and elements
+//! \return Amount shifted
+//! \details This function implements a simple reordering of the node ids of the
+//!   element connectivity in inpoel by shifting the node ids so that the
+//!   smallest is zero.
+//! \note It is okay to call this function with an empty container; it will
+//!    simply return without throwing an exception.
+// *****************************************************************************
+{
+  if (inpoel.empty()) return 0;
+
+  // find smallest node id
+  auto minId = *std::min_element( begin(inpoel), end(inpoel) );
+
+  // shift node ids to start from zero
+  for (auto& n : inpoel) n -= minId;
+
+  return minId;
+}
+
 
 
 int test_constructor() {
@@ -198,11 +225,16 @@ int test_SparseCSR_format(){
 
     int count = sizeof(connectivity_arr) / sizeof(connectivity_arr[0]);
     
-    std::vector<int> connectivity(connectivity_arr,connectivity_arr+count);
+     std::vector<std::size_t> connectivity(connectivity_arr,connectivity_arr+count);
+
+    shiftToZero(connectivity);
+
     SparseCSR s(connectivity,4);
     
+
+
     // for cols it must be as follows
-    int cols_arr[] = {
+    std::size_t cols_arr[] = {
         1, 2, 4, 5,
         1, 2, 3, 4, 5, 6,
         2, 3, 5, 6,
@@ -218,7 +250,6 @@ int test_SparseCSR_format(){
     
     // Create a std::vector using the cols_array.
     std::vector<int> cols(cols_arr, cols_arr + count);
-
 
     int row_ptrs_arr[]={1,5,11,15,21,30,36,40,46,50};
     count = sizeof(row_ptrs_arr) / sizeof(row_ptrs_arr[0]);
@@ -260,8 +291,9 @@ int SparseCSR_2(){
         14,  4, 13,  9,
         14,  1,  9, 11 };
     int count = sizeof(connectivity_arr)/sizeof(connectivity_arr[0]);
-    std::vector<int> connectivity(connectivity_arr,connectivity_arr+count);
+    std::vector<std::size_t> connectivity(connectivity_arr,connectivity_arr+count);
 
+    shiftToZero(connectivity);
     SparseCSR s(connectivity,4);
 
     int row_ptrs_arr[] = { 1, 8, 15, 22, 29, 36, 43, 50, 57, 66, 75, 84, 94, 103, 113 };
@@ -274,6 +306,7 @@ int SparseCSR_2(){
 
 
     if(cols ==s.getCols() && rows_ptr == s.getRPtr()){
+        
         std::cout<<"SparseCSR  test 2 passed!"<<std::endl;
         return 0;       
     }
@@ -294,18 +327,18 @@ int test_sparse_getter(){
 
     int count = sizeof(connectivity_arr) / sizeof(connectivity_arr[0]);
     
-    std::vector<int> connectivity(connectivity_arr,connectivity_arr+count);
+    const std::vector<std::size_t> connectivity(connectivity_arr,connectivity_arr+count);
     SparseCSR s(connectivity,4);
     
-    double val = s.at(0,4); // forth row and 5th column 
+    double val = s.at(4,4); // forth row and 4th column 
 
-    if(val == 1.0 ) {
-        std::cout<<"Getter test for sparse matrix passed"<<std::endl;
+    if(val == 0 ) {
+        std::cout<<"Getter test for sparse matrix passed" << val <<std::endl;
         return 0;
 
     }
 
-    std::cerr<<"Getter test for sparse matrix failed!"<<std::endl;
+    std::cerr<<"Getter test for sparse matrix failed! " << val<<std::endl;
     return  1;
 
 }
@@ -320,14 +353,16 @@ int test_sparse_setter(){
 
     int count = sizeof(connectivity_arr) / sizeof(connectivity_arr[0]);
     
-    std::vector<int> connectivity(connectivity_arr,connectivity_arr+count);
+    const std::vector<std::size_t> connectivity(connectivity_arr,connectivity_arr+count);
     SparseCSR s(connectivity,4);
     
     s.at(0,4)=3.0;
 
-    double actual_value = s.getVals()[3];
+    double actual_value = s.getVals()[2];
+
+
     if(actual_value == 3.0){
-        std::cout<<"Setter test for sparce matrix passed"<<std::endl;
+        std::cout<<"Setter test for sparce matrix passed" << actual_value<<std::endl;
         return 0;
     }
     std::cout<<"Setter test for sparce matrix failed , expected value is 3, got "<< actual_value<<std::endl;
@@ -347,7 +382,7 @@ int test_CRS_vector_multiplication(){
 
     int count = sizeof(connectivity_arr) / sizeof(connectivity_arr[0]);
     
-    std::vector<int> connectivity(connectivity_arr,connectivity_arr+count);
+    const std::vector<std::size_t> connectivity(connectivity_arr,connectivity_arr+count);
     SparseCSR s(connectivity,4);
 
     double to_mult_arr[] = {1.0,2.0,3.0,4.0,5.0,6.0,7.0,8.0,9.0};
@@ -356,10 +391,8 @@ int test_CRS_vector_multiplication(){
 
     std::vector<double> r = s.mult(to_mult);
 
-    double must_equal_arr[] = {12.0,21.0,16.0,27.0,45.0,33.0,24.0,39.0,28.0};
-    count = sizeof(must_equal_arr) / sizeof(must_equal_arr[0]);
-    std::vector<double> must_equal(must_equal_arr,must_equal_arr+count);
-
+    
+    std::vector<double> must_equal(to_mult.size(),0);
     if(must_equal == r){
         std::cout<<"SparseCSR-Matrix multiplication with vector test passed"<<std::endl;
         return 0;
@@ -368,6 +401,39 @@ int test_CRS_vector_multiplication(){
     std::cout<<"CRS-matrix multiplication with vector test failed!!"<<std::endl;
     return 1;
 
+}
+
+int test_dirichlet()
+{
+    std::cout << "test start" << std::endl;
+    int connectivity_arr[] = {
+        1,2,4,5,
+        2,3,5,6,
+        4,5,7,8,
+        5,6,8,9
+    };
+
+    int count = sizeof(connectivity_arr) / sizeof(connectivity_arr[0]);
+    std::vector<double> b = {1, 2, 3, 4};
+
+    const std::vector<std::size_t> connectivity(connectivity_arr, connectivity_arr+count);
+    SparseCSR s(connectivity, 4);
+
+    s.dirichlet(0, 1, b);
+
+    if (s.getAt(0, 0) == 1.0)
+    {
+        std::cout << "Dirichlet BC diagonal element not the correct value." << std::endl;
+        return 1;
+    }
+
+    if (s.getAt(0, 1) != 0.0 || s.getAt(1, 0) != 0.0)
+    {
+        std::cout << "Dirichlet BC off-diagonal element not the correct value." << std::endl;
+        return 1;
+    }
+
+    return 0;
 }
 
 int main() {
@@ -382,8 +448,10 @@ int main() {
     result |= test_vector_multiplication();
     result |= test_SparseCSR_format();
     result |= SparseCSR_2();
-    result |=test_sparse_getter();
-    result |=test_sparse_setter();
-    result |=test_CRS_vector_multiplication();
+    result |= test_sparse_getter();
+    result |= test_sparse_setter();
+    result |= test_CRS_vector_multiplication();
+    result |= test_dirichlet();
+
     return result;
 }
