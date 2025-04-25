@@ -26,6 +26,9 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
+    - name: Set Safe Directory
+      run: git config --global --add safe.directory /__w/Firefly/Firefly
+
     - name: Initialize Git Submodules
       run: git submodule update --init --recursive
 
