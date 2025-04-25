@@ -1,3 +1,10 @@
+ 
+# Specify the minimum CMake version required
+cmake_minimum_required(VERSION 3.15)
+
+# Project name, version, and languages ​​used
+project(Firefly VERSION 1.0 LANGUAGES CXX)
+
 
 #Tell Cmake the featureset we require
 cmake_minimum_required(VERSION 3.15)
@@ -8,9 +15,14 @@ project(Firefly VERSION 1.0 LANGUAGES C CXX)
 # Set the compiler version to 17
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+ 
 
-# Set cmake modules directory
+# Set the path of the additional modules
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+
+ 
+# Add source directory to main project
+add_subdirectory(${CMAKE_SOURCE_DIR}/src)
 
 # Include ExternalProject module
 include(ExternalProject)
@@ -41,8 +53,9 @@ else()
     set(EIGEN_INCLUDE_DIR "${PROJECT_BINARY_DIR}/eigen-install/include/eigen3")
     include_directories(${EIGEN_INCLUDE_DIR})  
 endif()
+ 
 
-# adding matrix to the build
+# Library for dealing with arrays
 add_library(MatrixLib
     src/matrix/Dense.cpp
     src/matrix/Matrix.h
@@ -63,13 +76,17 @@ add_library(MatrixLib
 
 )
 
-# Configure a CSR matrix class
+#CSR Library
 add_library(CSR src/laplacian/CSR.cpp)
 
+ 
+# Laplacian Gradient Library
+
 # Configure a functions needed to compute the Laplacian
+ 
 add_library(Laplacian src/laplacian/Laplacian.cpp)
 
-# Configure building the executable to test the Laplacian
+# Testing programs
 add_executable(LaplacianTests src/laplacian/testLaplacian.cpp)
 target_link_libraries(LaplacianTests PRIVATE MatrixLib CSR Laplacian)
 
@@ -85,6 +102,13 @@ add_executable(testCholeskyCRSeigen src/cholesky/testCholeskyCRSeigen.cpp)
 target_link_libraries(testCholeskyCRSeigen PRIVATE MatrixLib)
 
 
+ 
+add_executable(MatrixTests src/matrix/test_matrix.cpp)
+target_link_libraries(MatrixTests PRIVATE MatrixLib)
+
+# Main executable file
+add_executable(firefly firefly.cpp)
+
 
 # Configure building the CG solver executable
 add_executable(ConjugateGradientSolver src/CG/ConjugateGradientSolver.cpp)
@@ -94,9 +118,13 @@ target_link_libraries(ConjugateGradientSolver PRIVATE MatrixLib)
 add_subdirectory(${CMAKE_SOURCE_DIR}/src)
 
 add_executable(firefly firefly.cpp)  # Configure cmake's testing system
+ 
 
-# Configure cmake's testing system
+# Enable testing environment
 enable_testing()
+
+ 
+# Add tests to the project
 
 # Add testing subdirectory
 add_subdirectory(${CMAKE_SOURCE_DIR}/src/test)
@@ -117,10 +145,14 @@ add_dependencies(cholesky_test eigen)
 
 add_dependencies(testCholeskyCRSeigen eigen)
 # Add a test, running the chillax executable, non-zero exit code will fail the test
+ 
 add_test(NAME firefly COMMAND firefly)
-
-# Add a test for the Matrix library
 add_test(NAME MatrixTests COMMAND MatrixTests)
+ 
+add_test(NAME laplacian COMMAND LaplacianTests)
+
+# Add functionality for regression tests
+
 
 # Add tests for the Laplacian
 add_test(NAME laplacian COMMAND LaplacianTests)
@@ -159,12 +191,10 @@ target_link_libraries(AscTest PRIVATE asc)
 add_test(NAME AscTest COMMAND AscTest)
 
 # Include function used to add regression tests
+ 
 include(add_regression_test)
 
-# Set paths required for running tests
-set(TEST_RUNNER ${CMAKE_SOURCE_DIR}/cmake/test_runner.cmake)
-
-# Add tests
+# Prepare regression tests with expected pass/fail results.
 add_regression_test(test_example_pass_regexp firefly
                     EXTRA_PASS_REGEXP "Firefly Project"
                     LABELS "basic")
@@ -172,6 +202,29 @@ add_regression_test(test_example_fail_regexp firefly
                     EXTRA_FAIL_REGEXP "Firefly Project"
                     EXTRA_PROPERTIES "WILL_FAIL;1"
                     LABELS "basic")
+
+ 
+# Doxygen Document Preparation
+find_package(Doxygen REQUIRED)
+
+if(DOXYGEN_FOUND)
+    set(DOXYGEN_IN ${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile)
+    set(DOXYGEN_OUT ${CMAKE_CURRENT_BINARY_DIR}/docs)
+
+    add_custom_command(
+        OUTPUT ${DOXYGEN_OUT}
+        COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYGEN_IN}
+        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+        COMMENT "Generating API documentation with Doxygen"
+        VERBATIM
+    )
+
+#Define the goal for generating documents
+    add_custom_target(doc ALL DEPENDS ${DOXYGEN_OUT})
+
+# Add document dependency to main target
+    add_dependencies(firefly doc)
+endif()
 
 # Add regression tests for CG solver
 add_regression_test(test_cg_pass_regexp ConjugateGradientSolver
@@ -332,3 +385,4 @@ add_regression_test( numdifftest_fail numdiff_test
 #add_test(NAME firefly COMMAND firefly)
 
 message("Install path: ${PROJECT_BINARY_DIR}")
+ 
