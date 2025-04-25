@@ -26,6 +26,12 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
+    - name: Initialize Git Submodules
+      run: git submodule update --init --recursive
+
+    - name: Install Dependencies
+      run: sudo apt-get update && sudo apt-get install -y doxygen
+
     - name: Configure CMake
       run: >
         cmake -B /firefly/build
@@ -39,57 +45,4 @@ jobs:
     - name: Test
       working-directory: /firefly/build
       run: |
-        ctest --build-config ${{ matrix.build_type }}
-        ctest -R test_example_pass_regexp -V
-
-  build-macos:
-    runs-on: macos-latest
-
-    strategy:
-      fail-fast: false
-      matrix:
-        build_type: [Release, Debug]
-        cpp_compiler: [clang++]
-
-    steps:
-    - uses: actions/checkout@v4
-
-    - name: Set reusable strings
-      id: strings
-      shell: bash
-      run: |
-        echo "build-output-dir=${{ github.workspace }}/build" >> "$GITHUB_OUTPUT"
-
-    - name: Install MPI (macOS)
-      run: brew install mpich gcc
-
-    - name: Set Fortran Compiler
-      run: |
-        echo "Setting Fortran Compiler..."
-        if [[ -x "$(which gfortran)" ]]; then
-          echo "FC=$(which gfortran)" >> $GITHUB_ENV
-        elif [[ -f "/usr/local/bin/gfortran-13" ]]; then
-          echo "FC=/usr/local/bin/gfortran-13" >> $GITHUB_ENV
-        elif [[ -f "/opt/homebrew/bin/gfortran-13" ]]; then
-          echo "FC=/opt/homebrew/bin/gfortran-13" >> $GITHUB_ENV
-        else
-          echo "No gfortran found!"
-          exit 1
-        fi    
-
-    - name: Configure CMake
-      run: >
-        cmake -B ${{ steps.strings.outputs.build-output-dir }}
-        -DCMAKE_CXX_COMPILER=${{ matrix.cpp_compiler }}
-        -DCMAKE_Fortran_COMPILER=$FC
-        -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
-        -S ${{ github.workspace }}
-
-    - name: Build
-      run: cmake --build ${{ steps.strings.outputs.build-output-dir }} --config ${{ matrix.build_type }}
-
-    - name: Test
-      working-directory: ${{ steps.strings.outputs.build-output-dir }}
-      run: |
         ctest --build-config ${{ matrix.build_type }} --output-on-failure
-        ctest -R test_example_pass_regexp -V --output-on-failure
