@@ -152,7 +152,7 @@ add_test(NAME MatrixTests COMMAND MatrixTests)
 add_test(NAME laplacian COMMAND LaplacianTests)
 
 # Add functionality for regression tests
-=======
+
 
 # Add tests for the Laplacian
 add_test(NAME laplacian COMMAND LaplacianTests)
